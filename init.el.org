@@ -1,0 +1,171 @@
+* emacs init file
+  :PROPERTIES:
+  :header-args:elisp: :tangle ~/.emacs.d/init.el
+  :END:      
+** use mepal package reposity
+   #+BEGIN_SRC elisp
+     (require 'package) ;; You might already have this line
+     (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+     (package-initialize) 
+   #+END_SRC
+
+   use customize replaced!
+   
+** set code block highlight
+   #+BEGIN_SRC elisp
+     (setq org-confirm-babel-evaluate nil ; no confirm when C-c C-e
+           org-src-fontify-natively t ; highlight code
+           org-src-tab-acts-natively t)
+   #+END_SRC
+
+** install use-package 
+   [[https://github.com/jwiegley/use-package][use-package]]
+   #+BEGIN_SRC elisp
+     (if (not (package-installed-p 'use-package))
+         (progn
+           (package-refresh-contents)
+           (package-install 'use-package)))
+
+     (require 'use-package)
+   #+END_SRC
+
+** install general
+   #+BEGIN_SRC elisp
+     (use-package general
+       :ensure t
+       :commands (general-define-key))
+   #+END_SRC
+
+** which-key
+   #+BEGIN_SRC elisp
+     (use-package which-key
+       :ensure t 
+       :commands (which-key-mode
+                  which-key-setup-side-window-right)
+       :init (which-key-setup-side-window-right))
+   #+END_SRC
+** Ivy, Counsel, Swiper
+   #+BEGIN_SRC elisp
+     (use-package ivy :ensure t
+       :commands (ivy-mode
+                  ivy-switch-buffer)
+       :init (general-define-key
+              "C-x b" '(ivy-switch-buffer :which-key "switch buffer")))
+
+     (use-package counsel :ensure t
+       :commands (counsel-find-file
+                  counsel-ag
+                  counsel-M-x
+                  counsel-describe-function
+                  counsel-find-library)
+       :init (general-define-key
+              "C-x C-f" 'counsel-find-file
+              "C-c k" 'counsel-ag
+              "M-x" 'counsel-M-x
+              "C-h f" 'counsel-describe-function
+              "<f1> l" 'counsel-find-library
+              "C-x C-r" 'counsel-recentf))
+
+     (use-package swiper
+       :ensure t
+       :commands (swiper)
+       :init (general-define-key
+              "C-s" 'swiper))
+   #+END_SRC
+** emacs windows number
+   #+BEGIN_SRC elisp :tangle no
+     (use-package winum
+       :ensure t
+       :commands (winum-mode)
+       :config (general-define-key
+                "C-x w" 'winum-select-window-by-number))
+   #+END_SRC
+** chinese piyin
+   #+BEGIN_SRC elisp
+     (use-package chinese-pyim
+       :ensure t 
+       :config
+       ;; 激活 basedict 拼音词库
+       (use-package chinese-pyim-greatdict
+         :ensure t
+         :config (chinese-pyim-greatdict-enable))
+
+       ;; 五笔用户使用 wbdict 词库
+       ;; (use-package chinese-pyim-wbdict
+       ;;   :ensure nil
+       ;;   :config (chinese-pyim-wbdict-gbk-enable))
+
+       (setq default-input-method "chinese-pyim")
+
+       ;; 我使用全拼
+       (setq pyim-default-scheme 'quanpin)
+
+       ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+       ;; 我自己使用的中英文动态切换规则是：
+       ;; 1. 光标只有在注释里面时，才可以输入中文。
+       ;; 2. 光标前是汉字字符时，才能输入中文。
+       ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+       ;; (setq-default pyim-english-input-switch-functions
+       ;;               '(pyim-probe-dynamic-english
+       ;;                 pyim-probe-isearch-mode
+       ;;                 pyim-probe-program-mode
+       ;;                 pyim-probe-org-structure-template))
+
+       ;; (setq-default pyim-punctuation-half-width-functions
+       ;;               '(pyim-probe-punctuation-line-beginning
+       ;;                 pyim-probe-punctuation-after-punctuation))
+
+       ;; 开启拼音搜索功能
+       (setq pyim-isearch-enable-pinyin-search t)
+
+       ;; 使用 pupup-el 来绘制选词框
+       (setq pyim-page-tooltip 'popup)
+
+       ;; 选词框显示5个候选词
+       (setq pyim-page-length 5)
+
+       ;; 让 Emacs 启动时自动加载 pyim 词库
+       (add-hook 'emacs-startup-hook
+                 #'(lambda () (pyim-restart-1 t)))
+       :bind
+       (("M-j" . pyim-convert-code-at-point) ;与 pyim-probe-dynamic-english 配合
+        ("C-;" . pyim-delete-word-from-personal-buffer)))
+   #+END_SRC
+** hightlight sexp
+   #+BEGIN_SRC elispx
+     (show-paren-mode 1)
+     (setq show-paren-style 'expression)
+   #+END_SRC
+** use rainbow delimiters
+   [[https://github.com/jlr/rainbow-delimiters][github]]
+   #+BEGIN_SRC elisp
+     (use-package rainbow-delimiters
+       :ensure t
+       :commands (rainbow-delimiters-mode))
+   #+END_SRC
+** tranparent window
+   #+BEGIN_SRC elisp
+     (defun transparent-current-frame ()
+       "Transparent the window"
+       (interactive)
+       (let ((current-alpha (frame-parameter nil 'alpha)))
+         (if (eql 100 (cdr current-alpha))
+             (set-frame-parameter (selected-frame) 'alpha '(75 . 50))
+           (set-frame-parameter (selected-frame) 'alpha '(100 . 100)))))
+
+     (general-define-key "<f3>" #'transparent-current-frame)
+   #+END_SRC
+
+   #+RESULTS:
+   : transparent-current-frame
+** run python3 envrioment
+   #+BEGIN_SRC elisp
+     (add-hook 'python-mode-hook '(lambda ()
+                                    (python-shell-parse-command "python3")))
+   #+END_SRC
+** load theme 
+   *dont tangla at other computer*
+   #+BEGIN_SRC elisp
+     (load-theme 'darcula t)
+   #+END_SRC
+
