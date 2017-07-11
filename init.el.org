@@ -160,10 +160,13 @@
    : transparent-current-frame
 ** run python3 envrioment
    #+BEGIN_SRC elisp
-     (use-package elpy
-       :ensure
-       :mode ("\\.py\\'" . enable-elpy)
-       :interpreter ("python" . enable-elpy))
+     (use-package python
+       :init
+       (setq python-shell-interpreter "python3")
+       (setq elpy-rpc-python-command "python3")
+       :mode ("\\.py\\'" . python-mode)
+       :interpreter ("python" . python-mode)
+       :config (elpy-enable))
    #+END_SRC
 
 ** load theme 
@@ -172,3 +175,4 @@
      (load-theme 'darcula t)
    #+END_SRC
 
+   
