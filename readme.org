@@ -1,0 +1,2 @@
+* This is org file for my emacs init.el
+  Use C-c C-v t to tangle it.
