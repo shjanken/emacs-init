@@ -5,11 +5,15 @@
 ** use mepal package reposity
    #+BEGIN_SRC elisp
      (require 'package) ;; You might already have this line
-     (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+     (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+                              ("melpa" . "http://elpa.emacs-china.org/melpa/")))
      (package-initialize) 
    #+END_SRC
 
    use customize replaced!
+   
+   <2017-07-12>
+   use emacs china elpa mirrow
    
 ** set code block highlight
    #+BEGIN_SRC elisp
@@ -168,11 +172,58 @@
        :interpreter ("python" . python-mode)
        :config (elpy-enable))
    #+END_SRC
+** smart parens
+   #+BEGIN_SRC elisp
+     (use-package smartparens
+       :ensure t
+       :config
+       (add-hook 'prog-mode-hook #'smartparens-mode))
+   #+END_SRC
+   
+   smart parens 的用法
+   
+   - sp-splice-sexp
+     (emacs) -> emacs
 
+   - sp-rewrapp-sexp
+     (emacs) -> [emacs]
+
+   - sp-forward-barf-sexp
+     (emacs (emacs1)| (emacs2)) ->  (emacs (emacs1))(emacs2)
+
+   - sp-forward-slurp-sexp
+     (emacs (emacs1)|) (emacs2) -> (emacs (emacs1) (emacs2))
+
+   - sp-forward-slurp-hybrid-sexp
+     smae
 ** load theme 
    *dont tangla at other computer*
+   <2017-07-12> use tao theme
    #+BEGIN_SRC elisp
-     (load-theme 'darcula t)
+     (use-package anti-zenburn-theme
+       :ensure t)
+
+     (load-theme 'anti-zenburn t)
    #+END_SRC
 
-   
+   #+BEGIN_SRC elisp :tangle no
+     (load-theme 'darcula t)
+   #+END_SRC
+** expand-region
+   #+BEGIN_SRC elisp
+     (use-package expand-region
+       :ensure t
+       :commands (er/expand-region)
+       :bind
+       (("C-=" . er/expand-region)))
+   #+END_SRC
+
+** default setting what use customize
+   #+BEGIN_SRC elisp
+     (custom-set-faces
+      ;; custom-set-faces was added by Custom.
+      ;; If you edit it by hand, you could mess it up, so be careful.
+      ;; Your init file should contain only one such instance.
+      ;; If there is more than one, they won't work right.
+      '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 112 :width normal :foundry "MS  " :family "YaHei Consolas Hybrid")))))
+   #+END_SRC
