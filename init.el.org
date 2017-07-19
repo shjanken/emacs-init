@@ -233,3 +233,31 @@
     #+BEGIN_SRC elisp
       (setq command-line-default-directory "~/")
     #+END_SRC
+** set convenient key chord
+   #+BEGIN_SRC elisp
+     (general-define-key
+      "s"
+      (general-key-dispatch #'self-insert-command
+        :timeout 0.2
+        "s" #'save-buffer
+        )) ; set 'ss' to save buffer
+   #+END_SRC
+
+   #+RESULTS:
+*** set mm to set-mark-command
+    when i pre 'mm', run set-mark-command, and notice me at message buffer
+    #+BEGIN_SRC elisp
+      (defun set-mark-and-show-message (arg)
+          "Run set mark command and show a message"
+        (interactive "P")
+        (message "Set Marked!")
+        (set-mark-command arg))
+
+
+      (general-define-key
+       "m"
+       (general-key-dispatch #'self-insert-command
+         :timeout 0.2
+         "m" #'set-mark-and-show-message))
+    #+END_SRC
+
