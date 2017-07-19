@@ -234,7 +234,13 @@
       (setq command-line-default-directory "~/")
     #+END_SRC
 ** set convenient key chord
-   #+BEGIN_SRC elisp
+   
+   general-key-dispatch 可以实现类似于 key-chord 的功能。
+   general-key-dispatch 后面的函数表示如果按了指定的键以后没有按后续的按键（没有设定或者超时），
+   则会执行的方法。（在这里是 self-insert-command, 将按键代表的字符字节插入）
+
+   general-key-dispatch 不能重复定义，如果重复定义了，后面的会覆盖前面的
+   #+BEGIN_SRC elisp :tangle no
      (general-define-key
       "s"
       (general-key-dispatch #'self-insert-command
@@ -246,6 +252,7 @@
    #+RESULTS:
 *** set mm to set-mark-command
     when i pre 'mm', run set-mark-command, and notice me at message buffer
+
     #+BEGIN_SRC elisp
       (defun set-mark-and-show-message (arg)
           "Run set mark command and show a message"
@@ -256,8 +263,9 @@
 
       (general-define-key
        "m"
-       (general-key-dispatch #'self-insert-command
+       (general-key-dispatch 'self-insert-command
          :timeout 0.2
-         "m" #'set-mark-and-show-message))
+         "m" 'set-mark-and-show-message
+         "s" 'save-buffer))
     #+END_SRC
 
