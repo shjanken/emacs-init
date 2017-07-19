@@ -167,8 +167,8 @@
    #+BEGIN_SRC elisp
      (use-package python
        :init
-       (setq python-shell-interpreter "python3")
-       (setq elpy-rpc-python-command "python3")
+       (setq python-shell-interpreter "python")
+       (setq elpy-rpc-python-command "python")
        :mode ("\\.py\\'" . python-mode)
        :interpreter ("python" . python-mode)
        :config (elpy-enable))
@@ -228,3 +228,8 @@
       ;; If there is more than one, they won't work right.
       '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 112 :width normal :foundry "MS  " :family "YaHei Consolas Hybrid")))))
    #+END_SRC
+
+*** set my default directory when emacs start
+    #+BEGIN_SRC elisp
+      (setq command-line-default-directory "~/")
+    #+END_SRC
