@@ -268,3 +268,44 @@
          "m" 'set-mark-and-show-message
          "s" 'save-buffer))
     #+END_SRC
+
+** org mode setting
+*** set file to agenda view
+    #+BEGIN_SRC elisp
+      (general-define-key
+       "C-c a" #'org-agenda)
+
+      (setq org-agenda-files '("~/Documents/org/inbox.org"
+                               "~/Documents/org/gtd.org"
+                               "~/Documents/org/tickler.org"))
+    #+END_SRC
+*** org capture template
+    | key       | operator                   |
+    | "C-c c t" | insert task to inbox.org   |
+    | "C-c c T" | insert task to tickler.org |
+
+    #+BEGIN_SRC elisp
+      (general-define-key "C-c c" #'org-capture)
+
+      (setq org-capture-templates '(("t" "Todo [inbox]" entry
+                                     (file+headline "~/Documents/org/inbox.org" "Tasks")
+                                     "* TODO %i%?")
+                                    ("T" "Tickler" entry
+                                     (file+headline "~/Documents/org/tickler.org" "Tickler")
+                                     "* %i%? \n %U")))
+    #+END_SRC
+*** set org file todo keywords
+    #+BEGIN_SRC elisp
+     (setq org-todo-keywords '((sequence
+                                 "TODO(t)"
+                                 "WAITING(w)"
+                                 "|"
+                                 "DONE(d)"
+                                 "CANCELLED(c)")))
+    #+END_SRC
+*** set refile target
+    #+BEGIN_SRC elisp
+      (setq org-refile-targets '(("~/Documents/org/gtd.org" :maxlevel . 3)
+                                 ("~/Documents/org/someday.org" :level . 1)
+                                 ("~/Documents/org/tickler.org" :maxlevel . 2)))
+    #+END_SRC
