@@ -340,4 +340,3 @@
        :init
        (add-hook 'prog-mode-hook 'company-mode))
    #+END_SRC
-   
