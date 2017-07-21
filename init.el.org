@@ -309,3 +309,11 @@
                                  ("~/Documents/org/someday.org" :level . 1)
                                  ("~/Documents/org/tickler.org" :maxlevel . 2)))
     #+END_SRC
+** clojure
+   #+BEGIN_SRC elisp
+     (use-package clojure-mode
+       :ensure t
+       :config
+       (use-package cider
+         :ensure t))
+   #+END_SRC
