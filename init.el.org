@@ -310,6 +310,11 @@
                                  ("~/Documents/org/tickler.org" :maxlevel . 2)))
     #+END_SRC
 ** clojure
+   - clojure package start so slow.
+     [2017-07-21 周五]
+     clojure and cider package startup use more than 3 seconds.
+     so i add :commands keyword config.
+     now clojure and cider not start on emacs startup.
 
    #+BEGIN_SRC elisp
      (use-package clojure-mode
