@@ -268,7 +268,7 @@
          "m" 'set-mark-and-show-message
          "s" 'save-buffer))
     #+END_SRC
-
+    
 ** org mode setting
 *** set file to agenda view
     #+BEGIN_SRC elisp
@@ -310,10 +310,29 @@
                                  ("~/Documents/org/tickler.org" :maxlevel . 2)))
     #+END_SRC
 ** clojure
+
    #+BEGIN_SRC elisp
      (use-package clojure-mode
        :ensure t
+       :commands (clojure-mode clojurescript-mode)
        :config
        (use-package cider
          :ensure t))
    #+END_SRC
+
+** workgroup2
+   #+BEGIN_SRC elisp
+     (use-package workgroups2
+       :ensure t)
+   #+END_SRC
+
+   #+RESULTS:
+** company
+   #+BEGIN_SRC elisp
+     (use-package company
+       :ensure t
+       :commands (company-mode)
+       :init
+       (add-hook 'prog-mode-hook 'company-mode))
+   #+END_SRC
+   
