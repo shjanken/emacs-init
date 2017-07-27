@@ -200,7 +200,7 @@
 ** load theme 
    *dont tangla at other computer*
    <2017-07-12> use tao theme
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle no
      (use-package anti-zenburn-theme
        :ensure t)
 
@@ -210,6 +210,13 @@
    #+BEGIN_SRC elisp :tangle no
      (load-theme 'darcula t)
    #+END_SRC
+*** <2017-07-27> use plan-9 theme
+    #+BEGIN_SRC elisp
+      (use-package plan9-theme
+        :ensure t)
+
+      (load-theme 'plan9)
+    #+END_SRC
 ** expand-region
    #+BEGIN_SRC elisp
      (use-package expand-region
