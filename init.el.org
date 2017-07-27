@@ -48,6 +48,8 @@
        :commands (which-key-mode
                   which-key-setup-side-window-right)
        :init (which-key-setup-side-window-right))
+
+     (which-key-mode)
    #+END_SRC
 ** Ivy, Counsel, Swiper
    #+BEGIN_SRC elisp
@@ -215,7 +217,7 @@
       (use-package plan9-theme
         :ensure t)
 
-      (load-theme 'plan9)
+      (load-theme 'plan9)A
     #+END_SRC
 ** expand-region
    #+BEGIN_SRC elisp
@@ -236,9 +238,11 @@
       '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 112 :width normal :foundry "MS  " :family "YaHei Consolas Hybrid")))))
    #+END_SRC
 
-*** set my default directory when emacs start
+*** COMMENT set my default directory when emacs start
     #+BEGIN_SRC elisp
       (setq command-line-default-directory "~/")
+      (scroll-bar-mode -1) ; disable scroll bar
+      (tool-bar-mode -1) ; disable tool bar
     #+END_SRC
 ** set convenient key chord
    
