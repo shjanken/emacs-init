@@ -217,7 +217,7 @@
       (use-package plan9-theme
         :ensure t)
 
-      (load-theme 'plan9)A
+      (load-theme 'plan9)
     #+END_SRC
 ** expand-region
    #+BEGIN_SRC elisp
@@ -243,6 +243,7 @@
       (setq command-line-default-directory "~/")
       (scroll-bar-mode -1) ; disable scroll bar
       (tool-bar-mode -1) ; disable tool bar
+      (show-paren-mode) ; hight light match parens
     #+END_SRC
 ** set convenient key chord
    
@@ -332,8 +333,9 @@
        :ensure t
        :commands (clojure-mode clojurescript-mode)
        :config
-       (use-package cider
-         :ensure t))
+       (defun clojure-config ()
+         (use-package cider :ensure t)
+         (show-paren-mode)))
    #+END_SRC
 
 ** workgroup2
