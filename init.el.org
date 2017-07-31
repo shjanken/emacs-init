@@ -358,3 +358,9 @@
      (use-package dired+
        :ensure t)
    #+END_SRC
+** try
+   try package and do not install it
+   #+BEGIN_SRC elisp
+     (use-package try
+       :ensure t)
+   #+END_SRC
