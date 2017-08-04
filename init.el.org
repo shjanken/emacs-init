@@ -380,3 +380,41 @@
        :bind
        (("M-p" . ace-window)))
    #+END_SRC
+** evil
+   #+BEGIN_SRC elisp
+     (defun my--evil-config ()
+       "Config my evil"
+       (evil-mode 1)
+       (general-evil-setup) ; can use general-nmap, general-mmap..
+
+       (general-nmap :prefix "SPC"
+                     "b" '(:ignore t :which-key "buffer")
+                     "bb" '(ivy-switch-buffer :which-key "switch buffer")
+                     "bp" '(switch-to-prev-buffer :which-key "prev buffer")
+                     "bn" '(switch-to-next-buffer :which-key "next buffer")
+                     "bk" '(kill-buffer :which-key "kill buffer")
+                     "k" 'kill-buffer
+
+                     "f" '(:ignore t :which-key "file")
+                     "fr" 'counsel-recentf
+                     "ff" '(counsel-find-file :which-key "find-file")
+
+                     "s" '(:ignore t)
+                     "ss" 'save-buffer
+                     "sp" '(sp-forward-slurp-sexp :which-key "forward slurp")
+
+                     "/" '(swiper :which-key "search")
+                     "x" '(counsel-M-x :which-key "M-x"))
+
+       (general-imap "j"
+                     (general-key-dispatch 'self-insert-command
+                       :timeout 0.25
+                       "k" 'evil-normal-state)))
+
+
+     (use-package evil
+       :ensure t
+       :config
+       (my--evil-config))
+   #+END_SRC
+   
