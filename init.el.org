@@ -272,7 +272,7 @@
 *** set mm to set-mark-command
     when i pre 'mm', run set-mark-command, and notice me at message buffer
 
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (defun set-mark-and-show-message (arg)
           "Run set mark command and show a message"
         (interactive "P")
@@ -406,10 +406,11 @@
                      "/" '(swiper :which-key "search")
                      "x" '(counsel-M-x :which-key "M-x"))
 
-       (general-imap "j"
-                     (general-key-dispatch 'self-insert-command
-                       :timeout 0.25
-                       "k" 'evil-normal-state)))
+       (general-imap
+        "j"
+        (general-key-dispatch 'self-insert-command
+          :timeout 0.25
+          "k" 'evil-normal-state)))
 
 
      (use-package evil
@@ -417,4 +418,20 @@
        :config
        (my--evil-config))
    #+END_SRC
+** ace jump mode
+   直接跳转到用户输入的字符上去
+   [[https://github.com/winterTTr/ace-jump-mode][github]]
+   #+BEGIN_SRC elisp
+     (use-package ace-jump-mode
+       :ensure t
+
+       ;; use evil keymaps
+       :config
+       (general-define-key
+        :states '(normal inert emacs)
+        :prefix "SPC"
+        "w" '(:ignore t :which-key "jump to")
+        "wf" '(ace-jump-word-mode :which-key "jump to word")
+        "wl" '(ace-jump-line-mode :which-key "jump to line")))
+           #+END_SRC
    
