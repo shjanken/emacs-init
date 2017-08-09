@@ -429,9 +429,30 @@
        :config
        (general-define-key
         :states '(normal inert emacs)
-        :prefix "SPC"
-        "w" '(:ignore t :which-key "jump to")
-        "wf" '(ace-jump-word-mode :which-key "jump to word")
-        "wl" '(ace-jump-line-mode :which-key "jump to line")))
-           #+END_SRC
+        :prefix ","
+        "f" '(ace-jump-word-mode :which-key "jump to word")
+        "l" '(ace-jump-line-mode :which-key "jump to line")))
+   #+END_SRC
+
+** find file in project 
+   install on windows: 
+   find file in project 需要 find 工具来查找文件，所以在 windows 上需要 cygwin 来配合
+   #+BEGIN_SRC elisp :tangle no
+     (if (eq system-type 'windows-nt)
+         (setq ffip-find-executable "c:\\\\cygwin64\\\\bin\\\\find"))
+   #+END_SRC
    
+   #+BEGIN_SRC elisp
+     (use-package find-file-in-project
+       :ensure t
+       :init
+       (if (eq system-type 'windows-nt)
+           (setq ffip-find-executable "c:\\\\cygwin\\\\bin\\\\find"))
+       :config
+       (general-define-key
+        :states '(normal)
+        :prefix "SPC"
+        "p" '(:ignore t :which-key "prefix - find file in project")
+        "pf" '(find-file-in-project :which-key "find file")))
+        
+   #+END_SRC
