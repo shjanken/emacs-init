@@ -1,5 +1,5 @@
 * emacs init file
-  :PROPERTIES:
+ :PROPERTIES:
   :header-args:elisp: :tangle ~/.emacs.d/init.el
   :END:      
 ** use mepal package reposity
@@ -241,9 +241,11 @@
 *** COMMENT set my default directory when emacs start
     #+BEGIN_SRC elisp
       (setq command-line-default-directory "~/")
+      (setq default-directory "~/")
       (scroll-bar-mode -1) ; disable scroll bar
       (tool-bar-mode -1) ; disable tool bar
       (show-paren-mode) ; hight light match parens
+      (setq inhibit-startup-screen t)
     #+END_SRC
 
 *** set babel execute language
@@ -346,9 +348,11 @@
    #+END_SRC
 
 ** workgroup2
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle no
      (use-package workgroups2
-       :ensure t)
+       :ensure t
+       :config
+       (workgroups-mode t))
    #+END_SRC
 
    #+RESULTS:
@@ -456,3 +460,40 @@
         "pf" '(find-file-in-project :which-key "find file")))
         
    #+END_SRC
+
+** use color theme
+   #+BEGIN_SRC elisp :tangle no
+     (use-package color-theme
+       :ensure t)
+   #+END_SRC
+   
+** eyebrowser
+   #+BEGIN_SRC elisp
+     (use-package eyebrowse
+       :ensure t
+       :config
+       (setq eyebrowse-mode-line-separator " "
+             eyebrowse-new-workspace t)
+       (eyebrowse-mode t)
+       ;; use desktop save the current state
+       (desktop-change-dir "~/") ; my desktop.lock file in HOME directory
+       )
+        
+   #+END_SRC
+
+** symbol-overlay
+   高亮符号的插件
+
+   #+BEGIN_SRC elisp
+     (use-package symbol-overlay
+       :ensure t)
+   #+END_SRC
+   - 快捷键设置
+     #+BEGIN_SRC elisp :tangle no
+       (global-set-key (kbd "M-i") 'symbol-overlay-put)
+       (global-set-key (kbd "M-n") 'symbol-overlay-switch-forward)
+       (global-set-key (kbd "M-p") 'symbol-overlay-switch-backward)
+       (global-set-key (kbd "<f7>") 'symbol-overlay-mode)
+       (global-set-key (kbd "<f8>") 'symbol-overlay-remove-all)
+     #+END_SRC
+    
