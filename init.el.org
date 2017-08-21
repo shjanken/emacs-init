@@ -1,4 +1,4 @@
-* emacs init file
+* emacs init fie
  :PROPERTIES:
   :header-args:elisp: :tangle ~/.emacs.d/init.el
   :END:      
@@ -148,7 +148,8 @@
    #+BEGIN_SRC elisp
      (use-package rainbow-delimiters
        :ensure t
-       :commands (rainbow-delimiters-mode))
+       :config
+       (rainbow-delimiters-mode))
    #+END_SRC
 ** tranparent window
    #+BEGIN_SRC elisp
@@ -238,7 +239,7 @@
       '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 112 :width normal :foundry "MS  " :family "YaHei Consolas Hybrid")))))
    #+END_SRC
 
-*** COMMENT set my default directory when emacs start
+*** set my default directory when emacs start
     #+BEGIN_SRC elisp
       (setq command-line-default-directory "~/")
       (setq default-directory "~/")
@@ -342,9 +343,23 @@
        :ensure t
        :commands (clojure-mode clojurescript-mode)
        :config
-       (defun clojure-config ()
-         (use-package cider :ensure t)
-         (show-paren-mode)))
+       (use-package cider :ensure t)
+       (show-paren-mode)
+
+       (general-define-key
+        :states '(insert emacs normal)
+        :keymaps 'cider-repl-mode-map
+        "M-p" 'ace-window
+        "q" 'cider-popup-buffer-quit-function)
+
+
+       ;; in cider-stack-trace-mode set q to quit
+       (general-define-key
+        :state '(insert emacs normal)
+        :keymaps 'cider-stacktrace-mode-map
+
+        "M-p" 'ace-window ; 将 M-p 绑定到 ace-window， 获取一致的用户体验
+        "C-p"  'cider-popup-buffer-quit-function))
    #+END_SRC
 
 ** workgroup2
@@ -381,8 +396,8 @@
      (use-package ace-window
        :ensure t
        :commands (ace-window)
-       :bind
-       (("M-p" . ace-window)))
+       :init
+       (bind-key "M-p" 'ace-window))
    #+END_SRC
 ** evil
    #+BEGIN_SRC elisp
@@ -496,4 +511,13 @@
        (global-set-key (kbd "<f7>") 'symbol-overlay-mode)
        (global-set-key (kbd "<f8>") 'symbol-overlay-remove-all)
      #+END_SRC
-    
+** key-freq
+   这个扩展可以查看我的案件统计
+   这样我就可以根据我自己的案件频率来调整优化快捷键
+   #+BEGIN_SRC elisp     
+     (use-package keyfreq
+       :ensure t
+       :config
+       (keyfreq-mode 1)
+       (keyfreq-autosave-mode 1)) 
+   #+END_SRC
