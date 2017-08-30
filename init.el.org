@@ -1,4 +1,4 @@
-* emacs init fie
+* emacs init file
  :PROPERTIES:
   :header-args:elisp: :tangle ~/.emacs.d/init.el
   :END:      
@@ -201,8 +201,7 @@
    - sp-forward-slurp-hybrid-sexp
      smae
 ** load theme 
-   *dont tangla at other computer*
-   <2017-07-12> use tao theme
+*** old theme
    #+BEGIN_SRC elisp :tangle no
      (use-package anti-zenburn-theme
        :ensure t)
@@ -213,12 +212,47 @@
    #+BEGIN_SRC elisp :tangle no
      (load-theme 'darcula t)
    #+END_SRC
-*** <2017-07-27> use plan-9 theme
-    #+BEGIN_SRC elisp
+*** use plan-9 theme
+    Must set y twice on emacs startup!
+    #+BEGIN_SRC elisp :tangle no
       (use-package plan9-theme
         :ensure t)
 
       (load-theme 'plan9)
+    #+END_SRC
+*** use doom-theme
+    This theme has some problem in my emacs.
+    #+BEGIN_SRC elisp :tangle no
+      (use-package doom-themes
+        :ensure t
+        :config
+        (doom-themes-org-config))
+
+      (load-theme 'doom-one t)
+    #+END_SRC
+*** atom one dark
+    #+BEGIN_SRC elisp :tangle no
+      (use-package atom-one-dark-theme
+        :ensure t)
+
+      (load-theme 'atom-one-dark t)
+    #+END_SRC
+*** ample theme
+    #+BEGIN_SRC elisp :tangle no
+      (use-package ample-theme
+        :init (progn (load-theme 'ample t t)
+                     (load-theme 'ample-flat t t)
+                     (load-theme 'ample-light t t)
+                     (enable-theme 'ample-light))
+        :defer t
+        :ensure t)
+    #+END_SRC
+*** lenlen theme
+    #+BEGIN_SRC elisp :tangle no
+      (use-package solarized-theme
+        :ensure t
+        :init (load-theme 'solarized)
+        :defer t)
     #+END_SRC
 ** expand-region
    #+BEGIN_SRC elisp
@@ -349,8 +383,7 @@
        (general-define-key
         :states '(insert emacs normal)
         :keymaps 'cider-repl-mode-map
-        "M-p" 'ace-window
-        "q" 'cider-popup-buffer-quit-function)
+        "M-p" 'ace-window)
 
 
        ;; in cider-stack-trace-mode set q to quit
@@ -453,7 +486,7 @@
         "l" '(ace-jump-line-mode :which-key "jump to line")))
    #+END_SRC
 
-** find file in project 
+** find file inproject 
    install on windows: 
    find file in project 需要 find 工具来查找文件，所以在 windows 上需要 cygwin 来配合
    #+BEGIN_SRC elisp :tangle no
@@ -511,7 +544,7 @@
        (global-set-key (kbd "<f7>") 'symbol-overlay-mode)
        (global-set-key (kbd "<f8>") 'symbol-overlay-remove-all)
      #+END_SRC
-** key-freq
+** key-fre
    这个扩展可以查看我的案件统计
    这样我就可以根据我自己的案件频率来调整优化快捷键
    #+BEGIN_SRC elisp     
@@ -520,4 +553,11 @@
        :config
        (keyfreq-mode 1)
        (keyfreq-autosave-mode 1)) 
+   #+END_SRC
+** Neotree
+   #+BEGIN_SRC elisp
+     (use-package neotree
+       :ensure t
+       :bind
+       (("<f8>" . neotree-toggle)))
    #+END_SRC
