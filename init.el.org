@@ -561,3 +561,9 @@
        :bind
        (("<f8>" . neotree-toggle)))
    #+END_SRC
+** alchemist
+   develop with elixir and erlang
+   #+BEGIN_SRC elisp
+     (use-package alchemist
+       :ensure t) 
+   #+END_SRC
