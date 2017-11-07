@@ -33,7 +33,7 @@
      (require 'use-package)
      (setq use-package-verbose t)
    #+END_SRC
-
+   
 ** install general
    #+BEGIN_SRC elisp
      (use-package general
@@ -88,7 +88,7 @@
                 "C-x w" 'winum-select-window-by-number))
    #+END_SRC
 ** chinese piyin
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle noA
      (use-package chinese-pyim
        :ensure t 
        :config
@@ -148,7 +148,8 @@
    #+BEGIN_SRC elisp
      (use-package rainbow-delimiters
        :ensure t
-       :commands (rainbow-delimiters-mode))
+       :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
    #+END_SRC
 ** tranparent window
    #+BEGIN_SRC elisp
@@ -213,11 +214,21 @@
      (load-theme 'darcula t)
    #+END_SRC
 *** <2017-07-27> use plan-9 theme
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package plan9-theme
         :ensure t)
 
       (load-theme 'plan9)
+    #+END_SRC
+*** <2017-11-03> use minimal-theme
+    #+BEGIN_SRC elisp
+      (use-package ample-theme
+        :init (progn (load-theme 'ample t t)
+                     (load-theme 'ample-flat t t)
+                     (load-theme 'ample-light t t)
+                     (enable-theme 'ample-light))
+        :defer t
+        :ensure t)
     #+END_SRC
 ** expand-region
    #+BEGIN_SRC elisp
@@ -384,4 +395,9 @@
    #+BEGIN_SRC elisp
      (use-package alchemist
        :ensure t) 
+   #+END_SRC
+** js & jsx enviroment
+   #+BEGIN_SRC elisp
+     (use-package rjsx-mode
+       :ensure t)
    #+END_SRC
