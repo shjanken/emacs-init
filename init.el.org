@@ -1,7 +1,7 @@
 * emacs init file
  :PROPERTIES:
-  :header-args:elisp: :tangle ~/.emacs.d/init.el
-  :END:      
+ :header-args:elisp: :tangle ~/.emacs.d/init.el
+ :END:
 ** use mepal package reposity
    #+BEGIN_SRC elisp
      (require 'package) ;; You might already have this line
@@ -561,3 +561,11 @@
        :bind
        (("<f8>" . neotree-toggle)))
    #+END_SRC
+** Elixir
+   #+BEGIN_SRC elisp
+     (use-package alchemist
+       :ensure t)
+   #+END_SRC
+
+   #+RESULTS:
+
