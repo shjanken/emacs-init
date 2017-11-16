@@ -566,6 +566,3 @@
      (use-package alchemist
        :ensure t)
    #+END_SRC
-
-   #+RESULTS:
-
