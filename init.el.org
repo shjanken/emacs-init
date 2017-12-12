@@ -1,7 +1,7 @@
 * emacs init file
  :PROPERTIES:
-  :header-args:elisp: :tangle ~/.emacs.d/init.el
-  :END:      
+ :header-args:elisp: :tangle ~/.emacs.d/init.el
+ :END:
 ** use mepal package reposity
    #+BEGIN_SRC elisp
      (require 'package) ;; You might already have this line
@@ -88,7 +88,7 @@
                 "C-x w" 'winum-select-window-by-number))
    #+END_SRC
 ** chinese piyin
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp tangle no
      (use-package chinese-pyim
        :ensure t 
        :config
@@ -562,8 +562,7 @@
        :bind
        (("<f8>" . neotree-toggle)))
    #+END_SRC
-** alchemist
-   develop with elixir and erlang
+** Elixir
    #+BEGIN_SRC elisp
      (use-package elixir-mode
        :mode ("\\.ex\\'" . elixir-mode)
