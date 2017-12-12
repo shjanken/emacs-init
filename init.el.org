@@ -421,7 +421,8 @@
    try package and do not install it
    #+BEGIN_SRC elisp
      (use-package try
-       :ensure t)
+       :ensure t
+       :commands try)
    #+END_SRC
 ** ace-window
    make move cursor to other window quickly and convinently
@@ -564,6 +565,10 @@
 ** alchemist
    develop with elixir and erlang
    #+BEGIN_SRC elisp
-     (use-package alchemist
-       :ensure t) 
+     (use-package elixir-mode
+       :mode ("\\.ex\\'" . elixir-mode)
+       :config
+       ;; start alchemist
+       (use-package alchemist
+         :ensure t))
    #+END_SRC
