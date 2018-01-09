@@ -571,3 +571,9 @@
        (use-package alchemist
          :ensure t))
    #+END_SRC
+** Golang 
+   #+BEGIN_SRC elisp
+     (use-package go-mode
+       :ensure t
+       :mode "\\.go\\'") 
+   #+END_SRC
