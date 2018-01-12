@@ -2,6 +2,7 @@
  :PROPERTIES:
  :header-args:elisp: :tangle ~/.emacs.d/init.el
  :END:
+
 ** use mepal package reposity
    #+BEGIN_SRC elisp
      (require 'package) ;; You might already have this line
@@ -33,12 +34,14 @@
      (require 'use-package)
      (setq use-package-verbose t)
    #+END_SRC
-
+   
 ** install general
    #+BEGIN_SRC elisp
      (use-package general
        :ensure t
-       :commands (general-define-key))
+       :commands (general-define-key)
+       :config
+       (setq my-leader "C-c"))
    #+END_SRC
 
 ** which-key
@@ -46,13 +49,14 @@
      (use-package which-key
        :ensure t 
        :commands (which-key-mode
-                  which-key-setup-side-window-right)
-       :init (which-key-setup-side-window-right))
+                  which-key-setup-side-window-bottom)
+       :init (which-key-setup-side-window-bottom))
 
      (which-key-mode)
    #+END_SRC
 ** Ivy, Counsel, Swiper
-   #+BEGIN_SRC elisp
+   <2018-01-12 五> 用 heml 代替
+   #+BEGIN_SRC elisp :tangle no
      (use-package ivy :ensure t
        :commands (ivy-mode
                   ivy-switch-buffer)
@@ -79,7 +83,23 @@
        :init (general-define-key
               "C-s" 'swiper))
    #+END_SRC
-** emacs windows number
+** helm
+   [[https://github.com/emacs-helm/helm][helm github]]
+   #+BEGIN_SRC elisp
+     (use-package helm
+       :ensure t
+       :init
+       (progn
+         (require 'helm-config)
+         (helm-mode 1))
+       :config
+       (general-define-key
+        "C-x C-f" 'helm-find-files
+        "M-x" 'helm-M-x
+        "C-x C-r" '(helm-recentf :which-key "recent files")
+        "C-x C-o" '(find-file-read-only :which-key "open read only")))
+   #+END_SRC
+** emacs windows number :tangle no
    #+BEGIN_SRC elisp :tangle no
      (use-package winum
        :ensure t
@@ -112,11 +132,11 @@
        ;; 1. 光标只有在注释里面时，才可以输入中文。
        ;; 2. 光标前是汉字字符时，才能输入中文。
        ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
-       ;; (setq-default pyim-english-input-switch-functions
-       ;;               '(pyim-probe-dynamic-english
-       ;;                 pyim-probe-isearch-mode
-       ;;                 pyim-probe-program-mode
-       ;;                 pyim-probe-org-structure-template))
+       (setq-default pyim-english-input-switch-functions
+                     '(pyim-probe-dynamic-english
+                       pyim-probe-isearch-mode
+                       pyim-probe-program-mode
+                       pyim-probe-org-structure-template))
 
        (setq-default pyim-punctuation-half-width-functions
                      '(pyim-probe-punctuation-line-beginning
@@ -126,7 +146,8 @@
        (pyim-isearch-mode 1)
 
        ;; 使用 pupup-el 来绘制选词框
-       (setq pyim-page-tooltip 'popup)
+       (setq pyim-page-tooltip 'pos-tip)
+       (setq x-gtk-use-system-tooltips t)
 
        ;; 选词框显示5个候选词
        (setq pyim-page-length 5)
@@ -184,7 +205,18 @@
      (use-package smartparens
        :ensure t
        :config
-       (add-hook 'prog-mode-hook #'smartparens-mode))
+       (add-hook 'prog-mode-hook #'smartparens-mode)
+       (general-define-key
+        :prefix my-leader
+        "s" '(:ignroe t :which-key "smart parens")
+        "sp" 'sp-splice-sexp
+        "sr" 'sp-rewrapp-sexp
+        "sf" 'sp-forward-slurp-sexp
+        "sb" 'sp-forward-barf-sexp))
+       ;; :bind (("C-c s p" . sp-splice-sexp)
+       ;;        ("C-c s r" . sp-rewrapp-sexp)
+       ;;        ("C-c s f" . sp-forward-slurp-sexp)
+       ;;        ("C-c s b" . sp-forward-barf-sexp)))
    #+END_SRC
    
    smart parens 的用法
@@ -292,6 +324,12 @@
        'org-babel-load-languages '((clojure . t)
                                    (emacs-lisp . t)))
     #+END_SRC
+
+*** set default key
+    #+BEGIN_SRC elisp
+      (general-define-key :prefix my-leader
+                          "m" 'set-mark-and-show-message)
+    #+END_SRC
 ** set convenient key chord
    
    general-key-dispatch 可以实现类似于 key-chord 的功能。
@@ -327,7 +365,6 @@
          "m" 'set-mark-and-show-message
          "s" 'save-buffer))
     #+END_SRC
-    
 ** org mode setting
 *** set file to agenda view
     #+BEGIN_SRC elisp
@@ -562,4 +599,23 @@
    #+BEGIN_SRC elisp
      (use-package alchemist
        :ensure t)
+   #+END_SRC
+** Erlang & Elixir
+   #+BEGIN_SRC elisp
+     (use-package elixir-mode
+       :mode ("\\.ex\\'" . elixir-mode)
+       :config
+       (use-package alchemist
+         :ensure t))
+   #+END_SRC
+** golang 
+   #+BEGIN_SRC elisp
+     (use-package go-mode
+       :ensure t
+       :config
+       (progn
+         (add-hook 'before-save-hook 'gofmt-before-save)
+         (add-hook 'go-mode-hook
+                   (lambda ()
+                     (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))))
    #+END_SRC
