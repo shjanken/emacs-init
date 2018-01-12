@@ -147,7 +147,8 @@
        (add-hook 'emacs-startup-hook
                  #'(lambda () (pyim-restart-1 t)))
        (general-define-key :prefix my-leader
-                           "p c" 'pyim-convert-code-at-point))
+                           "p" '(:ignore t :which-key "pyim")
+                           "p c" '(pyim-convert-code-at-point :which-key "convert code at point")))
 
      (require 'pyim)
      (require 'pyim-basedict) ; 拼音词库设置，五笔用户 *不需要* 此行设置
@@ -196,10 +197,17 @@
        :ensure t
        :config
        (add-hook 'prog-mode-hook #'smartparens-mode)
-       :bind (("C-c s p" . sp-splice-sexp)
-              ("C-c s r" . sp-rewrapp-sexp)
-              ("C-c s f" . sp-forward-slurp-sexp)
-              ("C-c s b" . sp-forward-barf-sexp)))
+       (general-define-key
+        :prefix my-leader
+        "s" '(:ignroe t :which-key "smart parens")
+        "sp" 'sp-splice-sexp
+        "sr" 'sp-rewrapp-sexp
+        "sf" 'sp-forward-slurp-sexp
+        "sb" 'sp-forward-barf-sexp))
+       ;; :bind (("C-c s p" . sp-splice-sexp)
+       ;;        ("C-c s r" . sp-rewrapp-sexp)
+       ;;        ("C-c s f" . sp-forward-slurp-sexp)
+       ;;        ("C-c s b" . sp-forward-barf-sexp)))
    #+END_SRC
    
    smart parens 的用法
