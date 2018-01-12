@@ -88,7 +88,7 @@
                 "C-x w" 'winum-select-window-by-number))
    #+END_SRC
 ** chinese piyin
-   #+BEGIN_SRC elisp :tangle noA
+   #+BEGIN_SRC elisp :tangle no
      (use-package chinese-pyim
        :ensure t 
        :config
