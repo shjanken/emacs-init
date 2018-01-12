@@ -2,6 +2,14 @@
   :PROPERTIES:
   :header-args:elisp: :tangle ~/.emacs.d/init.el
   :END:      
+** my function
+   #+BEGIN_SRC elisp
+     (defun set-mark-and-show-message (arg)
+       "Run set mark command and show a message"
+       (interactive "P")
+       (message "Set Marked!")
+       (set-mark-command arg))
+   #+END_SRC
 ** use mepal package reposity
    #+BEGIN_SRC elisp
      (require 'package) ;; You might already have this line
@@ -48,8 +56,8 @@
      (use-package which-key
        :ensure t 
        :commands (which-key-mode
-                  which-key-setup-side-window-right)
-       :init (which-key-setup-side-window-right))
+                  which-key-setup-side-window-bottom)
+       :init (which-key-setup-side-window-bottom))
 
      (which-key-mode)
    #+END_SRC
@@ -138,9 +146,8 @@
        ;; 让 Emacs 启动时自动加载 pyim 词库
        (add-hook 'emacs-startup-hook
                  #'(lambda () (pyim-restart-1 t)))
-       :bind
-       (("C-c M-j" . pyim-convert-code-at-point) ;与 pyim-probe-dynamic-english 配合
-        ("C-;" . pyim-delete-word-from-personal-buffer)))
+       (general-define-key :prefix my-leader
+                           "p c" 'pyim-convert-code-at-point))
 
      (require 'pyim)
      (require 'pyim-basedict) ; 拼音词库设置，五笔用户 *不需要* 此行设置
@@ -286,7 +293,7 @@
 *** set default key
     #+BEGIN_SRC elisp
       (general-define-key :prefix my-leader
-                          "m" 'set-mark)
+                          "m" 'set-mark-and-show-message)
     #+END_SRC
 ** set convenient key chord
    
@@ -419,7 +426,7 @@
    #+END_SRC
 ** Erlang & Elixir
    #+BEGIN_SRC elisp
-     (use-package elixir-mode d
+     (use-package elixir-mode
        :mode ("\\.ex\\'" . elixir-mode)
        :config
        (use-package alchemist
