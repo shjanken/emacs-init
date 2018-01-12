@@ -38,7 +38,9 @@
    #+BEGIN_SRC elisp
      (use-package general
        :ensure t
-       :commands (general-define-key))
+       :commands (general-define-key)
+       :config
+       (setq my-leader "C-c"))
    #+END_SRC
 
 ** which-key
@@ -79,7 +81,7 @@
        :init (general-define-key
               "C-s" 'swiper))
    #+END_SRC
-** emacs windows number
+** emacs windows number :tangle no
    #+BEGIN_SRC elisp :tangle no
      (use-package winum
        :ensure t
@@ -186,7 +188,9 @@
      (use-package smartparens
        :ensure t
        :config
-       (add-hook 'prog-mode-hook #'smartparens-mode))
+       (add-hook 'prog-mode-hook #'smartparens-mode)
+       :bind (("C-c s p" . sp-splice-sexp)
+              ("C-c s r" . sp-rewrapp-sexp)))
    #+END_SRC
    
    smart parens 的用法
