@@ -2,7 +2,14 @@
  :PROPERTIES:
  :header-args:elisp: :tangle ~/.emacs.d/init.el
  :END:
-
+** my functions 
+   #+BEGIN_SRC elisp
+     (defun set-mark-and-show-message (arg)
+       "Run set mark command and show a message"
+       (interactive "P")
+       (message "Set Marked!")
+       (set-mark-command arg))
+   #+END_SRC
 ** use mepal package reposity
    #+BEGIN_SRC elisp
      (require 'package) ;; You might already have this line
@@ -99,7 +106,7 @@
         "C-x C-r" '(helm-recentf :which-key "recent files")
         "C-x C-o" '(find-file-read-only :which-key "open read only")))
    #+END_SRC
-** emacs windows number :tangle no
+** emacs windows number
    #+BEGIN_SRC elisp :tangle no
      (use-package winum
        :ensure t
@@ -453,7 +460,7 @@
    #+END_SRC
 ** try
    try package and do not install it
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle no
      (use-package try
        :ensure t)
    #+END_SRC
@@ -466,83 +473,6 @@
        :init
        (bind-key "M-p" 'ace-window))
    #+END_SRC
-** evil
-   #+BEGIN_SRC elisp
-     (defun my--evil-config ()
-       "Config my evil"
-       (evil-mode 1)
-       (general-evil-setup) ; can use general-nmap, general-mmap..
-
-       (general-nmap :prefix "SPC"
-                     "b" '(:ignore t :which-key "buffer")
-                     "bb" '(ivy-switch-buffer :which-key "switch buffer")
-                     "bp" '(switch-to-prev-buffer :which-key "prev buffer")
-                     "bn" '(switch-to-next-buffer :which-key "next buffer")
-                     "bk" '(kill-buffer :which-key "kill buffer")
-                     "k" 'kill-buffer
-
-                     "f" '(:ignore t :which-key "file")
-                     "fr" 'counsel-recentf
-                     "ff" '(counsel-find-file :which-key "find-file")
-
-                     "s" '(:ignore t)
-                     "ss" 'save-buffer
-                     "sp" '(sp-forward-slurp-sexp :which-key "forward slurp")
-
-                     "/" '(swiper :which-key "search")
-                     "x" '(counsel-M-x :which-key "M-x"))
-
-       (general-imap
-        "j"
-        (general-key-dispatch 'self-insert-command
-          :timeout 0.25
-          "k" 'evil-normal-state)))
-
-
-     (use-package evil
-       :ensure t
-       :config
-       (my--evil-config))
-   #+END_SRC
-** ace jump mode
-   直接跳转到用户输入的字符上去
-   [[https://github.com/winterTTr/ace-jump-mode][github]]
-   #+BEGIN_SRC elisp
-     (use-package ace-jump-mode
-       :ensure t
-
-       ;; use evil keymaps
-       :config
-       (general-define-key
-        :states '(normal inert emacs)
-        :prefix ","
-        "f" '(ace-jump-word-mode :which-key "jump to word")
-        "l" '(ace-jump-line-mode :which-key "jump to line")))
-   #+END_SRC
-
-** find file inproject 
-   install on windows: 
-   find file in project 需要 find 工具来查找文件，所以在 windows 上需要 cygwin 来配合
-   #+BEGIN_SRC elisp :tangle no
-     (if (eq system-type 'windows-nt)
-         (setq ffip-find-executable "c:\\\\cygwin64\\\\bin\\\\find"))
-   #+END_SRC
-   
-   #+BEGIN_SRC elisp
-     (use-package find-file-in-project
-       :ensure t
-       :init
-       (if (eq system-type 'windows-nt)
-           (setq ffip-find-executable "c:\\\\cygwin\\\\bin\\\\find"))
-       :config
-       (general-define-key
-        :states '(normal)
-        :prefix "SPC"
-        "p" '(:ignore t :which-key "prefix - find file in project")
-        "pf" '(find-file-in-project :which-key "find file")))
-        
-   #+END_SRC
-
 ** use color theme
    #+BEGIN_SRC elisp :tangle no
      (use-package color-theme
