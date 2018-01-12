@@ -334,9 +334,7 @@
       (general-define-key
        "C-c a" #'org-agenda)
 
-      (setq org-agenda-files '("~/Documents/org/inbox.org"
-                               "~/Documents/org/gtd.org"
-                               "~/Documents/org/tickler.org"))
+      (setq org-agenda-files '("~/Documents/org/"))
     #+END_SRC
 *** org capture template
     | key       | operator                   |
@@ -348,25 +346,21 @@
 
       (setq org-capture-templates '(("t" "Todo [inbox]" entry
                                      (file+headline "~/Documents/org/inbox.org" "Tasks")
-                                     "* TODO %i%?")
-                                    ("T" "Tickler" entry
-                                     (file+headline "~/Documents/org/tickler.org" "Tickler")
-                                     "* %i%? \n %U")))
+                                     "* TODO %i%?")))
     #+END_SRC
 *** set org file todo keywords
     #+BEGIN_SRC elisp
-     (setq org-todo-keywords '((sequence
-                                 "TODO(t)"
-                                 "WAITING(w)"
-                                 "|"
-                                 "DONE(d)"
-                                 "CANCELLED(c)")))
+      (setq org-todo-keywords '((sequence
+                                  "TODO(t)"
+                                  "WAITING(w)"
+                                  "SOMEDAY(s)"
+                                  "|"
+                                  "DONE(d)"
+                                  "CANCELLED(c)")))
     #+END_SRC
 *** set refile target
     #+BEGIN_SRC elisp
-      (setq org-refile-targets '(("~/Documents/org/gtd.org" :maxlevel . 3)
-                                 ("~/Documents/org/someday.org" :level . 1)
-                                 ("~/Documents/org/tickler.org" :maxlevel . 2)))
+      (setq org-refile-targets '(("~/Documents/org/archive/" :maxlevel . 9)))
     #+END_SRC
 ** clojure
    - clojure package start so slow.
