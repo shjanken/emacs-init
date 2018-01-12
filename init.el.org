@@ -117,6 +117,11 @@
 ** chinese piyin
    #+BEGIN_SRC elisp
      (use-package pyim
+       :init
+       (progn
+         (require 'pyim)
+         (require 'pyim-basedict)
+         (pyim-basedict-enable))
        :ensure t
        :config
        ;; 激活 basedict 拼音词库
@@ -153,8 +158,7 @@
        (pyim-isearch-mode 1)
 
        ;; 使用 pupup-el 来绘制选词框
-       (setq pyim-page-tooltip 'pos-tip)
-       (setq x-gtk-use-system-tooltips t)
+       (setq pyim-page-tooltip 'popup)
 
        ;; 选词框显示5个候选词
        (setq pyim-page-length 5)
@@ -162,12 +166,11 @@
        ;; 让 Emacs 启动时自动加载 pyim 词库
        (add-hook 'emacs-startup-hook
                  #'(lambda () (pyim-restart-1 t)))
-       :bind
-       (("M-j" . pyim-convert-code-at-point) ;与 pyim-probe-dynamic-english 配合
-        ("C-;" . pyim-delete-word-from-personal-buffer)))
 
-     (require 'pyim)
-     (require 'pyim-basedict)
+       (general-define-key
+        :prefix my-leader
+        "p" '(:ignore t :which-key "pyim")
+        "pc" 'pyim-convert-code-at-point))
    #+END_SRC
 ** hightlight sexp
    #+BEGIN_SRC elispx
@@ -524,11 +527,6 @@
        :ensure t
        :bind
        (("<f8>" . neotree-toggle)))
-   #+END_SRC
-** Elixir
-   #+BEGIN_SRC elisp
-     (use-package alchemist
-       :ensure t)
    #+END_SRC
 ** Erlang & Elixir
    #+BEGIN_SRC elisp
