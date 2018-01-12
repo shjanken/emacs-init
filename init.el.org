@@ -1,15 +1,8 @@
 * emacs init file
-  :PROPERTIES:
-  :header-args:elisp: :tangle ~/.emacs.d/init.el
-  :END:      
-** my function
-   #+BEGIN_SRC elisp
-     (defun set-mark-and-show-message (arg)
-       "Run set mark command and show a message"
-       (interactive "P")
-       (message "Set Marked!")
-       (set-mark-command arg))
-   #+END_SRC
+ :PROPERTIES:
+ :header-args:elisp: :tangle ~/.emacs.d/init.el
+ :END:
+
 ** use mepal package reposity
    #+BEGIN_SRC elisp
      (require 'package) ;; You might already have this line
@@ -117,7 +110,6 @@
 ** chinese piyin
    #+BEGIN_SRC elisp
      (use-package pyim
-       :defer t
        :ensure t
        :config
        ;; 激活 basedict 拼音词库
@@ -163,12 +155,12 @@
        ;; 让 Emacs 启动时自动加载 pyim 词库
        (add-hook 'emacs-startup-hook
                  #'(lambda () (pyim-restart-1 t)))
-       (general-define-key :prefix my-leader
-                           "p" '(:ignore t :which-key "pyim")
-                           "p c" '(pyim-convert-code-at-point :which-key "convert code at point")))
+       :bind
+       (("M-j" . pyim-convert-code-at-point) ;与 pyim-probe-dynamic-english 配合
+        ("C-;" . pyim-delete-word-from-personal-buffer)))
 
      (require 'pyim)
-     (require 'pyim-basedict) ; 拼音词库设置，五笔用户 *不需要* 此行设置
+     (require 'pyim-basedict)
    #+END_SRC
 ** hightlight sexp
    #+BEGIN_SRC elispx
@@ -180,8 +172,8 @@
    #+BEGIN_SRC elisp
      (use-package rainbow-delimiters
        :ensure t
-       :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-
+       :config
+       (rainbow-delimiters-mode))
    #+END_SRC
 ** tranparent window
    #+BEGIN_SRC elisp
@@ -244,8 +236,7 @@
    - sp-forward-slurp-hybrid-sexp
      smae
 ** load theme 
-   *dont tangla at other computer*
-   <2017-07-12> use tao theme
+*** old theme
    #+BEGIN_SRC elisp :tangle no
      (use-package anti-zenburn-theme
        :ensure t)
@@ -256,15 +247,33 @@
    #+BEGIN_SRC elisp :tangle no
      (load-theme 'darcula t)
    #+END_SRC
-*** <2017-07-27> use plan-9 theme
+*** use plan-9 theme
+    Must set y twice on emacs startup!
     #+BEGIN_SRC elisp :tangle no
       (use-package plan9-theme
         :ensure t)
 
       (load-theme 'plan9)
     #+END_SRC
-*** <2017-11-03> use minimal-theme
-    #+BEGIN_SRC elisp
+*** use doom-theme
+    This theme has some problem in my emacs.
+    #+BEGIN_SRC elisp :tangle no
+      (use-package doom-themes
+        :ensure t
+        :config
+        (doom-themes-org-config))
+
+      (load-theme 'doom-one t)
+    #+END_SRC
+*** atom one dark
+    #+BEGIN_SRC elisp :tangle no
+      (use-package atom-one-dark-theme
+        :ensure t)
+
+      (load-theme 'atom-one-dark t)
+    #+END_SRC
+*** ample theme
+    #+BEGIN_SRC elisp :tangle no
       (use-package ample-theme
         :init (progn (load-theme 'ample t t)
                      (load-theme 'ample-flat t t)
@@ -272,6 +281,13 @@
                      (enable-theme 'ample-light))
         :defer t
         :ensure t)
+    #+END_SRC
+*** lenlen theme
+    #+BEGIN_SRC elisp :tangle no
+      (use-package solarized-theme
+        :ensure t
+        :init (load-theme 'solarized)
+        :defer t)
     #+END_SRC
 ** expand-region
    #+BEGIN_SRC elisp
@@ -295,17 +311,11 @@
 *** set my default directory when emacs start
     #+BEGIN_SRC elisp
       (setq command-line-default-directory "~/")
+      (setq default-directory "~/")
       (scroll-bar-mode -1) ; disable scroll bar
       (tool-bar-mode -1) ; disable tool bar
       (show-paren-mode) ; hight light match parens
-
-      (setq
-       backup-by-copying t
-       backup-directory-alist '(("." . "~/.emacs_backups"))
-       delete-old-versions t
-       kept-new-versions 3
-       kept-old-versions 2
-       version-control t)
+      (setq inhibit-startup-screen t)
     #+END_SRC
 
 *** set babel execute language
@@ -340,8 +350,6 @@
 *** set mm to set-mark-command
     when i pre 'mm', run set-mark-command, and notice me at message buffer
 
-    <2018-01-12 五> 使用 mm 会导致输入变慢，不流畅
-
     #+BEGIN_SRC elisp :tangle no
       (defun set-mark-and-show-message (arg)
           "Run set mark command and show a message"
@@ -363,9 +371,7 @@
       (general-define-key
        "C-c a" #'org-agenda)
 
-      (setq org-agenda-files '("~/Documents/org/inbox.org"
-                               "~/Documents/org/gtd.org"
-                               "~/Documents/org/tickler.org"))
+      (setq org-agenda-files '("~/Documents/org/"))
     #+END_SRC
 *** org capture template
     | key       | operator                   |
@@ -377,25 +383,21 @@
 
       (setq org-capture-templates '(("t" "Todo [inbox]" entry
                                      (file+headline "~/Documents/org/inbox.org" "Tasks")
-                                     "* TODO %i%?")
-                                    ("T" "Tickler" entry
-                                     (file+headline "~/Documents/org/tickler.org" "Tickler")
-                                     "* %i%? \n %U")))
+                                     "* TODO %i%?")))
     #+END_SRC
 *** set org file todo keywords
     #+BEGIN_SRC elisp
-     (setq org-todo-keywords '((sequence
-                                 "TODO(t)"
-                                 "WAITING(w)"
-                                 "|"
-                                 "DONE(d)"
-                                 "CANCELLED(c)")))
+      (setq org-todo-keywords '((sequence
+                                  "TODO(t)"
+                                  "WAITING(w)"
+                                  "SOMEDAY(s)"
+                                  "|"
+                                  "DONE(d)"
+                                  "CANCELLED(c)")))
     #+END_SRC
 *** set refile target
     #+BEGIN_SRC elisp
-      (setq org-refile-targets '(("~/Documents/org/gtd.org" :maxlevel . 3)
-                                 ("~/Documents/org/someday.org" :level . 1)
-                                 ("~/Documents/org/tickler.org" :maxlevel . 2)))
+      (setq org-refile-targets '(("~/Documents/org/archive/" :maxlevel . 9)))
     #+END_SRC
 ** clojure
    - clojure package start so slow.
@@ -409,15 +411,30 @@
        :ensure t
        :commands (clojure-mode clojurescript-mode)
        :config
-       (defun clojure-config ()
-         (use-package cider :ensure t)
-         (show-paren-mode)))
+       (use-package cider :ensure t)
+       (show-paren-mode)
+
+       (general-define-key
+        :states '(insert emacs normal)
+        :keymaps 'cider-repl-mode-map
+        "M-p" 'ace-window)
+
+
+       ;; in cider-stack-trace-mode set q to quit
+       (general-define-key
+        :state '(insert emacs normal)
+        :keymaps 'cider-stacktrace-mode-map
+
+        "M-p" 'ace-window ; 将 M-p 绑定到 ace-window， 获取一致的用户体验
+        "C-p"  'cider-popup-buffer-quit-function))
    #+END_SRC
 
 ** workgroup2
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle no
      (use-package workgroups2
-       :ensure t)
+       :ensure t
+       :config
+       (workgroups-mode t))
    #+END_SRC
 
    #+RESULTS:
@@ -446,8 +463,142 @@
      (use-package ace-window
        :ensure t
        :commands (ace-window)
+       :init
+       (bind-key "M-p" 'ace-window))
+   #+END_SRC
+** evil
+   #+BEGIN_SRC elisp
+     (defun my--evil-config ()
+       "Config my evil"
+       (evil-mode 1)
+       (general-evil-setup) ; can use general-nmap, general-mmap..
+
+       (general-nmap :prefix "SPC"
+                     "b" '(:ignore t :which-key "buffer")
+                     "bb" '(ivy-switch-buffer :which-key "switch buffer")
+                     "bp" '(switch-to-prev-buffer :which-key "prev buffer")
+                     "bn" '(switch-to-next-buffer :which-key "next buffer")
+                     "bk" '(kill-buffer :which-key "kill buffer")
+                     "k" 'kill-buffer
+
+                     "f" '(:ignore t :which-key "file")
+                     "fr" 'counsel-recentf
+                     "ff" '(counsel-find-file :which-key "find-file")
+
+                     "s" '(:ignore t)
+                     "ss" 'save-buffer
+                     "sp" '(sp-forward-slurp-sexp :which-key "forward slurp")
+
+                     "/" '(swiper :which-key "search")
+                     "x" '(counsel-M-x :which-key "M-x"))
+
+       (general-imap
+        "j"
+        (general-key-dispatch 'self-insert-command
+          :timeout 0.25
+          "k" 'evil-normal-state)))
+
+
+     (use-package evil
+       :ensure t
+       :config
+       (my--evil-config))
+   #+END_SRC
+** ace jump mode
+   直接跳转到用户输入的字符上去
+   [[https://github.com/winterTTr/ace-jump-mode][github]]
+   #+BEGIN_SRC elisp
+     (use-package ace-jump-mode
+       :ensure t
+
+       ;; use evil keymaps
+       :config
+       (general-define-key
+        :states '(normal inert emacs)
+        :prefix ","
+        "f" '(ace-jump-word-mode :which-key "jump to word")
+        "l" '(ace-jump-line-mode :which-key "jump to line")))
+   #+END_SRC
+
+** find file inproject 
+   install on windows: 
+   find file in project 需要 find 工具来查找文件，所以在 windows 上需要 cygwin 来配合
+   #+BEGIN_SRC elisp :tangle no
+     (if (eq system-type 'windows-nt)
+         (setq ffip-find-executable "c:\\\\cygwin64\\\\bin\\\\find"))
+   #+END_SRC
+   
+   #+BEGIN_SRC elisp
+     (use-package find-file-in-project
+       :ensure t
+       :init
+       (if (eq system-type 'windows-nt)
+           (setq ffip-find-executable "c:\\\\cygwin\\\\bin\\\\find"))
+       :config
+       (general-define-key
+        :states '(normal)
+        :prefix "SPC"
+        "p" '(:ignore t :which-key "prefix - find file in project")
+        "pf" '(find-file-in-project :which-key "find file")))
+        
+   #+END_SRC
+
+** use color theme
+   #+BEGIN_SRC elisp :tangle no
+     (use-package color-theme
+       :ensure t)
+   #+END_SRC
+   
+** eyebrowser
+   #+BEGIN_SRC elisp
+     (use-package eyebrowse
+       :ensure t
+       :config
+       (setq eyebrowse-mode-line-separator " "
+             eyebrowse-new-workspace t)
+       (eyebrowse-mode t)
+       ;; use desktop save the current state
+       (desktop-change-dir "~/") ; my desktop.lock file in HOME directory
+       )
+        
+   #+END_SRC
+
+** symbol-overlay
+   高亮符号的插件
+
+   #+BEGIN_SRC elisp
+     (use-package symbol-overlay
+       :ensure t)
+   #+END_SRC
+   - 快捷键设置
+     #+BEGIN_SRC elisp :tangle no
+       (global-set-key (kbd "M-i") 'symbol-overlay-put)
+       (global-set-key (kbd "M-n") 'symbol-overlay-switch-forward)
+       (global-set-key (kbd "M-p") 'symbol-overlay-switch-backward)
+       (global-set-key (kbd "<f7>") 'symbol-overlay-mode)
+       (global-set-key (kbd "<f8>") 'symbol-overlay-remove-all)
+     #+END_SRC
+** key-fre
+   这个扩展可以查看我的案件统计
+   这样我就可以根据我自己的案件频率来调整优化快捷键
+   #+BEGIN_SRC elisp     
+     (use-package keyfreq
+       :ensure t
+       :config
+       (keyfreq-mode 1)
+       (keyfreq-autosave-mode 1)) 
+   #+END_SRC
+** Neotree
+   #+BEGIN_SRC elisp
+     (use-package neotree
+       :ensure t
        :bind
-       (("M-p" . ace-window)))
+       (("<f8>" . neotree-toggle)))
+   #+END_SRC
+** Elixir
+   #+BEGIN_SRC elisp
+     (use-package alchemist
+       :ensure t)
    #+END_SRC
 ** Erlang & Elixir
    #+BEGIN_SRC elisp

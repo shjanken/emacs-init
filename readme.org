@@ -1,2 +1,2 @@
 * This is org file for my emacs init.el
-  Use C-c C-v t to tangle it.
+  Use C-c C-v t tangle init.el.org to ~/.emacs.d/init.el
