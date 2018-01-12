@@ -190,7 +190,9 @@
        :config
        (add-hook 'prog-mode-hook #'smartparens-mode)
        :bind (("C-c s p" . sp-splice-sexp)
-              ("C-c s r" . sp-rewrapp-sexp)))
+              ("C-c s r" . sp-rewrapp-sexp)
+              ("C-c s f" . sp-forward-slurp-sexp)
+              ("C-c s b" . sp-forward-barf-sexp)))
    #+END_SRC
    
    smart parens 的用法
@@ -258,12 +260,20 @@
       '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 112 :width normal :foundry "MS  " :family "YaHei Consolas Hybrid")))))
    #+END_SRC
 
-*** COMMENT set my default directory when emacs start
+*** set my default directory when emacs start
     #+BEGIN_SRC elisp
       (setq command-line-default-directory "~/")
       (scroll-bar-mode -1) ; disable scroll bar
       (tool-bar-mode -1) ; disable tool bar
       (show-paren-mode) ; hight light match parens
+
+      (setq
+       backup-by-copying t
+       backup-directory-alist '(("." . "~/.emacs_backups"))
+       delete-old-versions t
+       kept-new-versions 3
+       kept-old-versions 2
+       version-control t)
     #+END_SRC
 
 *** set babel execute language
@@ -271,6 +281,12 @@
       (org-babel-do-load-languages
        'org-babel-load-languages '((clojure . t)
                                    (emacs-lisp . t)))
+    #+END_SRC
+
+*** set default key
+    #+BEGIN_SRC elisp
+      (general-define-key :prefix my-leader
+                          "m" 'set-mark)
     #+END_SRC
 ** set convenient key chord
    
@@ -292,7 +308,9 @@
 *** set mm to set-mark-command
     when i pre 'mm', run set-mark-command, and notice me at message buffer
 
-    #+BEGIN_SRC elisp
+    <2018-01-12 五> 使用 mm 会导致输入变慢，不流畅
+
+    #+BEGIN_SRC elisp :tangle no
       (defun set-mark-and-show-message (arg)
           "Run set mark command and show a message"
         (interactive "P")
@@ -307,7 +325,6 @@
          "m" 'set-mark-and-show-message
          "s" 'save-buffer))
     #+END_SRC
-    
 ** org mode setting
 *** set file to agenda view
     #+BEGIN_SRC elisp
@@ -402,8 +419,11 @@
    #+END_SRC
 ** Erlang & Elixir
    #+BEGIN_SRC elisp
-     (use-package alchemist
-       :ensure t) 
+     (use-package elixir-mode d
+       :mode ("\\.ex\\'" . elixir-mode)
+       :config
+       (use-package alchemist
+         :ensure t))
    #+END_SRC
 ** golang 
    #+BEGIN_SRC elisp
