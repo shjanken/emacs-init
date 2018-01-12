@@ -62,7 +62,8 @@
      (which-key-mode)
    #+END_SRC
 ** Ivy, Counsel, Swiper
-   #+BEGIN_SRC elisp
+   <2018-01-12 五> 用 heml 代替
+   #+BEGIN_SRC elisp :tangle no
      (use-package ivy :ensure t
        :commands (ivy-mode
                   ivy-switch-buffer)
@@ -88,6 +89,22 @@
        :commands (swiper)
        :init (general-define-key
               "C-s" 'swiper))
+   #+END_SRC
+** helm
+   [[https://github.com/emacs-helm/helm][helm github]]
+   #+BEGIN_SRC elisp
+     (use-package helm
+       :ensure t
+       :init
+       (progn
+         (require 'helm-config)
+         (helm-mode 1))
+       :config
+       (general-define-key
+        "C-x C-f" 'helm-find-files
+        "M-x" 'helm-M-x
+        "C-x C-r" '(helm-recentf :which-key "recent files")
+        "C-x C-o" '(find-file-read-only :which-key "open read only")))
    #+END_SRC
 ** emacs windows number :tangle no
    #+BEGIN_SRC elisp :tangle no
