@@ -104,7 +104,12 @@
         "C-x C-f" 'helm-find-files
         "M-x" 'helm-M-x
         "C-x C-r" '(helm-recentf :which-key "recent files")
-        "C-x C-o" '(find-file-read-only :which-key "open read only")))
+        "C-x C-o" '(find-file-read-only :which-key "open read only"))
+       (use-package helm-swoop ; helm 的 search 模式
+         :ensure t
+         :config
+         (general-define-key
+          "C-s" '(helm-swoop :which-key "search"))))
    #+END_SRC
 ** emacs windows number
    #+BEGIN_SRC elisp :tangle no
@@ -182,8 +187,8 @@
    #+BEGIN_SRC elisp
      (use-package rainbow-delimiters
        :ensure t
-       :config
-       (rainbow-delimiters-mode))
+       :init
+       (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
    #+END_SRC
 ** tranparent window
    #+BEGIN_SRC elisp
@@ -407,7 +412,7 @@
     #+END_SRC
 *** set refile target
     #+BEGIN_SRC elisp
-      (setq org-refile-targets '(("~/Documents/org/archive/" :maxlevel . 9)))
+      (setq org-refile-targets '(("~/Documents/org/" :maxlevel . 9)))
     #+END_SRC
 ** clojure
    - clojure package start so slow.
@@ -483,7 +488,7 @@
    #+END_SRC
    
 ** eyebrowser
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle no
      (use-package eyebrowse
        :ensure t
        :config
@@ -540,10 +545,22 @@
    #+BEGIN_SRC elisp
      (use-package go-mode
        :ensure t
+       :mode "\\.go\\'"
        :config
        (progn
          (add-hook 'before-save-hook 'gofmt-before-save)
          (add-hook 'go-mode-hook
                    (lambda ()
                      (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))))
+   #+END_SRC
+** markdown
+   #+BEGIN_SRC elisp
+     (use-package markdown-mode
+       :ensure t
+       :mode "\\.md\\'")
+   #+END_SRC
+** linum mode
+   #+BEGIN_SRC elisp
+     (use-package linum-mode
+       :hook prog-mode)
    #+END_SRC
