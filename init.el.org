@@ -1,5 +1,5 @@
 * emacs init file
- :PROPERTIES:
+  :PROPERTIES: 
  :header-args:elisp: :tangle ~/.emacs.d/init.el
  :END:
 ** my functions 
@@ -564,3 +564,14 @@
      (use-package linum-mode
        :hook prog-mode)
    #+END_SRC
+** key chord
+   #+BEGIN_SRC elisp
+     (use-package key-chord
+       :ensure t
+       :commands key-chord-mode
+       :init
+       (add-hook 'prog-mode-hook (lambda () (key-chord-mode 1)))
+       :config
+       (key-chord-define-global "ww" 'save-buffer)
+       (key-chord-define-global ",m" 'set-mark-command))
+#+END_SRC
