@@ -572,6 +572,7 @@
         kept-new-versions 6
         kept-old-versions 2
         version-control t)
+#+END_SRC
 ** key chord
    #+BEGIN_SRC elisp
      (use-package key-chord
@@ -582,4 +583,4 @@
        :config
        (key-chord-define-global "ww" 'save-buffer)
        (key-chord-define-global ",m" 'set-mark-command))
-#+END_SRC
+  #+END_SRC
