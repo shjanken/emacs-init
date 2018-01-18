@@ -564,3 +564,13 @@
      (use-package linum-mode
        :hook prog-mode)
    #+END_SRC
+** setup auto backup
+#+BEGIN_SRC elisp
+  (setq backup-by-copying t ; enable auto backup
+        backup-directory-alist '(("." . "~/.emacs_backups"))
+        delete-old-versions t
+        kept-new-versions 6
+        kept-old-versions 2
+        version-control t)
+
+#+END_SRC
