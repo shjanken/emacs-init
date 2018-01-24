@@ -412,7 +412,7 @@
     #+END_SRC
 *** set refile target
     #+BEGIN_SRC elisp
-      (setq org-refile-targets '(("~/Documents/org/" :maxlevel . 9)))
+      (setq org-refile-targets '(("~/Documents/org/work.org" :maxlevel . 5)))
     #+END_SRC
 ** clojure
    - clojure package start so slow.
@@ -584,3 +584,19 @@
        (key-chord-define-global "ww" 'save-buffer)
        (key-chord-define-global ",m" 'set-mark-command))
   #+END_SRC
+** sky-color-clock
+   好看的会根据时间自动改变颜色的 =modeline= 时钟
+   [[https://github.com/zk-phi/sky-color-clock][sky-color-clock]]
+   #+BEGIN_SRC elisp
+     ;; check the sky-color-clock wheat installed
+     (if (not (file-exists-p "~/.emacs.d/elpa/sky-color-clock/sky-color-clock.el"))
+         (message "sky-color-clock not installed")
+       (progn
+         (add-to-list 'load-path "~/.emacs.d/elpa/sky-color-clock")
+         (require 'sky-color-clock)
+         (sky-color-clock-initialize 31) ; this is shanghai latitude
+         (setq sky-color-clock-enable-emoji-icon nil) ; no display emoji
+         (setq sky-color-clock-enable-temperature-indicator t) ; display temperature
+         (push '(:eval (sky-color-clock)) (default-value 'mode-line-format))
+         ))
+   #+END_SRC
