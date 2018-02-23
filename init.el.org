@@ -1,3 +1,5 @@
+#+startup: hidestars
+
 * emacs init file
   :PROPERTIES: 
  :header-args:elisp: :tangle ~/.emacs.d/init.el
@@ -63,7 +65,7 @@
    #+END_SRC
 ** Ivy, Counsel, Swiper
    <2018-01-12 五> 用 heml 代替
-   #+BEGIN_SRC elisp :tangle no
+   #+BEGIN_SRC elisp
      (use-package ivy :ensure t
        :commands (ivy-mode
                   ivy-switch-buffer)
@@ -92,7 +94,7 @@
    #+END_SRC
 ** helm
    [[https://github.com/emacs-helm/helm][helm github]]
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle no
      (use-package helm
        :ensure t
        :init
@@ -298,12 +300,11 @@
         :ensure t)
     #+END_SRC
 *** lenlen theme
-    #+BEGIN_SRC elisp :tangle no
-      (use-package solarized-theme
-        :ensure t
-        :init (load-theme 'solarized)
-        :defer t)
+    #+BEGIN_SRC elisp
+      (use-package lenlen-theme
+        :ensure t)
     #+END_SRC
+
 ** expand-region
    #+BEGIN_SRC elisp
      (use-package expand-region
@@ -412,7 +413,17 @@
     #+END_SRC
 *** set refile target
     #+BEGIN_SRC elisp
-      (setq org-refile-targets '(("~/Documents/org/work.org" :maxlevel . 5)))
+      (setq org-refile-targets
+            '(
+              ("~/Documents/org/work.org" :maxlevel . 5)
+              ("~/Documents/org/personal.org" :maxlevel . 9)
+              ("~/Documents/org/notes.org" :maxlevel . 9)
+              ))
+    #+END_SRC
+*** 设置每一级标题有不一样的大小
+    #+BEGIN_SRC elisp
+      (set-face-attribute 'org-level-1 nil :height 1.2 :bold t)
+      (set-face-attribute 'org-level-2 nil :height 1.1 :bold t)
     #+END_SRC
 ** clojure
    - clojure package start so slow.
@@ -462,7 +473,7 @@
        (add-hook 'prog-mode-hook 'company-mode))
    #+END_SRC
 ** dired+
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle no
      (use-package dired+
        :ensure t)
    #+END_SRC
@@ -560,9 +571,19 @@
        :mode "\\.md\\'")
    #+END_SRC
 ** linum mode
-   #+BEGIN_SRC elisp
+   
+   打算用 linum-relative 来代替
+   SCHEDULED: <2018-02-01 周四>
+  
+   #+BEGIN_SRC elisp :tangle no
      (use-package linum-mode
        :hook prog-mode)
+   #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (use-package linum-relative
+       :ensure t
+       :hook (prog-mode . linum-relative-mode))
    #+END_SRC
 ** setup auto backup
 #+BEGIN_SRC elisp
@@ -599,4 +620,10 @@
          (setq sky-color-clock-enable-temperature-indicator t) ; display temperature
          (push '(:eval (sky-color-clock)) (default-value 'mode-line-format))
          ))
+   #+END_SRC
+** cnfonts
+   #+BEGIN_SRC elisp
+     (use-package cnfonts
+       :ensure t
+       :init (cnfonts-enable))
    #+END_SRC
