@@ -2,8 +2,8 @@
 
 * emacs init file
   :PROPERTIES: 
- :header-args:elisp: :tangle ~/.emacs.d/init.el
- :END:
+  :header-args:elisp: :tangle ~/.emacs.d/init.el
+  :END:      
 ** my functions 
    #+BEGIN_SRC elisp
      (defun set-mark-and-show-message (arg)
@@ -253,17 +253,6 @@
    - sp-forward-slurp-hybrid-sexp
      smae
 ** load theme 
-*** old theme
-   #+BEGIN_SRC elisp :tangle no
-     (use-package anti-zenburn-theme
-       :ensure t)
-
-     (load-theme 'anti-zenburn t)
-   #+END_SRC
-
-   #+BEGIN_SRC elisp :tangle no
-     (load-theme 'darcula t)
-   #+END_SRC
 *** use plan-9 theme
     Must set y twice on emacs startup!
     #+BEGIN_SRC elisp :tangle no
@@ -272,39 +261,23 @@
 
       (load-theme 'plan9)
     #+END_SRC
-*** use doom-theme
-    This theme has some problem in my emacs.
-    #+BEGIN_SRC elisp :tangle no
-      (use-package doom-themes
-        :ensure t
-        :config
-        (doom-themes-org-config))
-
-      (load-theme 'doom-one t)
-    #+END_SRC
-*** atom one dark
-    #+BEGIN_SRC elisp :tangle no
-      (use-package atom-one-dark-theme
-        :ensure t)
-
-      (load-theme 'atom-one-dark t)
-    #+END_SRC
-*** ample theme
-    #+BEGIN_SRC elisp :tangle no
-      (use-package ample-theme
-        :init (progn (load-theme 'ample t t)
-                     (load-theme 'ample-flat t t)
-                     (load-theme 'ample-light t t)
-                     (enable-theme 'ample-light))
-        :defer t
-        :ensure t)
-    #+END_SRC
 *** lenlen theme
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package lenlen-theme
         :ensure t)
     #+END_SRC
+*** doom theme
+    #+BEGIN_SRC elisp
+      (use-package doom-themes
+        :ensure t
+        :config
+        (set doom-themes-enable-bold t)
+        (set doom-themes-enable-italic t)
+        (doom-themes-visual-bell-config))
 
+      (load-theme 'doom-one-light)
+    #+END_SRC
+    
 ** expand-region
    #+BEGIN_SRC elisp
      (use-package expand-region
@@ -571,17 +544,18 @@
        :mode "\\.md\\'")
    #+END_SRC
 ** linum mode
+
    
-   打算用 linum-relative 来代替
-   SCHEDULED: <2018-02-01 周四>
+   <2018-02-01> 打算用 linum-relative 来代替
   
    #+BEGIN_SRC elisp :tangle no
      (use-package linum-mode
        :hook prog-mode)
    #+END_SRC
 
+   <2018-04-20 周五> 用了 =line mode= 以后太慢了，还是取消掉
    #+BEGIN_SRC elisp
-     (use-package linum-relative
+     (use-package linum-relative :tangle no
        :ensure t
        :hook (prog-mode . linum-relative-mode))
    #+END_SRC
