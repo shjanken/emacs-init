@@ -267,7 +267,8 @@
         :ensure t)
     #+END_SRC
 *** doom theme
-    #+BEGIN_SRC elisp
+    <2018-04-24 周二> change tangle to no. just want to test new theme
+    #+BEGIN_SRC elisp :tangle no
       (use-package doom-themes
         :ensure t
         :config
@@ -276,6 +277,14 @@
         (doom-themes-visual-bell-config))
 
       (load-theme 'doom-one-light)
+    #+END_SRC
+*** doneburn-theme
+    A light theme.
+    [[https://github.com/manuel-uberti/doneburn-theme][github address]]
+    #+BEGIN_SRC elisp
+      (use-package doneburn-theme
+        :ensure t
+        :config (load-theme 'doneburn 'no-confirm))
     #+END_SRC
     
 ** expand-region
@@ -554,8 +563,8 @@
    #+END_SRC
 
    <2018-04-20 周五> 用了 =line mode= 以后太慢了，还是取消掉
-   #+BEGIN_SRC elisp
-     (use-package linum-relative :tangle no
+   #+BEGIN_SRC elisp :tangle no
+     (use-package linum-relative
        :ensure t
        :hook (prog-mode . linum-relative-mode))
    #+END_SRC
