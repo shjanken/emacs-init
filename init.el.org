@@ -528,11 +528,18 @@
    #+END_SRC
 ** Erlang & Elixir
    #+BEGIN_SRC elisp
+     ;; elixir
      (use-package elixir-mode
        :mode ("\\.ex\\'" . elixir-mode)
        :config
        (use-package alchemist
          :ensure t))
+
+     ;; erlang
+     (use-package erlang
+       :ensure t
+       :mode ("\\.erl\\'" . erlang-mode)
+       :interpreter ("erlang" . erlang-mode))
    #+END_SRC
 ** golang 
    #+BEGIN_SRC elisp
