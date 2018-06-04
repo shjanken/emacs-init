@@ -438,11 +438,10 @@
    #+END_SRC
 
 ** workgroup2
-   #+BEGIN_SRC elisp :tangle no
+   #+BEGIN_SRC elisp
      (use-package workgroups2
-       :ensure t
-       :config
-       (workgroups-mode t))
+       :ensure t)
+     (workgroups-mode 1)
    #+END_SRC
 
    #+RESULTS:
@@ -481,16 +480,16 @@
    #+END_SRC
    
 ** eyebrowser
-   #+BEGIN_SRC elisp :tangle no
+   #+BEGIN_SRC elisp
      (use-package eyebrowse
        :ensure t
        :config
-       (setq eyebrowse-mode-line-separator " "
+       (setq eyebrowse-mode-line-separator " | "
              eyebrowse-new-workspace t)
-       (eyebrowse-mode t)
        ;; use desktop save the current state
        (desktop-change-dir "~/") ; my desktop.lock file in HOME directory
-       )
+       :init (add-hook 'prog-mode-hook 'eyebrowse-mode)
+       :commands (eyebrowse-mode))
         
    #+END_SRC
 
@@ -617,3 +616,32 @@
        :ensure t
        :init (cnfonts-enable))
    #+END_SRC
+** find file in project
+   [[https://github.com/technomancy/find-file-in-project][github]]
+   #+BEGIN_SRC elisp
+     (use-package find-file-in-project
+       :ensure t
+       :init
+       (if (eq system-type 'windows-nt)
+           (if (file-exists-p "c:\\\\tools\\\\cygwin")
+               (setq ffip-find-executable "c:\\\\tools\\\\cyginw\\\\bin\\\\find")
+             (setq ffip-find-executable "~/.babun/cygwin/bin/find")))
+       (general-define-key :prefix my-leader
+                           "f" '(:ignore t :which-key "find file in project")
+                           "ff" 'find-file-in-project)
+       :commands (find-file-in-project
+                  find-file-in-project-by-point
+                  find-file-in-project-by-selected))
+   #+END_SRC
+
+*** Useage:
+**** under windows
+     in windows. we can use cygwin find tool
+     #+BEGIN_SRC elisp :tangle no
+       (if (eq system-type 'window-nt)
+           (setq ffip-find-executable "c:\\\\cygwin64\\\\bin\\\\find"))
+
+       ;; beacuse i use choco instal the cygwin
+       ;; so the path is c:\tools\cygwin\bin\find.exe
+     #+END_SRC
+     
