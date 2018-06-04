@@ -625,7 +625,7 @@
        (if (eq system-type 'windows-nt)
            (if (file-exists-p "c:\\\\tools\\\\cygwin")
                (setq ffip-find-executable "c:\\\\tools\\\\cyginw\\\\bin\\\\find")
-             (setq ffip-find-executable "~/.babun/cygwin/bin/find")))
+             (setq ffip-find-executable "c:\\\\Users\\\\janke\\\\.babun\\\\cygwin\\\\bin\\\\find")))
        (general-define-key :prefix my-leader
                            "f" '(:ignore t :which-key "find file in project")
                            "ff" 'find-file-in-project)
