@@ -4,6 +4,7 @@
   :PROPERTIES: 
   :header-args:elisp: :tangle ~/.emacs.d/init.el
   :END:      
+
 ** my functions 
    #+BEGIN_SRC elisp
      (defun set-mark-and-show-message (arg)
@@ -207,16 +208,6 @@
 
    #+RESULTS:
    : transparent-current-frame
-** run python3 envrioment
-   #+BEGIN_SRC elisp
-     (use-package python
-       :init
-       (setq python-shell-interpreter "python")
-       (setq elpy-rpc-python-command "python")
-       :mode ("\\.py\\'" . python-mode)
-       :interpreter ("python" . python-mode)
-       :config (elpy-enable))
-   #+END_SRC
 ** smart parens
    #+BEGIN_SRC elisp
      (use-package smartparens
@@ -333,41 +324,6 @@
       (general-define-key :prefix my-leader
                           "m" 'set-mark-and-show-message)
     #+END_SRC
-** set convenient key chord
-   
-   general-key-dispatch 可以实现类似于 key-chord 的功能。
-   general-key-dispatch 后面的函数表示如果按了指定的键以后没有按后续的按键（没有设定或者超时），
-   则会执行的方法。（在这里是 self-insert-command, 将按键代表的字符字节插入）
-
-   general-key-dispatch 不能重复定义，如果重复定义了，后面的会覆盖前面的
-   #+BEGIN_SRC elisp :tangle no
-     (general-define-key
-      "s"
-      (general-key-dispatch #'self-insert-command
-        :timeout 0.2
-        "s" #'save-buffer
-        )) ; set 'ss' to save buffer
-   #+END_SRC
-
-   #+RESULTS:
-*** set mm to set-mark-command
-    when i pre 'mm', run set-mark-command, and notice me at message buffer
-
-    #+BEGIN_SRC elisp :tangle no
-      (defun set-mark-and-show-message (arg)
-          "Run set mark command and show a message"
-        (interactive "P")
-        (message "Set Marked!")
-        (set-mark-command arg))
-
-
-      (general-define-key
-       "m"
-       (general-key-dispatch 'self-insert-command
-         :timeout 0.2
-         "m" 'set-mark-and-show-message
-         "s" 'save-buffer))
-    #+END_SRC
 ** org mode setting
 *** set file to agenda view
     #+BEGIN_SRC elisp
@@ -412,36 +368,6 @@
       (set-face-attribute 'org-level-1 nil :height 1.2 :bold t)
       (set-face-attribute 'org-level-2 nil :height 1.1 :bold t)
     #+END_SRC
-** clojure
-   - clojure package start so slow.
-     [2017-07-21 周五]
-     clojure and cider package startup use more than 3 seconds.
-     so i add :commands keyword config.
-     now clojure and cider not start on emacs startup.
-
-   #+BEGIN_SRC elisp
-     (use-package clojure-mode
-       :ensure t
-       :commands (clojure-mode clojurescript-mode)
-       :config
-       (use-package cider :ensure t)
-       (show-paren-mode)
-
-       (general-define-key
-        :states '(insert emacs normal)
-        :keymaps 'cider-repl-mode-map
-        "M-p" 'ace-window)
-
-
-       ;; in cider-stack-trace-mode set q to quit
-       (general-define-key
-        :state '(insert emacs normal)
-        :keymaps 'cider-stacktrace-mode-map
-
-        "M-p" 'ace-window ; 将 M-p 绑定到 ace-window， 获取一致的用户体验
-        "C-p"  'cider-popup-buffer-quit-function))
-   #+END_SRC
-
 ** workgroup2
    #+BEGIN_SRC elisp
      (use-package workgroups2
@@ -546,33 +472,6 @@
        :bind
        (("<f8>" . neotree-toggle)))
    #+END_SRC
-** Erlang & Elixir
-   #+BEGIN_SRC elisp
-     ;; elixir
-     (use-package elixir-mode
-       :mode ("\\.ex\\'" . elixir-mode)
-       :config
-       (use-package alchemist
-         :ensure t))
-
-     ;; erlang
-     (use-package erlang
-       :ensure t
-       :mode ("\\.erl\\'" . erlang-mode)
-       :interpreter ("erlang" . erlang-mode))
-   #+END_SRC
-** golang 
-   #+BEGIN_SRC elisp
-     (use-package go-mode
-       :ensure t
-       :mode "\\.go\\'"
-       :config
-       (progn
-         (add-hook 'before-save-hook 'gofmt-before-save)
-         (add-hook 'go-mode-hook
-                   (lambda ()
-                     (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))))
-   #+END_SRC
 ** markdown
    #+BEGIN_SRC elisp
      (use-package markdown-mode
@@ -654,20 +553,91 @@
                   find-file-in-project-by-point
                   find-file-in-project-by-selected))
    #+END_SRC
-
-*** Useage:
-**** under windows
-     in windows. we can use cygwin find tool
-     #+BEGIN_SRC elisp :tangle no
-       (if (eq system-type 'window-nt)
-           (setq ffip-find-executable "c:\\\\cygwin64\\\\bin\\\\find"))
-
-       ;; beacuse i use choco instal the cygwin
-       ;; so the path is c:\tools\cygwin\bin\find.exe
-     #+END_SRC
-** magit
+** ewsw
+   emacs-websock-sucem 是我写的一个包 . 用来处理和工作有关的事情
    #+BEGIN_SRC elisp
-     (use-package magit
-       :ensure t
-       :bind (("C-c g s" . magit-status)))
+     ;; (add-to-list 'load-path "~/workspace/emacs-websocket-sucem/")
+
+     (use-package ewsw
+       :init
+       (add-to-list 'load-path "~/workspace/emacs-websocket-sucem")
+       (use-package websocket
+         :ensure t)
+       :commands (ewsw-start-server))
    #+END_SRC
+
+** DEVELOPMENT LANGUAGES
+   development language packages
+   <2018-06-28 周四> 因为包比较多了，所以把编程语言相关的包单独放
+*** clojure
+    - clojure package start so slow.
+      [2017-07-21 周五]
+      clojure and cider package startup use more than 3 seconds.
+      so i add :commands keyword config.
+      now clojure and cider not start on emacs startup.
+
+    #+BEGIN_SRC elisp
+      (use-package clojure-mode
+       	:ensure t
+       	:commands (clojure-mode clojurescript-mode)
+       	:config
+       	(use-package cider :ensure t)
+       	(show-paren-mode)
+
+       	(general-define-key
+         :states '(insert emacs normal)
+         :keymaps 'cider-repl-mode-map
+         "M-p" 'ace-window)
+
+
+       	;; in cider-stack-trace-mode set q to quit
+       	(general-define-key
+         :state '(insert emacs normal)
+         :keymaps 'cider-stacktrace-mode-map
+
+         "M-p" 'ace-window ; 将 M-p 绑定到 ace-window， 获取一致的用户体验
+         "C-p"  'cider-popup-buffer-quit-function))
+    #+END_SRC
+*** run python3 envrioment
+    #+BEGIN_SRC elisp
+      (use-package python
+       	:init
+       	(setq python-shell-interpreter "python")
+       	(setq elpy-rpc-python-command "python")
+       	:mode ("\\.py\\'" . python-mode)
+       	:interpreter ("python" . python-mode)
+       	:config (elpy-enable))
+    #+END_SRC
+*** Erlang & Elixir
+    #+BEGIN_SRC elisp
+      ;; elixir
+      (use-package elixir-mode
+       	:mode ("\\.ex\\'" . elixir-mode)
+       	:config
+       	(use-package alchemist
+          :ensure t))
+
+      ;; erlang
+      (use-package erlang
+       	:ensure t
+       	:mode ("\\.erl\\'" . erlang-mode)
+       	:interpreter ("erlang" . erlang-mode))
+    #+END_SRC
+*** golang 
+    #+BEGIN_SRC elisp
+      (use-package go-mode
+       	:ensure t
+       	:mode "\\.go\\'"
+       	:config
+       	(progn
+          (add-hook 'before-save-hook 'gofmt-before-save)
+          (add-hook 'go-mode-hook
+                    (lambda ()
+                      (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))))
+    #+END_SRC
+*** magit
+    #+BEGIN_SRC elisp
+      (use-package magit
+       	:ensure t
+       	:bind (("C-c g s" . magit-status)))
+    #+END_SRC
