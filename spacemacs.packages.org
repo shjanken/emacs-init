@@ -10,7 +10,7 @@
          (websocket)
          (ewsw :location local) ; ./local/ewsw/ewsw.eln
          (expand-region) ; use C-= expand region
-         )lllll)
+         ))
 
      (defun shjanken/init-websocket ()
        (use-package websocket
