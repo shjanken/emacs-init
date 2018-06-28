@@ -252,7 +252,7 @@
 
    - sp-forward-slurp-hybrid-sexp
      smae
-** load theme 
+** load themen 
 *** use plan-9 theme
     Must set y twice on emacs startup!
     #+BEGIN_SRC elisp :tangle no
@@ -268,7 +268,7 @@
     #+END_SRC
 *** doom theme
     <2018-04-24 周二> change tangle to no. just want to test new theme
-    #+BEGIN_SRC elisp :tangle no
+    #+BEGIN_SRC elisp
       (use-package doom-themes
         :ensure t
         :config
@@ -276,12 +276,12 @@
         (set doom-themes-enable-italic t)
         (doom-themes-visual-bell-config))
 
-      (load-theme 'doom-one-light)
+      (load-theme 'doom-one-light 'no-confirm)
     #+END_SRC
 *** doneburn-theme
     A light theme.
     [[https://github.com/manuel-uberti/doneburn-theme][github address]]
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package doneburn-theme
         :ensure t
         :config (load-theme 'doneburn 'no-confirm))
