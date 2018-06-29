@@ -283,7 +283,7 @@
     #+END_SRC
 *** dracula theme
     #+BEGIN_SRC elisp
-      (use-package dracula-theme
+      (use-package dracula-theme :tangle no
 	:ensure t
 	:config
 	(load-theme 'dracula t))
@@ -567,8 +567,10 @@
        :init
        (add-to-list 'load-path "~/workspace/emacs-websocket-sucem")
        (use-package websocket
-         :ensure t)
-       :commands (ewsw-start-server))
+	 :ensure t)
+       :commands (ewsw-start-server)
+       :bind (("C-c u s" . ewsw-send-cgylr-search)
+	      ("C-c u d" . ewsw-send-delete-yw)))
    #+END_SRC
 
 ** DEVELOPMENT LANGUAGES
