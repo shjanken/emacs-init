@@ -278,10 +278,17 @@
         :config (load-theme 'doneburn 'no-confirm))
     #+END_SRC
 *** zenburn
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package zenburn-theme
         :ensure t
         :config (load-theme 'zenburn t))          
+    #+END_SRC
+*** dracula theme
+    #+BEGIN_SRC elisp
+      (use-package dracula-theme
+	:ensure t
+	:config
+	(load-theme 'dracula t))
     #+END_SRC
 ** expand-region
    #+BEGIN_SRC elisp
