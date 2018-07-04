@@ -377,7 +377,7 @@
       (set-face-attribute 'org-level-2 nil :height 1.1 :bold t)
     #+END_SRC
 ** workgroup2
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle no
      (use-package workgroups2
        :ensure t)
      (workgroups-mode 1)
@@ -577,10 +577,10 @@
        :init
        (add-to-list 'load-path "~/workspace/emacs-websocket-sucem")
        (use-package websocket
-	 :ensure t)
+         :ensure t)
        :commands (ewsw-start-server)
        :bind (("C-c u s" . ewsw-send-cgylr-search)
-	      ("C-c u d" . ewsw-send-delete-yw)))
+              ("C-c u d" . ewsw-send-delete-yw)))
    #+END_SRC
 ** atomic chrome
    使用 Emacs  在 chrome 里面编辑文本内容
@@ -588,11 +588,6 @@
      (use-package atomic-chrome
        :ensure t
        :config (atomic-chrome-start-server))
-   #+END_SRC
-** frame tab
-   #+BEGIN_SRC elisp
-     (use-package frame-tabs
-       :ensure t)
    #+END_SRC
 ** DEVELOPMENT LANGUAGES
    development language packages
