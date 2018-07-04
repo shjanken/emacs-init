@@ -257,15 +257,11 @@
     #+END_SRC
 *** doom theme
     <2018-04-24 周二> change tangle to no. just want to test new theme
-    #+BEGIN_SRC elisp :tangle no
+    #+BEGIN_SRC elisp
       (use-package doom-themes
         :ensure t
         :config
-        (set doom-themes-enable-bold t)
-        (set doom-themes-enable-italic t)
-        (doom-themes-visual-bell-config)
-
-        (load-theme 'doom-one-light 'no-confirm))
+        (load-theme 'doom-one-light t))
     #+END_SRC
 *** doneburn-theme
     A light theme.
@@ -282,8 +278,8 @@
         :config (load-theme 'zenburn t))          
     #+END_SRC
 *** dracula theme
-    #+BEGIN_SRC elisp
-      (use-package dracula-theme :tangle no
+    #+BEGIN_SRC elisp :tangle no
+      (use-package dracula-theme
 	:ensure t
 	:config
 	(load-theme 'dracula t))
@@ -328,6 +324,13 @@
     #+BEGIN_SRC elisp
       (general-define-key :prefix my-leader
                           "m" 'set-mark-and-show-message)
+    #+END_SRC
+
+*** set no auto backup 
+    disable auto backup. ( backup~ & #autobackup#)
+    #+BEGIN_SRC elisp
+      (setq mark-backup-files nil)
+      (setq auto-save-default nil)
     #+END_SRC
 ** org mode setting
 *** set file to agenda view
@@ -471,12 +474,19 @@
        (keyfreq-autosave-mode 1)) 
    #+END_SRC
 ** Neotree
-   #+BEGIN_SRC elisp
-     (use-package neotree
-       :ensure t
-       :bind
-       (("<f8>" . neotree-toggle)))
-   #+END_SRC
+*** icon for neotree
+    #+BEGIN_SRC elisp
+      (use-package all-the-icons :ensure t)          
+    #+END_SRC
+*** neotree
+    #+BEGIN_SRC elisp
+      (use-package neotree
+        :ensure t
+        :init
+        (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+        :bind
+        (("<f8>" . neotree-toggle)))
+    #+END_SRC
 ** markdown
    #+BEGIN_SRC elisp
      (use-package markdown-mode
@@ -572,7 +582,18 @@
        :bind (("C-c u s" . ewsw-send-cgylr-search)
 	      ("C-c u d" . ewsw-send-delete-yw)))
    #+END_SRC
-
+** atomic chrome
+   使用 Emacs  在 chrome 里面编辑文本内容
+   #+BEGIN_SRC elisp
+     (use-package atomic-chrome
+       :ensure t
+       :config (atomic-chrome-start-server))
+   #+END_SRC
+** frame tab
+   #+BEGIN_SRC elisp
+     (use-package frame-tabs
+       :ensure t)
+   #+END_SRC
 ** DEVELOPMENT LANGUAGES
    development language packages
    <2018-06-28 周四> 因为包比较多了，所以把编程语言相关的包单独放
@@ -619,16 +640,16 @@
     #+BEGIN_SRC elisp
       ;; elixir
       (use-package elixir-mode
-       	:mode ("\\.ex\\'" . elixir-mode)
-       	:config
-       	(use-package alchemist
+        :mode ("\\.ex\\'" . elixir-mode)
+        :config
+        (use-package alchemist
           :ensure t))
 
       ;; erlang
       (use-package erlang
-       	:ensure t
-       	:mode ("\\.erl\\'" . erlang-mode)
-       	:interpreter ("erlang" . erlang-mode))
+        :ensure t
+        :mode ("\\.erl\\'" . erlang-mode)
+        :interpreter ("erlang" . erlang-mode))
     #+END_SRC
 *** golang 
     #+BEGIN_SRC elisp
