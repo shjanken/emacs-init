@@ -91,6 +91,15 @@
        :init (general-define-key
               "C-s" 'swiper))
    #+END_SRC
+*** all-the-icon-iv
+    =ivy= 的图标，看起来和好看 .
+    [[|https://github.com/asok/all-the-icons-ivy][github]]
+    #+BEGIN_SRC elisp :tangle no
+      (use-package all-the-icons-ivy
+        :ensure t
+        :config
+        (all-the-icons-ivy-setup))
+    #+END_SRC
 ** helm
    [[https://github.com/emacs-helm/helm][helm github]]
    #+BEGIN_SRC elisp :tangle no
@@ -665,3 +674,17 @@
        	:bind (("C-c g s" . magit-status)))
     #+END_SRC
 >>>>>>> 298f1ba91d1f4ab44470b1b99a3f1d6532fe2164
+*** javascript
+**** js-commit
+     [[https://github.com/redguardtoo/js-comint][github]]
+     直接执行 js 代码。 j
+     #+BEGIN_SRC elisp
+       (use-package js-comint
+         :ensure t
+         :config
+         (general-define-key
+          :keymaps 'js-mode-map
+          "C-x C-e" 'js-send-last-sexp)
+         :commands (js-send-last-sexp))
+     #+END_SRC
+
