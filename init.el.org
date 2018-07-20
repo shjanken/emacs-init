@@ -10,6 +10,13 @@
        (interactive "P")
        (message "Set Marked!")
        (set-mark-command arg))
+
+     (defun show-all-buffers-with-file
+	 ()
+       (interactive)
+       (list-buffers 1))
+
+     (global-set-key (kbd "<f7>") 'show-all-buffers-with-file)
    #+END_SRC
 ** use mepal package reposity
    #+BEGIN_SRC elisp
@@ -67,29 +74,29 @@
    #+BEGIN_SRC elisp
      (use-package ivy :ensure t
        :commands (ivy-mode
-                  ivy-switch-buffer)
+		  ivy-switch-buffer)
        :init (general-define-key
-              "C-x b" '(ivy-switch-buffer :which-key "switch buffer")))
+	      "C-x b" '(ivy-switch-buffer :which-key "switch buffer")))
 
      (use-package counsel :ensure t
        :commands (counsel-find-file
-                  counsel-ag
-                  counsel-M-x
-                  counsel-describe-function
-                  counsel-find-library)
+		  counsel-ag
+		  counsel-M-x
+		  counsel-describe-function
+		  counsel-find-library)
        :init (general-define-key
-              "C-x C-f" 'counsel-find-file
-              "C-c k" 'counsel-ag
-              "M-x" 'counsel-M-x
-              "C-h f" 'counsel-describe-function
-              "<f1> l" 'counsel-find-library
-              "C-x C-r" 'counsel-recentf))
+	      "C-x C-f" 'counsel-find-file
+	      "C-c k" 'counsel-ag
+	      "M-x" 'counsel-M-x
+	      "C-h f" 'counsel-describe-function
+	      "<f1> l" 'counsel-find-library
+	      "C-x C-r" 'counsel-recentf))
 
      (use-package swiper
        :ensure t
        :commands (swiper)
        :init (general-define-key
-              "C-s" 'swiper))
+	      "C-s" 'swiper))
    #+END_SRC
 ** helm
    [[https://github.com/emacs-helm/helm][helm github]]
@@ -261,7 +268,7 @@
       (use-package doom-themes
         :ensure t
         :config
-        (load-theme 'doom-one-light t))
+        (load-theme 'doom-one t))
     #+END_SRC
 *** doneburn-theme
     A light theme.
