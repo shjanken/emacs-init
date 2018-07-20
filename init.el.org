@@ -680,7 +680,6 @@
        	:ensure t
        	:bind (("C-c g s" . magit-status)))
     #+END_SRC
->>>>>>> 298f1ba91d1f4ab44470b1b99a3f1d6532fe2164
 *** javascript
 **** js-commit
      [[https://github.com/redguardtoo/js-comint][github]]
