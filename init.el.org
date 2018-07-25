@@ -18,6 +18,12 @@
 
      (global-set-key (kbd "<f7>") 'show-all-buffers-with-file)
    #+END_SRC
+
+   关闭 =emacs= 的 "dududu" 的报警声音 f
+   #+BEGIN_SRC elisp
+     (setq visible-bell nil)
+     (setq ring-bell-function 'ignore)
+   #+END_SRC
 ** use mepal package reposity
    #+BEGIN_SRC elisp
      (require 'package) ;; You might already have this line
@@ -608,6 +614,18 @@
 ** DEVELOPMENT LANGUAGES
    development language packages
    <2018-06-28 周四> 因为包比较多了，所以把编程语言相关的包单独放
+** Color file 
+   一个可以给 =list-buffer= 里面的 =buffer name= 设置颜色的包。 j
+   #+BEGIN_SRC elisp
+     (use-package color-file
+       :ensure t
+       :straight (color-file :type git
+			     :host github
+			     :repo "jmercouris/color-file")
+       :init
+       (setq color-file-ivy-regex-file-colors
+	     '(("*scratch*" . "Red"))))
+   #+END_SRC
 *** clojure
     - clojure package start so slow.
       [2017-07-21 周五]
@@ -683,8 +701,8 @@
 *** javascript
 **** js-commit
      [[https://github.com/redguardtoo/js-comint][github]]
-     直接执行 js 代码。 j
-     #+BEGIN_SRC elisp
+     直接执行 js 代码。 
+     #+BEGIN_SRC elisp :tangle no
        (use-package js-comint
          :ensure t
          :config
@@ -693,4 +711,16 @@
           "C-x C-e" 'js-send-last-sexp)
          :commands (js-send-last-sexp))
      #+END_SRC
+**** js2 mode
+     #+BEGIN_SRC elisp 
+       (use-package js2-mode
+	 :ensure t
+	 :mode "\\.js\\'"
+	 :interpreter "javascript"
+	 :config
+	 (use-package ac-js2
+	   :ensure t) ;; auto complete
+	 )ff
+     #+END_SRC
+    
 
