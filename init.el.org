@@ -611,21 +611,20 @@
 ** frame bufs
 只显示属于当前 ~frame~ 的 ~buffers~
 [[https://github.com/alpaker/Frame-Bufs][github]]
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package frame-bufs
     :quelpa (frame-bufs :fetcher github :repo "alpaker/Frame-Bufs")
+    :commands (frame-bufs-mode)
     :config
     (frame-bufs-mode t))
 #+END_SRC
 
 ** Color file 
    一个可以给 =list-buffer= 里面的 =buffer name= 设置颜色的包。 j
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle no
      (use-package color-file
-       :ensure t
-       :straight (color-file :type git
-			     :host github
-			     :repo "jmercouris/color-file")
+       :quelpa (color-file :fetcher github
+			   :repo "jmercouris/color-file")
        :init
        (setq color-file-ivy-regex-file-colors
 	     '(("*scratch*" . "Red"))))
