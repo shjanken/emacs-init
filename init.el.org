@@ -617,9 +617,7 @@
     :config
     (frame-bufs-mode t))
 #+END_SRC
-** DEVELOPMENT LANGUAGES
-   development language packages
-   <2018-06-28 周四> 因为包比较多了，所以把编程语言相关的包单独放
+
 ** Color file 
    一个可以给 =list-buffer= 里面的 =buffer name= 设置颜色的包。 j
    #+BEGIN_SRC elisp
@@ -632,6 +630,9 @@
        (setq color-file-ivy-regex-file-colors
 	     '(("*scratch*" . "Red"))))
    #+END_SRC
+** DEVELOPMENT LANGUAGES
+   development language packages
+   <2018-06-28 周四> 因为包比较多了，所以把编程语言相关的包单独放
 *** clojure
     - clojure package start so slow.
       [2017-07-21 周五]
@@ -726,7 +727,7 @@
 	 :config
 	 (use-package ac-js2
 	   :ensure t) ;; auto complete
-	 )ff
+	 )
      #+END_SRC
     
 
