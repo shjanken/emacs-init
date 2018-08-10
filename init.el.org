@@ -10,6 +10,19 @@
        (interactive "P")
        (message "Set Marked!")
        (set-mark-command arg))
+
+     (defun show-all-buffers-with-file
+	 ()
+       (interactive)
+       (list-buffers 1))
+
+     (global-set-key (kbd "<f7>") 'show-all-buffers-with-file)
+   #+END_SRC
+
+   关闭 =emacs= 的 "dududu" 的报警声音 f
+   #+BEGIN_SRC elisp
+     (setq visible-bell nil)
+     (setq ring-bell-function 'ignore)
    #+END_SRC
 ** use mepal package reposity
    #+BEGIN_SRC elisp
@@ -71,29 +84,29 @@
    #+BEGIN_SRC elisp
      (use-package ivy :ensure t
        :commands (ivy-mode
-                  ivy-switch-buffer)
+		  ivy-switch-buffer)
        :init (general-define-key
-              "C-x b" '(ivy-switch-buffer :which-key "switch buffer")))
+	      "C-x b" '(ivy-switch-buffer :which-key "switch buffer")))
 
      (use-package counsel :ensure t
        :commands (counsel-find-file
-                  counsel-ag
-                  counsel-M-x
-                  counsel-describe-function
-                  counsel-find-library)
+		  counsel-ag
+		  counsel-M-x
+		  counsel-describe-function
+		  counsel-find-library)
        :init (general-define-key
-              "C-x C-f" 'counsel-find-file
-              "C-c k" 'counsel-ag
-              "M-x" 'counsel-M-x
-              "C-h f" 'counsel-describe-function
-              "<f1> l" 'counsel-find-library
-              "C-x C-r" 'counsel-recentf))
+	      "C-x C-f" 'counsel-find-file
+	      "C-c k" 'counsel-ag
+	      "M-x" 'counsel-M-x
+	      "C-h f" 'counsel-describe-function
+	      "<f1> l" 'counsel-find-library
+	      "C-x C-r" 'counsel-recentf))
 
      (use-package swiper
        :ensure t
        :commands (swiper)
        :init (general-define-key
-              "C-s" 'swiper))
+	      "C-s" 'swiper))
    #+END_SRC
 *** all-the-icon-iv
     =ivy= 的图标，看起来和好看 .
@@ -607,6 +620,18 @@
 ** DEVELOPMENT LANGUAGES
    development language packages
    <2018-06-28 周四> 因为包比较多了，所以把编程语言相关的包单独放
+** Color file 
+   一个可以给 =list-buffer= 里面的 =buffer name= 设置颜色的包。 j
+   #+BEGIN_SRC elisp
+     (use-package color-file
+       :ensure t
+       :straight (color-file :type git
+			     :host github
+			     :repo "jmercouris/color-file")
+       :init
+       (setq color-file-ivy-regex-file-colors
+	     '(("*scratch*" . "Red"))))
+   #+END_SRC
 *** clojure
     - clojure package start so slow.
       [2017-07-21 周五]
@@ -679,12 +704,10 @@
        	:ensure t
        	:bind (("C-c g s" . magit-status)))
     #+END_SRC
->>>>>>> 298f1ba91d1f4ab44470b1b99a3f1d6532fe2164
 *** javascript
 **** js-commit
      [[https://github.com/redguardtoo/js-comint][github]]
-     直接执行 js 代码。 j
-     use nodejs-repl repect
+     直接执行 js 代码。 
      #+BEGIN_SRC elisp :tangle no
        (use-package js-comint
          :ensure t
@@ -694,18 +717,17 @@
           "C-x C-e" 'js-send-last-sexp)
          :commands (js-send-last-sexp))
      #+END_SRC
-**** node repl
-     #+BEGIN_SRC elisp
-       (use-package nodejs-repl
-         :ensure t
-         :config
-         (general-define-key
-          :keymaps 'js-mode-map
-          "C-c C-e" 'nodejs-repl-send-last-expression
-          "C-c C-j" 'nodejs-repl-send-line
-          "C-c C-r" 'nodejs-repl-send-region
-          "C-c C-l" 'nodejs-repl-load-file
-          "C-c C-z" 'nodejs-repl-switch-to-repl)
-         :commands nodejs-repl)
+**** js2 mode
+     #+BEGIN_SRC elisp 
+       (use-package js2-mode
+	 :ensure t
+	 :mode "\\.js\\'"
+	 :interpreter "javascript"
+	 :config
+	 (use-package ac-js2
+	   :ensure t) ;; auto complete
+	 )ff
+     #+END_SRC
+    
 
      #+END_SRC
