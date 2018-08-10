@@ -41,6 +41,10 @@
 
      (require 'use-package)
      (setq use-package-verbose t)
+
+     (use-package quelpa-use-package
+       :ensure t)
+     (require 'quelpa-use-package)
    #+END_SRC
    
 ** install general
@@ -266,11 +270,11 @@
     #+END_SRC
 *** doom theme
     <2018-04-24 周二> change tangle to no. just want to test new theme
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package doom-themes
         :ensure t
         :config
-        (load-theme 'doom-one-light t))
+        (load-theme 'doom-one t))
     #+END_SRC
 *** doneburn-theme
     A light theme.
@@ -287,7 +291,7 @@
         :config (load-theme 'zenburn t))          
     #+END_SRC
 *** dracula theme
-    #+BEGIN_SRC elisp :tangle no
+    #+BEGIN_SRC elisp
       (use-package dracula-theme
 	:ensure t
 	:config
@@ -347,7 +351,7 @@
       (general-define-key
        "C-c a" #'org-agenda)
 
-      (setq org-agenda-files '("~/Documents/org/"))
+      (setq org-agenda-files '("~/Documents/org/" "~/OneDrive/Documents/org/"))
     #+END_SRC
 *** org capture template
     | key       | operator                   |
@@ -484,7 +488,7 @@
    #+END_SRC
 ** Neotree
 *** icon for neotree
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package all-the-icons :ensure t)          
     #+END_SRC
 *** neotree
@@ -581,23 +585,25 @@
    emacs-websock-sucem 是我写的一个包 . 用来处理和工作有关的事情
    #+BEGIN_SRC elisp
      ;; (add-to-list 'load-path "~/workspace/emacs-websocket-sucem/")
-
      (use-package ewsw
        :init
        (add-to-list 'load-path "~/workspace/emacs-websocket-sucem")
+       :config
        (use-package websocket
          :ensure t)
-       :commands (ewsw-start-server)
        :bind (("C-c u s" . ewsw-send-cgylr-search)
-              ("C-c u d" . ewsw-send-delete-yw)))
+              ("C-c u d" . ewsw-send-delete-yw))
+       :commands ewsw-start-server)
    #+END_SRC
-** atomic chrome
-   使用 Emacs  在 chrome 里面编辑文本内容
-   #+BEGIN_SRC elisp
-     (use-package atomic-chrome
-       :ensure t
-       :config (atomic-chrome-start-server))
-   #+END_SRC
+** frame bufs
+只显示属于当前 ~frame~ 的 ~buffers~
+[[https://github.com/alpaker/Frame-Bufs][github]]
+#+BEGIN_SRC elisp
+  (use-package frame-bufs
+    :quelpa (frame-bufs :fetcher github :repo "alpaker/Frame-Bufs")
+    :config
+    (frame-bufs-mode t))
+#+END_SRC
 ** DEVELOPMENT LANGUAGES
    development language packages
    <2018-06-28 周四> 因为包比较多了，所以把编程语言相关的包单独放
@@ -678,7 +684,8 @@
 **** js-commit
      [[https://github.com/redguardtoo/js-comint][github]]
      直接执行 js 代码。 j
-     #+BEGIN_SRC elisp
+     use nodejs-repl repect
+     #+BEGIN_SRC elisp :tangle no
        (use-package js-comint
          :ensure t
          :config
@@ -687,4 +694,18 @@
           "C-x C-e" 'js-send-last-sexp)
          :commands (js-send-last-sexp))
      #+END_SRC
+**** node repl
+     #+BEGIN_SRC elisp
+       (use-package nodejs-repl
+         :ensure t
+         :config
+         (general-define-key
+          :keymaps 'js-mode-map
+          "C-c C-e" 'nodejs-repl-send-last-expression
+          "C-c C-j" 'nodejs-repl-send-line
+          "C-c C-r" 'nodejs-repl-send-region
+          "C-c C-l" 'nodejs-repl-load-file
+          "C-c C-z" 'nodejs-repl-switch-to-repl)
+         :commands nodejs-repl)
 
+     #+END_SRC
