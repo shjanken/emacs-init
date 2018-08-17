@@ -553,7 +553,8 @@
        (add-hook 'prog-mode-hook (lambda () (key-chord-mode 1)))
        :config
        (key-chord-define-global "ww" 'save-buffer)
-       (key-chord-define-global ",m" 'set-mark-command))
+       (key-chord-define-global ",m" 'set-mark-command)
+       (key-chord-define-global ",b" 'list-buffers))
   #+END_SRC
 ** sky-color-clock
    好看的会根据时间自动改变颜色的 =modeline= 时钟
