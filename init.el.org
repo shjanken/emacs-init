@@ -578,22 +578,34 @@
        :init (cnfonts-enable))
    #+END_SRC
 ** find file in project
-   [[https://github.com/technomancy/find-file-in-project][github]]
-   #+BEGIN_SRC elisp
-     (use-package find-file-in-project
-       :ensure t
-       :init
-       (if (eq system-type 'windows-nt)
-           (if (file-exists-p "c:\\\\tools\\\\cygwin")
-               (setq ffip-find-executable "c:\\\\tools\\\\cyginw\\\\bin\\\\find")
-             (setq ffip-find-executable "c:\\\\Users\\\\janke\\\\.babun\\\\cygwin\\\\bin\\\\find")))
-       (general-define-key :prefix my-leader
-                           "f" '(:ignore t :which-key "find file in project")
-                           "ff" 'find-file-in-project)
-       :commands (find-file-in-project
-                  find-file-in-project-by-point
-                  find-file-in-project-by-selected))
-   #+END_SRC
+*** find-file-in-project
+    [[https://github.com/technomancy/find-file-in-project][github]]
+    #+BEGIN_SRC elisp :tangle no
+      (use-package find-file-in-project
+       	:ensure t
+       	:init
+       	(if (eq system-type 'windows-nt)
+            (if (file-exists-p "c:\\\\tools\\\\cygwin")
+               	(setq ffip-find-executable "c:\\\\tools\\\\cyginw\\\\bin\\\\find")
+              (setq ffip-find-executable "c:\\\\Users\\\\janke\\\\.babun\\\\cygwin\\\\bin\\\\find")))
+       	(general-define-key :prefix my-leader
+                            "f" '(:ignore t :which-key "find file in project")
+                            "ff" 'find-file-in-project)
+       	:commands (find-file-in-project
+                   find-file-in-project-by-point
+                   find-file-in-project-by-selected))
+    #+END_SRC
+*** projectile
+    [[https://projectile.readthedocs.io/en/latest/installation/][manual]]
+    #+BEGIN_SRC elisp
+      (use-package projectile
+        :ensure t
+        :config
+        (define-key projectile-mode-map (kbd "C-c f") 'projectile-command-map)
+        (setq projectile-enable-caching t)
+        (setq projectile-completion-system 'ivy)
+        (projectile-mode +1))
+    #+END_SRC
 ** ewsw
    emacs-websock-sucem 是我写的一个包 . 用来处理和工作有关的事情
    #+BEGIN_SRC elisp
