@@ -364,8 +364,17 @@
       (general-define-key
        "C-c a" #'org-agenda)
 
-      (setq org-agenda-files '("~/Documents/org/" "~/OneDrive/Documents/org/"))
+      ;; (setq org-agenda-files '("~/Documents/org/" "~/OneDrive/Documents/org/"))
     #+END_SRC
+    
+    [2018-08-17]
+    从 ~org-agenda-file~ 里面去掉了我自己的 ~Document~ 目录里面的 ~org~ 文件。
+    因为在 ~agenda view~ 里面看起来很不清爽
+    #+BEGIN_SRC elisp
+      (setq org-agenda-files '("~/OneDrive/Documents/org/"))
+    #+END_SRC
+
+
 *** org capture template
     | key       | operator                   |
     | "C-c c t" | insert task to inbox.org   |
@@ -429,15 +438,36 @@
      (use-package try
        :ensure t)
    #+END_SRC
-** ace-window
-
+** switch window
    make move cursor to other window quickly and convinently
-   #+BEGIN_SRC elisp
+   #+BEGIN_SRC elisp :tangle no
      (use-package ace-window
        :ensure t
        :commands (ace-window)
        :init
        (bind-key "M-p" 'ace-window))
+   #+END_SRC
+
+   <2018-08-23 周四> 切换到 ~switch window~
+   #+BEGIN_SRC elisp
+     (use-package switch-window
+       :ensure t
+       :config
+       (setq switch-window-auto-resize-window t)
+       (general-define-key
+        :prefix my-leader
+        "w" '(:ignore t :witch-key "switch-window")
+        "wo" 'switch-window)
+       (global-set-key (kbd "C-x o") 'switch-window)
+       (global-set-key (kbd "C-x 1") 'switch-window-then-maximize)
+       (global-set-key (kbd "C-x 2") 'switch-window-then-split-below)
+       (global-set-key (kbd "C-x 3") 'switch-window-then-split-right)
+       (global-set-key (kbd "C-x 0") 'switch-window-then-delete)
+
+       (global-set-key (kbd "C-x 4 f") 'switch-window-then-find-file)
+       (global-set-key (kbd "C-x 4 d") 'switch-window-then-dired)
+       (global-set-key (kbd "C-x 4 b") 'switch-window-then-display-buffer)
+       )
    #+END_SRC
 ** ace jump
    [[https://github.com/abo-abo/avy][github]] address
@@ -744,3 +774,12 @@
     
 
      #+END_SRC
+
+
+
+
+
+
+
+
+
