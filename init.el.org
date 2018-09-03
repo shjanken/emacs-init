@@ -1,9 +1,9 @@
 * emacs init file
-  :PROPERTIES: 
+  :PROPERTIES:
   :header-args:elisp: :tangle ~/.emacs.d/init.el
-  :END:      
+  :END:
 
-** my functions 
+** my functions
    #+BEGIN_SRC elisp
      (defun set-mark-and-show-message (arg)
        "Run set mark command and show a message"
@@ -12,7 +12,7 @@
        (set-mark-command arg))
 
      (defun show-all-buffers-with-file
-	 ()
+         ()
        (interactive)
        (list-buffers 1))
 
@@ -29,14 +29,14 @@
      (require 'package) ;; You might already have this line
      (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
                               ("melpa" . "http://elpa.emacs-china.org/melpa/")))
-     (package-initialize) 
+     (package-initialize)
    #+END_SRC
 
    use customize replaced!
-   
+
    <2017-07-12>
    use emacs china elpa mirrow
-   
+
 ** set code block highlight
    #+BEGIN_SRC elisp
      (setq org-confirm-babel-evaluate nil ; no confirm when C-c C-e
@@ -44,7 +44,7 @@
            org-src-tab-acts-natively t)
    #+END_SRC
 
-** install use-package 
+** install use-package
    [[https://github.com/jwiegley/use-package][use-package]]
    #+BEGIN_SRC elisp
      (if (not (package-installed-p 'use-package))
@@ -59,7 +59,7 @@
        :ensure t)
      (require 'quelpa-use-package)
    #+END_SRC
-   
+
 ** install general
    #+BEGIN_SRC elisp
      (use-package general
@@ -72,7 +72,7 @@
 ** which-key
    #+BEGIN_SRC elisp
      (use-package which-key
-       :ensure t 
+       :ensure t
        :commands (which-key-mode
                   which-key-setup-side-window-bottom)
        :init (which-key-setup-side-window-bottom))
@@ -250,9 +250,9 @@
        ;;        ("C-c s f" . sp-forward-slurp-sexp)
        ;;        ("C-c s b" . sp-forward-barf-sexp)))
    #+END_SRC
-   
+
    smart parens 的用法
-   
+
    - sp-splice-sexp
      (emacs) -> emacs
 
@@ -267,7 +267,7 @@
 
    - sp-forward-slurp-hybrid-sexp
      smae
-** load theme 
+** load theme
 *** use plan-9 theme
     Must set y twice on emacs startup!
     #+BEGIN_SRC elisp :tangle no
@@ -301,7 +301,7 @@
     #+BEGIN_SRC elisp :tangle no
       (use-package zenburn-theme
         :ensure t
-        :config (load-theme 'zenburn t))          
+        :config (load-theme 'zenburn t))
     #+END_SRC
 *** dracula theme
     #+BEGIN_SRC elisp
@@ -352,7 +352,7 @@
                           "m" 'set-mark-and-show-message)
     #+END_SRC
 
-*** set no auto backup 
+*** set no auto backup
     disable auto backup. ( backup~ & #autobackup#)
     #+BEGIN_SRC elisp
       (setq mark-backup-files nil)
@@ -366,7 +366,7 @@
 
       ;; (setq org-agenda-files '("~/Documents/org/" "~/OneDrive/Documents/org/"))
     #+END_SRC
-    
+
     [2018-08-17]
     从 ~org-agenda-file~ 里面去掉了我自己的 ~Document~ 目录里面的 ~org~ 文件。
     因为在 ~agenda view~ 里面看起来很不清爽
@@ -489,7 +489,7 @@
      (use-package color-theme
        :ensure t)
    #+END_SRC
-   
+
 ** eyebrowser
    #+BEGIN_SRC elisp
      (use-package eyebrowse
@@ -501,7 +501,7 @@
        (desktop-change-dir "~/") ; my desktop.lock file in HOME directory
        :init (add-hook 'prog-mode-hook 'eyebrowse-mode)
        :commands (eyebrowse-mode))
-        
+
    #+END_SRC
 
 ** symbol-overlay
@@ -522,17 +522,17 @@
 ** key-fre
    这个扩展可以查看我的案件统计
    这样我就可以根据我自己的案件频率来调整优化快捷键
-   #+BEGIN_SRC elisp     
+   #+BEGIN_SRC elisp
      (use-package keyfreq
        :ensure t
        :config
        (keyfreq-mode 1)
-       (keyfreq-autosave-mode 1)) 
+       (keyfreq-autosave-mode 1))
    #+END_SRC
 ** Neotree
 *** icon for neotree
     #+BEGIN_SRC elisp :tangle no
-      (use-package all-the-icons :ensure t)          
+      (use-package all-the-icons :ensure t)
     #+END_SRC
 *** neotree
     #+BEGIN_SRC elisp
@@ -551,9 +551,9 @@
    #+END_SRC
 ** linum mode
 
-   
+
    <2018-02-01> 打算用 linum-relative 来代替
-  
+
    #+BEGIN_SRC elisp :tangle no
      (use-package linum-mode
        :hook prog-mode)
@@ -662,7 +662,7 @@
     (frame-bufs-mode t))
 #+END_SRC
 
-** Color file 
+** Color file
    一个可以给 =list-buffer= 里面的 =buffer name= 设置颜色的包。 j
    #+BEGIN_SRC elisp :tangle no
      (use-package color-file
@@ -729,7 +729,7 @@
         :mode ("\\.erl\\'" . erlang-mode)
         :interpreter ("erlang" . erlang-mode))
     #+END_SRC
-*** golang 
+*** golang
     #+BEGIN_SRC elisp
       (use-package go-mode
        	:ensure t
@@ -750,7 +750,7 @@
 *** javascript
 **** js-commit
      [[https://github.com/redguardtoo/js-comint][github]]
-     直接执行 js 代码。 
+     直接执行 js 代码。
      #+BEGIN_SRC elisp :tangle no
        (use-package js-comint
          :ensure t
@@ -761,7 +761,7 @@
          :commands (js-send-last-sexp))
      #+END_SRC
 **** js2 mode
-     #+BEGIN_SRC elisp 
+     #+BEGIN_SRC elisp
        (use-package js2-mode
 	 :ensure t
 	 :mode "\\.js\\'"
@@ -771,15 +771,11 @@
 	   :ensure t) ;; auto complete
 	 )
      #+END_SRC
-    
+
 
      #+END_SRC
-
-
-
-
-
-
-
-
-
+*** scala
+    #+BEGIN_SRC elisp
+      (use-package ensime
+        :ensure t)
+    #+END_SRC
