@@ -304,11 +304,24 @@
         :config (load-theme 'zenburn t))
     #+END_SRC
 *** dracula theme
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package dracula-theme
 	:ensure t
 	:config
 	(load-theme 'dracula t))
+    #+END_SRC
+*** Tao theme
+    纯色的主题
+    [[https://github.com/11111000000/tao-theme-emacs][GITHUB]]
+    #+BEGIN_SRC elisp
+      (use-package tao-theme
+	:ensure t
+	:config
+	(load-theme 'tao-yang t)
+	(use-package color-identifiers-mode
+	  :ensure t
+	  :config
+	  (add-hook 'prog-mode-hook 'global-color-identifiers-mode)))
     #+END_SRC
 ** expand-region
    #+BEGIN_SRC elisp
@@ -667,10 +680,10 @@
    #+BEGIN_SRC elisp :tangle no
      (use-package color-file
        :quelpa (color-file :fetcher github
-			   :repo "jmercouris/color-file")
+                           :repo "jmercouris/color-file")
        :init
        (setq color-file-ivy-regex-file-colors
-	     '(("*scratch*" . "Red"))))
+             '(("*scratch*" . "Red"))))
    #+END_SRC
 ** DEVELOPMENT LANGUAGES
    development language packages
@@ -774,6 +787,7 @@
 
 
      #+END_SRC
+
 *** scala
     #+BEGIN_SRC elisp
       (use-package ensime
