@@ -1,0 +1,13 @@
+* Wunderline 
+** wunderline today
+   #+BEGIN_SRC shell :tangle ~/.config/fish/functions/wt.fish
+     function wt
+       wunderline today
+     end
+   #+END_SRC
+** wunderline inbox
+   #+BEGIN_SRC shell :tangle ~/.config/fish/functions/wi.fish
+     function wi
+       wunderline inbox
+     end
+   #+END_SRC

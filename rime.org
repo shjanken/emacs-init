@@ -1,0 +1,14 @@
+* 添加小鹤双拼
+  #+BEGIN_SRC yaml :tangle ~/.config/ibus/rime/default.custom.yaml
+    patch:
+      schema_list:
+	- schema: double_pinyin_flypy
+	- schema: luna_pinyin_simp
+	- schema: luna_pinyin
+  #+END_SRC
+
+* 默认英语输入
+  #+BEGIN_SRC yaml :tangle ~/.config/ibus/rime/double_pinyin_flypy.custom.yaml
+    patch:
+      "switches/@0/reset": 1
+  #+END_SRC
