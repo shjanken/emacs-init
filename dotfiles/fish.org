@@ -11,3 +11,15 @@
        wunderline inbox
      end
    #+END_SRC
+* vim -> emacsclient                                                  :alias:
+  #+BEGIN_SRC shell :tangle ~/.config/fish/functions/vim.fish
+    function vim
+      emacsclient $argv
+    end
+  #+END_SRC
+* sqlcl                                                               :alias:
+  #+BEGIN_SRC shell :tangle ~/.config/fish/functions/sqlcl.fish
+    function sqlcl
+      ~/.sqlcl/bin/sql $argv
+    end
+  #+END_SRC

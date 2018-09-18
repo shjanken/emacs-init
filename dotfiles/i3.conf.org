@@ -1,0 +1,40 @@
+* hello-world blocklet
+
+** a hello world script that will reponse my click
+   #+BEGIN_SRC shell :tangle /tmp/my_hello_script
+    #!/bin/bash
+
+    echo 'hello world'
+  #+END_SRC
+
+  #+BEGIN_SRC shell
+    # set the script execute
+    chmod u+x /tmp/my_hello_script 
+  #+END_SRC
+  
+  
+** test with the $BLOCK_BUTTON var
+   #+BEGIN_SRC shell :tangle /tmp/test_button
+     #!/bin/bash
+
+     echo 'click me!'
+
+     case $BLOCK_BUTTON in
+	 *) echo $BLOCK_BUTTON ;;
+     esac
+   #+END_SRC
+
+* The pomodoro script for i3bar
+  *注意*: 使用这个脚本必须安装 =i3blocks=, =gnome-pomodoro=, =i3-gnome-pomodoro=
+  这个脚本包装了 =i3-gnome-pomodor= 并且响应用户的鼠标点击事件
+  #+BEGIN_SRC shell :tangle ~/.pomodoro_script
+    #!/bin/bash
+
+    echo $(i3-gnome-pomodoro status) ## echo the current status
+
+    case $BLOCK_BUTTON in
+	1) i3-gnome-pomodoro toggle ;; ## start the pomodoro
+	3) i3-gnome-pomodoro reset ;; ## stop the pomodoro
+	4) i3-gnome-pomodoro skip # skip current pomodoro
+    esac
+  #+END_SRC
