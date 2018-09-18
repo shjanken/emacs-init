@@ -30,12 +30,44 @@
   #+BEGIN_SRC shell :tangle ~/.pomodoro_script
     #!/bin/bash
 
-    echo $(i3-gnome-pomodoro status) ## echo the current status
+    # is pomodor is running ?
+    # is running return 0
+    # else return 1
+    function is_exists() {
+	COUNT=$(ps -ef | grep "gnome-pomodoro" | grep -v "grep" | wc -l)
+	STATUS=$(i3-gnome-pomodoro status)
+
+	if [ -z $STATUS ] || [ 0 == $COUNT ];then
+	    return 1 # return the error code
+	else
+	    return 0 # return success code
+	fi
+    }
+
+    # start the pomodoro by condition
+    # if pomodor is running. use i3-gnome-pomodoro toggle
+    # else use i3-gnome-pomodoro start
+    function start_pomodoro() {
+	echo 'in this'
+	if is_exists; then
+	    i3-gnome-pomodoro toggle
+	else
+	    i3-gnome-pomodoro start
+	fi
+    }
+
+    # echo the message.
+    # running: pomodoro status. .e.g: pomodoro 14:15
+    if is_exists;then
+	echo $(i3-gnome-pomodoro status)
+    else
+	echo 'start new pomodoro'
+    fi
 
     case $BLOCK_BUTTON in
-	1) i3-gnome-pomodoro toggle ;; ## start the pomodoro
+	1) start_pomodoro ;; ## start the pomodoro
 	3) i3-gnome-pomodoro reset ;; ## stop the pomodoro
-	4) i3-gnome-pomodoro skip # skip current pomodoro
+	4) i3-gnome-pomodoro skip ;; # skip current pomodoro
     esac
   #+END_SRC
   
