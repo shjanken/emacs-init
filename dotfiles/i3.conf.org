@@ -38,3 +38,10 @@
 	4) i3-gnome-pomodoro skip # skip current pomodoro
     esac
   #+END_SRC
+  
+  之后在 ~i3blocks~ 的配置文件 (=$HOME/.i3blocks.conf=) 里面写入以下内容。
+  #+BEGIN_SRC shell 
+    [pomodoro]
+    command=$HOME/.pomodoro_script
+    interval=1
+  #+END_SRC
