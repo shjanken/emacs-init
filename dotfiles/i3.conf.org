@@ -37,7 +37,8 @@
 	COUNT=$(ps -ef | grep "gnome-pomodoro" | grep -v "grep" | wc -l)
 	STATUS=$(i3-gnome-pomodoro status)
 
-	if [ -z $STATUS ] || [ 0 == $COUNT ];then
+	if [ -z "$STATUS" ] || [ 0 == "$COUNT" ]
+	then
 	    return 1 # return the error code
 	else
 	    return 0 # return success code
@@ -58,8 +59,16 @@
 
     # echo the message.
     # running: pomodoro status. .e.g: pomodoro 14:15
-    if is_exists;then
-	echo "<span foreground='#90C3D4'>$(i3-gnome-pomodoro status)</span>"
+    POMODORO_CURRENT_STATUS=$(i3-gnome-pomodoro status)
+    IS_POMODORO_PAUSED=$(i3-gnome-pomodoro status | grep "PAUSED" | wc -l)
+    if is_exists
+    then
+	if [ 1 == "$IS_POMODORO_PAUSED" ]
+	then
+	    echo "<span foreground='#FF952B'>$POMODORO_CURRENT_STATUS</span>"
+	else
+	    echo "<span foreground='#90C3D4'>$POMODORO_CURRENT_STATUS</span>"
+	fi
     else
 	echo "<span foreground='#A1D490'>start new pomodoro</span>"
     fi
