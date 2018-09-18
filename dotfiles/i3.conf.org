@@ -59,9 +59,9 @@
     # echo the message.
     # running: pomodoro status. .e.g: pomodoro 14:15
     if is_exists;then
-	echo $(i3-gnome-pomodoro status)
+	echo "<span foreground='#90C3D4'>$(i3-gnome-pomodoro status)</span>"
     else
-	echo 'start new pomodoro'
+	echo "<span foreground='#A1D490'>start new pomodoro</span>"
     fi
 
     case $BLOCK_BUTTON in
