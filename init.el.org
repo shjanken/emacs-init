@@ -685,6 +685,24 @@
        (setq color-file-ivy-regex-file-colors
              '(("*scratch*" . "Red"))))
    #+END_SRC
+
+** mode-line
+*** minor-mode 
+    [[https://github.com/tarsius/minions][github]]
+    #+BEGIN_SRC elisp
+      (use-package minions
+	:ensure t
+	:config (minions-mode 1))
+    #+END_SRC
+*** moody
+    [[https://github.com/tarsius/moody][github]]
+    #+BEGIN_SRC elisp
+      (use-package moody
+	:ensure t
+	:config
+	(moody-replace-mode-line-buffer-identification)
+	(moody-replace-vc-mode))
+    #+END_SRC
 ** DEVELOPMENT LANGUAGES
    development language packages
    <2018-06-28 周四> 因为包比较多了，所以把编程语言相关的包单独放
@@ -792,4 +810,15 @@
     #+BEGIN_SRC elisp
       (use-package ensime
         :ensure t)
+    #+END_SRC
+
+*** imenu
+    show outline 
+    #+BEGIN_SRC elisp :tangle no
+      (use-package imenu-list
+	:ensure t
+	:config
+	(add-hook 'prog-mode-hook #'imenu-list-smart-toggle)
+
+	:bind (("C-c i m" . imenu-list-smart-toggle)))
     #+END_SRC
