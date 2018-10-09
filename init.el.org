@@ -703,6 +703,14 @@
 	(moody-replace-mode-line-buffer-identification)
 	(moody-replace-vc-mode))
     #+END_SRC
+** tabbar
+   在 emacs-china 上看到的扩展
+   #+BEGIN_SRC elisp
+     (add-to-list 'load-path (expand-file-name "~/elisp"))
+     (require 'awesome-tab)
+     (awesome-tab-mode t)
+
+   #+END_SRC
 ** DEVELOPMENT LANGUAGES
    development language packages
    <2018-06-28 周四> 因为包比较多了，所以把编程语言相关的包单独放
