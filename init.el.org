@@ -3,7 +3,7 @@
   :header-args:elisp: :tangle ~/.emacs.d/init.el
   :END:
 
-** my functions
+** my funcqtions
    #+BEGIN_SRC elisp
      (defun set-mark-and-show-message (arg)
        "Run set mark command and show a message"
