@@ -54,6 +54,30 @@
        (load bootstrap-file nil 'nomessage))
    #+END_SRC
 
+** my default setting
+*** set my default directory when emacs start
+    #+BEGIN_SRC elisp
+      (setq command-line-default-directory "~/")
+      (setq default-directory "~/")
+      (scroll-bar-mode -1) ; disable scroll bar
+      (tool-bar-mode -1) ; disable tool bar
+      (show-paren-mode) ; hight light match parens
+      (setq inhibit-startup-screen t)
+    #+END_SRC
+
+*** set babel execute language
+    #+BEGIN_SRC elisp
+      (org-babel-do-load-languages
+       'org-babel-load-languages '((clojure . t)
+                                   (emacs-lisp . t)))
+    #+END_SRC
+
+*** set no auto backup
+    disable auto backup. ( backup~ & #autobackup#)
+    #+BEGIN_SRC elisp
+      (setq mark-backup-files nil)
+      (setq auto-save-default nil)
+    #+END_SRC
 ** emacs packages 
 
 *** use-packages
@@ -69,7 +93,7 @@
 	(awesome-tray-mode 1))
     #+END_SRC
 
-*** awesome-tab
+*** awesome-tab & projectile 
     [[https://github.com/manateelazycat/awesome-tab][github address]]
     我非常喜欢的一个包. 在顶部显示相关的 tab
     #+BEGIN_SRC elisp
@@ -80,8 +104,19 @@
 	(projectile-mode +1)
 	(use-package awesome-tab
 	:straight (awesome-tab :type git :host github :repo "manateelazycat/awesome-tab")
-	  :config
-	  (awesome-tab-mode t)))
+	:config
+	(awesome-tab-mode t))
+	(defhydra hydra-projectile
+	  (global-map "C-c f")
+	  "
+      projectile: 
+      Press _f_ to find file in current project
+      Press _a_ to find file by ag
+      "
+	  ("f" projectile-find-file nil)
+	  ("a" projectile-ag nil))
+	(define-key global-map (kbd "C-c f") 'hydra-projectile/body))
+
     #+END_SRC
 
 *** Ivy, Counsel, Swiper
@@ -157,7 +192,7 @@
 	  "smart parens"
 	  ("p" sp-splice-sexp "去表达式的括号")
 	  ("r" sp-rewrapp-sex "修改括号")
-	  ("f" sp-forward-slurp-sexp "向前吞掉一个表达式")
+	  "f" sp-forward-slurp-sexp "向前吞掉一个表达式"
 	  ("b" sp-forward-barf-sexp "收缩括号")))
     #+END_SRC
 
@@ -172,4 +207,44 @@
 	("B" backward-sexp "backward sexp"))
 
       (define-key global-map (kbd "<f2>") 'hydra-move/body)
+    #+END_SRC
+
+*** switch window
+    use =other-window= function
+    #+BEGIN_SRC elisp
+      (defhydra hydra-other-window
+	(global-map "C-x")
+	"
+      Press _o_ to switch window in current frame
+      Press _O_ to switch frame
+      "
+	("o" other-window nil)
+	("O" other-frame nil)
+	("q" nil "quit"))
+    #+END_SRC
+
+*** ace jump
+    快速跳转，字符，行，等等
+    #+BEGIN_SRC elisp
+      (use-package avy
+	:straight t
+	:config
+	(defhydra hydra-ace-jump
+	  (global-map "C-c c")
+	  "ace-jump"
+	  ("c" avy-goto-char "jump to char")
+	  ("w" avy-goto-word-0 "jump to word")
+	  ("l" avy-goto-line "jump to line number")
+	  ("t" avy-goto-char-timer "jump to char timer")
+	  ("q" nil "quit"))
+
+	(define-key global-map (kbd "C-c c") 'hydra-ace-jump/body))
+    #+END_SRC
+
+*** dracula theme
+    #+BEGIN_SRC elisp
+      (use-package dracula-theme
+	:straight t
+	:config
+	(load-theme 'dracula t))
     #+END_SRC
