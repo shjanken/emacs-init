@@ -84,13 +84,18 @@
     #+BEGIN_SRC elisp
       (straight-use-package 'use-package)
     #+END_SRC
-*** awesome-tray
-    [[https://github.com/manateelazycat/awesome-tray][github address]]. not in the melpa
+
+*** Hydras
+    hydras and example
+
     #+BEGIN_SRC elisp
-      (use-package awesome-tray
-	:straight (awesome-tray :type git :host github :repo "manateelazycat/awesome-tray")
+      (use-package hydra
+	:straight t
 	:config
-	(awesome-tray-mode 1))
+	(defhydra hydra-zoom (global-map "<f2>")
+	  "zoom"
+	  ("g" text-scale-increase "in")
+	  ("l" text-scale-decrease "out")))
     #+END_SRC
 
 *** awesome-tab & projectile 
@@ -109,12 +114,12 @@
 	(defhydra hydra-projectile
 	  (global-map "C-c f")
 	  "
-      projectile: 
       Press _f_ to find file in current project
       Press _a_ to find file by ag
       "
 	  ("f" projectile-find-file nil)
-	  ("a" projectile-ag nil))
+	  ("a" projectile-ag nil)
+	  ("q" nil "quit"))
 	(define-key global-map (kbd "C-c f") 'hydra-projectile/body))
 
     #+END_SRC
@@ -137,18 +142,13 @@
 	:straight t
 	:bind (("C-s" . swiper)))
     #+END_SRC
-
-*** Hydras
-    hydras and example
-
-    #+BEGIN_SRC elisp
-      (use-package hydra
-	:straight t
+*** awesome-tray                                                   :NOTANGLE:
+    [[https://github.com/manateelazycat/awesome-tray][github address]]. not in the melpa
+    #+BEGIN_SRC elisp :tangle no
+      (use-package awesome-tray
+	:straight (awesome-tray :type git :host github :repo "manateelazycat/awesome-tray")
 	:config
-	(defhydra hydra-zoom (global-map "<f2>")
-	  "zoom"
-	  ("g" text-scale-increase "in")
-	  ("l" text-scale-decrease "out")))
+	(awesome-tray-mode 1))
     #+END_SRC
 
 *** my ewsw package
@@ -164,7 +164,8 @@
       "
 	  ("s" ewsw-send-cgylr-search nil)
 	  ("d" ewsw-send-delete-yw nil)
-	  ("r" ewsw-close-ewsw-buffer "close the ewsw buffer"))
+	  ("r" ewsw-close-ewsw-buffer "close the ewsw buffer")
+	  ("q" nil "quit"))
 
 	(define-key global-map (kbd "C-c s") 'hydra-sucem/body))
 
@@ -192,7 +193,7 @@
 	  "smart parens"
 	  ("p" sp-splice-sexp "去表达式的括号")
 	  ("r" sp-rewrapp-sex "修改括号")
-	  "f" sp-forward-slurp-sexp "向前吞掉一个表达式"
+	  ("f" sp-forward-slurp-sexp "向前吞掉一个表达式")
 	  ("b" sp-forward-barf-sexp "收缩括号")))
     #+END_SRC
 
@@ -234,7 +235,7 @@
 	  "ace-jump"
 	  ("c" avy-goto-char "jump to char")
 	  ("w" avy-goto-word-0 "jump to word")
-	  ("l" avy-goto-line "jump to line number")
+	  ("l" avy-goto-line "jump to line qnumber")
 	  ("t" avy-goto-char-timer "jump to char timer")
 	  ("q" nil "quit"))
 
@@ -248,3 +249,85 @@
 	:config
 	(load-theme 'dracula t))
     #+END_SRC
+
+*** moody
+    好看的 =mode-line= 样式
+    [[https://github.com/tarsius/moody][github address]]
+    #+BEGIN_SRC elisp
+      (use-package moody
+	:straight t
+	:config
+	(moody-replace-mode-line-buffer-identification)
+	(moody-replace-vc-mode))
+    #+END_SRC
+
+*** buffer manager
+    #+BEGIN_SRC elisp
+      (defhydra hydra-buffer
+	(global-map "C-c b")
+	"buffer operation"
+	("b" ivy-switch-buffer "switch buffer")
+	("B" list-buffers "list all buffers")
+	("k" kill-buffer "kill current buffer")
+	("q" nil "quit"))
+
+      (define-key global-map (kbd "C-c b") 'hydra-buffer/body)
+    #+END_SRC
+
+*** expand-region    
+#+BEGIN_SRC elisp
+      (use-package expand-region
+	:straight t
+	:commands (er/expand-region)
+	:bind
+	(("C-=" . er/expand-region)))
+    #+END_SRC
+
+
+*** cnfonts 
+    #+BEGIN_SRC elisp
+      (use-package cnfonts
+	:straight t
+	:config
+	(cnfonts-enable))
+
+    #+END_SRC
+** development
+
+*** autocomplete                                                   :NOTANGLE:
+    #+BEGIN_SRC elisp :tangle no
+      (use-package auto-complete
+	:straight t
+	:config
+	(add-hook 'prog-mode-hook #'auto-complete-mode))
+    #+END_SRC
+
+*** company
+    auto complate
+    #+BEGIN_SRC elisp
+      (use-package company
+	:straight t
+	:config
+	(add-hook 'prog-mode-hook #'company-mode))
+    #+END_SRC
+
+*** fly check
+
+    #+BEGIN_SRC elisp
+      (use-package flycheck
+	:straight t
+	:init
+	(global-flycheck-mode))
+    #+END_SRC
+
+*** Languages
+
+**** rust
+     #+BEGIN_SRC elisp
+       (use-package rust-mode
+	 :straight t
+	 :config
+	 (setq rust-format-on-save t)
+	 :mode "\\.rs\\'"
+	 :interpreter "rust")
+     #+END_SRC
