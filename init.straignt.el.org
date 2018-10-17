@@ -28,6 +28,12 @@ Some package is in the github.
      (setq ring-bell-function 'ignore)
    #+END_SRC
 
+   disable auto backup
+   #+BEGIN_SRC elisp
+     (setq mark-backup-files nil)
+     (setq auto-save-default nil)
+   #+END_SRC
+
 ** use mepal package reposity
    #+BEGIN_SRC elisp
      (require 'package) ;; You might already have this line
