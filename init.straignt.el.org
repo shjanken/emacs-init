@@ -1,3 +1,6 @@
+#+title: Emacs init file
+this init file install package with =user-package= and =straight=.
+Some package is in the github.
 * emacs init file
   :PROPERTIES:
   :header-args:elisp: :tangle ~/.emacs.d/init.el
@@ -55,29 +58,29 @@
    #+END_SRC
 
 ** my default setting
-*** set my default directory when emacs start
-    #+BEGIN_SRC elisp
-      (setq command-line-default-directory "~/")
-      (setq default-directory "~/")
-      (scroll-bar-mode -1) ; disable scroll bar
-      (tool-bar-mode -1) ; disable tool bar
-      (show-paren-mode) ; hight light match parens
-      (setq inhibit-startup-screen t)
-    #+END_SRC
+** set my default directory when emacs start
+   #+BEGIN_SRC elisp
+     (setq command-line-default-directory "~/")
+     (setq default-directory "~/")
+     (scroll-bar-mode -1) ; disable scroll bar
+     (tool-bar-mode -1) ; disable tool bar
+     (show-paren-mode) ; hight light match parens
+     (setq inhibit-startup-screen t)
+   #+END_SRC
 
-*** set babel execute language
-    #+BEGIN_SRC elisp
-      (org-babel-do-load-languages
-       'org-babel-load-languages '((clojure . t)
-                                   (emacs-lisp . t)))
-    #+END_SRC
+** set babel execute language
+   #+BEGIN_SRC elisp
+     (org-babel-do-load-languages
+      'org-babel-load-languages '((clojure . t)
+                                  (emacs-lisp . t)))
+   #+END_SRC
 
-*** set no auto backup
-    disable auto backup. ( backup~ & #autobackup#)
-    #+BEGIN_SRC elisp
-      (setq mark-backup-files nil)
-      (setq auto-save-default nil)
-    #+END_SRC
+** set no auto backup
+   disable auto backup. ( backup~ & #autobackup#)
+   #+BEGIN_SRC elisp
+     (setq mark-backup-files nil)
+     (setq auto-save-default nil)
+   #+END_SRC
 ** emacs packages 
 
 *** use-packages
@@ -275,13 +278,13 @@
     #+END_SRC
 
 *** expand-region    
-#+BEGIN_SRC elisp
-      (use-package expand-region
-	:straight t
-	:commands (er/expand-region)
-	:bind
-	(("C-=" . er/expand-region)))
-    #+END_SRC
+ #+BEGIN_SRC elisp
+       (use-package expand-region
+	 :straight t
+	 :commands (er/expand-region)
+	 :bind
+	 (("C-=" . er/expand-region)))
+     #+END_SRC
 
 
 *** cnfonts 
@@ -292,42 +295,58 @@
 	(cnfonts-enable))
 
     #+END_SRC
-** development
+*** development
 
-*** autocomplete                                                   :NOTANGLE:
-    #+BEGIN_SRC elisp :tangle no
-      (use-package auto-complete
-	:straight t
-	:config
-	(add-hook 'prog-mode-hook #'auto-complete-mode))
-    #+END_SRC
-
-*** company
-    auto complate
-    #+BEGIN_SRC elisp
-      (use-package company
-	:straight t
-	:config
-	(add-hook 'prog-mode-hook #'company-mode))
-    #+END_SRC
-
-*** fly check
-
-    #+BEGIN_SRC elisp
-      (use-package flycheck
-	:straight t
-	:init
-	(global-flycheck-mode))
-    #+END_SRC
-
-*** Languages
-
-**** rust
-     #+BEGIN_SRC elisp
-       (use-package rust-mode
+**** autocomplete                                                  :NOTANGLE:
+     #+BEGIN_SRC elisp :tangle no
+       (use-package auto-complete
 	 :straight t
 	 :config
-	 (setq rust-format-on-save t)
-	 :mode "\\.rs\\'"
-	 :interpreter "rust")
+	 (add-hook 'prog-mode-hook #'auto-complete-mode))
      #+END_SRC
+
+**** company
+     auto complate
+     #+BEGIN_SRC elisp
+       (use-package company
+	 :straight t
+	 :config
+	 (add-hook 'prog-mode-hook #'company-mode))
+     #+END_SRC
+
+**** fly check
+
+     #+BEGIN_SRC elisp
+       (use-package flycheck
+	 :straight t
+	 :init
+	 (global-flycheck-mode))
+     #+END_SRC
+
+**** Languages
+
+***** rust
+      #+BEGIN_SRC elisp
+	(use-package rust-mode
+	  :straight t
+	  :config
+	  (setq rust-format-on-save t)
+	  (use-package cargo
+	    :straight t
+	    :config
+	    (add-hook 'rust-mode-hook 'cargo-minor-mode)
+
+	    ;; set keybinding
+	    (defhydra hydra-cargo
+	      (rust-mode-map "C-c a")
+
+	      "rust cargo"
+	      ("t" cargo-process-test "run cargo test")
+	      ("r" cargo-process-run "run project")
+	      ("b" cargo-process-build "build project")
+	      ("q" nil "quit"))
+
+	    (define-key global-map (kbd "C-c a") 'hydra-cargo/body))
+	  :mode "\\.rs\\'"
+	  :interpreter "rust")
+      #+END_SRC
