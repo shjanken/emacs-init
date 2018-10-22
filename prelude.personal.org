@@ -1,0 +1,33 @@
+#+title: The Custom file for prelude
+
+* custom
+:PROPERTIES:
+:header-args:elisp: :tangle ~/.emacs.d/personal/shjanken.el
+:END:
+** install packages
+   #+BEGIN_SRC elisp
+     ;; install websocket
+     ;; for my emacs-websocket-sucem package
+     (prelude-require-package 'websocket)
+   #+END_SRC
+** load my emacs-wesocket-sucem package
+   #+BEGIN_SRC elisp
+     (load-file "~/workspace/emacs-websocket-sucem/ewsw.el")
+     (define-key global-map (kbd "C-c C-u s") 'ewsw-send-cgylr-search)
+     (define-key global-map (kbd "C-c C-u d") 'ewsw-send-delete-yw)
+     (define-key global-map (kbd "C-c C-u u") 'ewsw-send-cgylr-update)
+     (define-key global-map (kbd "C-c C-u r") 'ewsw-close-ewsw-buffer)
+   #+END_SRC
+** keychord
+   #+BEGIN_SRC elisp
+     (key-chord-define-global "bb" 'ivy-switch-buffer)
+   #+END_SRC
+** load some other packages
+*** awesome tab
+    [[https://github.com/manateelazycat/awesome-tab][github address]]
+    This package only on the github. So must clone it to the =~/elisp= directoryg
+    #+BEGIN_SRC elisp
+      (add-to-list 'load-path (expand-file-name "~/elisp"))
+      (require 'awesome-tab)
+      (awesome-tab-mode t)
+    #+END_SRC
