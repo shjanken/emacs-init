@@ -31,3 +31,7 @@
       (require 'awesome-tab)
       (awesome-tab-mode t)
     #+END_SRC
+** other customize
+   #+BEGIN_SRC elisp
+     (setq prelude-flyspell nil)
+   #+END_SRC
