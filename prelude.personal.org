@@ -32,6 +32,11 @@
       (awesome-tab-mode t)
     #+END_SRC
 ** other customize
-   #+BEGIN_SRC elisp
-     (setq prelude-flyspell nil)
-   #+END_SRC
+*** disabled flyspell
+    #+BEGIN_SRC elisp
+      (setq prelude-flyspell nil)
+    #+END_SRC
+*** set default dir
+    #+BEGIN_SRC elisp
+      (setq default-directory "c:/Users/janke/")
+    #+END_SRC
