@@ -332,6 +332,21 @@ Some package is in the github.
      #+END_SRC
 
 **** Languages
+     
+     config the lsp for simple luangage
+     bulit in lsp-client
+     #+BEGIN_SRC elisp
+       (use-package lsp-mode
+	 :ensure t
+	 :init
+	 (setq lsp-auto-guess-root t)
+
+	 :config
+	 (require 'lsp-clients)
+	 (use-package lsp-ui
+	   :ensure t
+	   :hook (lsp-mode . 'lsp-ui-mode)))
+     #+END_SRC
 
 ***** rust
       #+BEGIN_SRC elisp
@@ -366,15 +381,14 @@ Some package is in the github.
     :config
     (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
 
-    ;; install auto company pakcage
-    (use-package company-tern
-      :straight t
-      :config
-      (add-hook 'js2-mode-hook (lambda () (tern-mode) (company-mode))))
-
     ;; install indium package
     (use-package indium
       :straight t)
+
+    ;; use lsp mode
+    :hook (js2-mode . (lambda
+			()
+			(lsp)))
     :mode "\\.js\\'")
 
   (use-package emmet-mode
