@@ -1,4 +1,6 @@
 #+title: Emacs init file
+#+STARTUP: hidestars
+#+STARTUP: overview
 this init file install package with =user-package= and =straight=.
 Some package is in the github.
 * emacs init file
@@ -356,3 +358,30 @@ Some package is in the github.
 	  :mode "\\.rs\\'"
 	  :interpreter "rust")
       #+END_SRC
+
+***** javascript
+#+BEGIN_SRC elisp
+  (use-package js2-mode
+    :straight t
+    :config
+    (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+
+    ;; install auto company pakcage
+    (use-package company-tern
+      :straight t
+      :config
+      (add-hook 'js2-mode-hook (lambda () (tern-mode) (company-mode))))
+
+    ;; install indium package
+    (use-package indium
+      :straight t)
+    :mode "\\.js\\'")
+
+  (use-package emmet-mode
+    :straight t
+    :config
+    (add-hook 'sgml-mode-hook 'emmet-mode)
+    (add-hook 'css-mode-hook 'emmet-mode))
+
+
+#+END_SRC

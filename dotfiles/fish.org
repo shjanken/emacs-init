@@ -23,3 +23,10 @@
       ~/.sqlcl/bin/sql $argv
     end
   #+END_SRC
+* emacs client                                                        :alias:
+  #+BEGIN_SRC shell :tangle ~/.config/fish/functions/ec.fish
+    function ec
+      emacsclient -c 
+    end
+  #+END_SRC
+  
