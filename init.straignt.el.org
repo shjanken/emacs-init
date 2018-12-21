@@ -298,7 +298,7 @@ Some package is in the github.
 *** cnfonts 
     #+BEGIN_SRC elisp
       (use-package cnfonts
-	:straight t
+	:ensure t
 	:config
 	(cnfonts-enable))
 
