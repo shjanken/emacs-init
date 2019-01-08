@@ -89,8 +89,7 @@ Some package is in the github.
       (setq mark-backup-files nil)
       (setq auto-save-default nil)
     #+END_SRC
-*** emacs packages 
-
+** emacs packages 
 *** use-packages
     #+BEGIN_SRC elisp
       (straight-use-package 'use-package)
@@ -301,7 +300,6 @@ Some package is in the github.
 	 :bind
 	 (("C-=" . er/expand-region)))
      #+END_SRC
-
 
 *** cnfonts 
     #+BEGIN_SRC elisp
