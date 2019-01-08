@@ -49,7 +49,7 @@ Some package is in the github.
    <2017-07-12>
    use emacs china elpa mirrow
 
-** COMMENT install package manager
+** install package manager
    #+BEGIN_SRC elisp
      (defvar bootstrap-version)
      (let ((bootstrap-file
