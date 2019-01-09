@@ -44,7 +44,7 @@ Some package is in the github.
      (package-initialize)
    #+END_SRC
 
-   use customize replaced!
+   *use customize replaced!*
 
    <2017-07-12>
    use emacs china elpa mirrow
