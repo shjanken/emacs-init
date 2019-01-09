@@ -44,7 +44,7 @@ Some package is in the github.
      (package-initialize)
    #+END_SRC
 
-   use customize replaced!
+   *use customize replaced!*
 
    <2017-07-12>
    use emacs china elpa mirrow
@@ -253,7 +253,7 @@ Some package is in the github.
     #+END_SRC
 
 *** themes
-**** dracula theme						   :NOTANGLE:
+**** dracula theme 						   :NOTANGLE:
     #+BEGIN_SRC elisp :tangle no
       (use-package dracula-theme
 	:straight t
@@ -261,11 +261,22 @@ Some package is in the github.
 	(load-theme 'dracula t))
     #+END_SRC
 
-**** solarized-theme
-     #+BEGIN_SRC elisp
+**** solarized-theme						   :NOTANGLE:
+     #+BEGIN_SRC elisp :tangle no
        (use-package solarized-theme
          :ensure t
          :config (load-theme 'solarized-light))
+     #+END_SRC
+
+**** poet-theme
+     #+BEGIN_SRC elisp
+       (use-package poet-theme
+         :ensure t
+         :config
+         (load-theme 'poet)
+         (add-hook 'text-mode-hook (lambda () (variable-pitch-mode 1)))
+         (set-face-attribute 'fixed-pitch nil :family "Inziu Iosevka SC")
+         (set-face-attribute 'variable-pitch nil :family "Inziu Iosevka SC"))
      #+END_SRC
 
 *** moody
