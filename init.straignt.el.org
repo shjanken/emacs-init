@@ -17,11 +17,12 @@ Some package is in the github.
        (set-mark-command arg))
 
      (defun show-all-buffers-with-file
-         ()
+	 ()
        (interactive)
        (list-buffers 1))
 
      (global-set-key (kbd "<f7>") 'show-all-buffers-with-file)
+     (global-set-key (kbd "<f2>") 'set-mark-and-show-message)
    #+END_SRC
 
    关闭 =emacs= 的 "dududu" 的报警声音 
@@ -102,7 +103,7 @@ Some package is in the github.
       (use-package hydra
 	:straight t
 	:config
-	(defhydra hydra-zoom (global-map "<f2>")
+	(defhydra hydra-zoom (global-map "<f5>")
 	  "zoom"
 	  ("g" text-scale-increase "in")
 	  ("l" text-scale-decrease "out")))
@@ -210,14 +211,14 @@ Some package is in the github.
 *** cursor movement 
     #+BEGIN_SRC elisp
       (defhydra hydra-move
-	(global-map "<f2>")
+	(global-map "<f4>")
 	"movement"
 	("w" forward-word "forward word")
 	("b" backward-word "backward word")
 	("s" forward-sexp "forward sexp")
 	("B" backward-sexp "backward sexp"))
 
-      (define-key global-map (kbd "<f2>") 'hydra-move/body)
+      (define-key global-map (kbd "<f4>") 'hydra-move/body)
     #+END_SRC
 
 *** switch window
@@ -354,21 +355,30 @@ Some package is in the github.
      bulit in lsp-client
      #+BEGIN_SRC elisp
        (use-package lsp-mode
-         :ensure t
-         :init
-         (setq lsp-auto-guess-root t)
+	 :ensure t
+	 :init
+	 (setq lsp-auto-guess-root t)
 
-         :config
-         (require 'lsp-clients)
-         (use-package lsp-ui
-           :ensure t
-           :hook (lsp-mode . 'lsp-ui-mode)
-           :config
-           (defhydra hydra-lsp
-             (global-map "C-c l")
-             "lsp convinent"
-             ("s" lsp-ui-sideline-mode "sidline mode"))
-           (define-key global-map (kbd "C-c l") 'hydra-lsp/body)))
+	 :config
+	 (require 'lsp-clients)
+
+	 ;; install lsp-ui
+	 (use-package lsp-ui
+	   :ensure t
+	   :hook (lsp-mode . 'lsp-ui-mode)
+	   :config
+	   (defhydra hydra-lsp
+	     (global-map "C-c l")
+	     "lsp convinent"
+	     ("s" lsp-ui-sideline-mode "sidline mode"))
+	   (define-key global-map (kbd "C-c l") 'hydra-lsp/body))
+
+	 ;; intall company-lsp for complition
+	 (use-package company-lsp
+	   :straight t
+	   :config
+	   (push 'company-lsp company-backends))
+	 )
      #+END_SRC
 
 ***** rust
@@ -384,7 +394,7 @@ Some package is in the github.
 
 	    ;; set keybinding
 	    (defhydra hydra-cargo
-	      (rust-mode-map "C-c a")
+	      (rust-mode-map "C-c r")
 
 	      "rust cargo"
 	      ("t" cargo-process-test "run cargo test")
@@ -392,9 +402,10 @@ Some package is in the github.
 	      ("b" cargo-process-build "build project")
 	      ("q" nil "quit"))
 
-	    (define-key global-map (kbd "C-c a") 'hydra-cargo/body))
+	    (define-key global-map (kbd "C-c r") 'hydra-cargo/body))
 	  :mode "\\.rs\\'"
-	  :interpreter "rust")
+	  :interpreter "rust"
+	  :hook (rust-mode . (lambda () (lsp) (flycheck-mode))))
       #+END_SRC
 
 ***** javascript
