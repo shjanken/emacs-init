@@ -696,7 +696,7 @@
     #+END_SRC
 *** moody
     [[https://github.com/tarsius/moody][github]]
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package moody
 	:ensure t
 	:config

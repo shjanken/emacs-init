@@ -283,7 +283,7 @@ Some package is in the github.
 *** moody
     好看的 =mode-line= 样式
     [[https://github.com/tarsius/moody][github address]]
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package moody
 	:straight t
 	:config

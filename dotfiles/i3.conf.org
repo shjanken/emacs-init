@@ -85,4 +85,4 @@
     [pomodoro]
     command=$HOME/.pomodoro_script
     interval=1
-  #+END_SRC
+  #+END_SRCn
