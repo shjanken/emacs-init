@@ -31,12 +31,6 @@ Some package is in the github.
      (setq ring-bell-function 'ignore)
    #+END_SRC
 
-   disable auto backup
-   #+BEGIN_SRC elisp
-     (setq mark-backup-files nil)
-     (setq auto-save-default nil)
-   #+END_SRC
-
 ** use mepal package reposity
    #+BEGIN_SRC elisp
      (require 'package) ;; You might already have this line
@@ -87,7 +81,7 @@ Some package is in the github.
 *** set no auto backup
     disable auto backup. ( backup~ & #autobackup#)
     #+BEGIN_SRC elisp
-      (setq mark-backup-files nil)
+      (setq make-backup-files nil)
       (setq auto-save-default nil)
     #+END_SRC
 ** emacs packages 
@@ -254,7 +248,7 @@ Some package is in the github.
     #+END_SRC
 
 *** themes
-**** dracula theme 						   :NOTANGLE:
+**** TODO dracula theme                                            :NOTANGLE:
     #+BEGIN_SRC elisp :tangle no
       (use-package dracula-theme
 	:straight t
@@ -262,15 +256,15 @@ Some package is in the github.
 	(load-theme 'dracula t))
     #+END_SRC
 
-**** solarized-theme						   :NOTANGLE:
-     #+BEGIN_SRC elisp :tangle no
+**** solarized-theme
+     #+BEGIN_SRC elisp
        (use-package solarized-theme
          :ensure t
          :config (load-theme 'solarized-light))
      #+END_SRC
 
-**** poet-theme
-     #+BEGIN_SRC elisp
+**** poet-theme                                                    :NOTANGLE:
+     #+BEGIN_SRC elisp :tangle no
        (use-package poet-theme
          :ensure t
          :config
@@ -438,4 +432,21 @@ Some package is in the github.
       #+BEGIN_SRC elisp
         (use-package cider
           :ensure t)
+      #+END_SRC
+***** Elixir
+      #+BEGIN_SRC elisp
+	(use-package alchemist
+	  :straight t
+	  :mode "\\.(ex|exs)\\'"
+	  :interpreter "elixirt"
+	  :config
+	  (defhydra hydra-al
+	    (elixir-mode-map "C-c a")
+
+	    "
+	_b_ eval this buffer
+	"
+	    ("b" alchemist-eval-buffer)
+	    ("q" nil "quit"))
+	  (define-key global-map (kbd "C-c a") 'hydra-al/body))
       #+END_SRC
