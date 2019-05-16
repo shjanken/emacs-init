@@ -248,7 +248,7 @@ Some package is in the github.
     #+END_SRC
 
 *** themes
-**** TODO dracula theme                                            :NOTANGLE:
+**** dracula theme                                                 :NOTANGLE:
     #+BEGIN_SRC elisp :tangle no
       (use-package dracula-theme
 	:straight t
@@ -260,7 +260,7 @@ Some package is in the github.
      #+BEGIN_SRC elisp
        (use-package solarized-theme
          :ensure t
-         :config (load-theme 'solarized-light))
+         :config (load-theme 'solarized-light t))
      #+END_SRC
 
 **** poet-theme                                                    :NOTANGLE:
