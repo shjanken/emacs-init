@@ -1,0 +1,503 @@
+#+title: Emacs init file
+#+STARTUP: hidestars
+#+STARTUP: overview
+this init file install package with =user-package= and =straight=.
+Some package is in the github.
+* emacs init file
+  :PROPERTIES:
+  :header-args:elisp: :tangle ~/.emacs.d/init.el
+  :END:
+
+** my funcqtions
+   #+BEGIN_SRC elisp
+     (defun set-mark-and-show-message (arg)
+       "Run set mark command and show a message"
+       (interactive "P")
+       (message "Set Marked!")
+       (set-mark-command arg))
+
+     (defun show-all-buffers-with-file
+	 ()
+       (interactive)
+       (list-buffers 1))
+
+     (global-set-key (kbd "<f7>") 'show-all-buffers-with-file)
+     (global-set-key (kbd "<f2>") 'set-mark-and-show-message)
+   #+END_SRC
+
+   关闭 =emacs= 的 "dududu" 的报警声音 
+   #+BEGIN_SRC elisp
+     (setq visible-bell nil)
+     (setq ring-bell-function 'ignore)
+   #+END_SRC
+
+** use mepal package reposity
+   #+BEGIN_SRC elisp
+     (require 'package) ;; You might already have this line
+     (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+                              ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+     (package-initialize)
+   #+END_SRC
+
+   *use customize replaced!*
+
+   <2017-07-12>
+   use emacs china elpa mirrow
+
+** install package manager
+   #+BEGIN_SRC elisp
+     (defvar bootstrap-version)
+     (let ((bootstrap-file
+            (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+           (bootstrap-version 5))
+       (unless (file-exists-p bootstrap-file)
+         (with-current-buffer
+             (url-retrieve-synchronously
+              "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+              'silent 'inhibit-cookies)
+           (goto-char (point-max))
+           (eval-print-last-sexp)))
+       (load bootstrap-file nil 'nomessage))
+   #+END_SRC
+
+** my default setting
+*** set my default directory when emacs start
+    #+BEGIN_SRC elisp
+      (setq command-line-default-directory "~/")
+      (setq default-directory "~/")
+      (scroll-bar-mode -1) ; disable scroll bar
+      (tool-bar-mode -1) ; disable tool bar
+      (show-paren-mode) ; hight light match parens
+      (setq inhibit-startup-screen t)
+    #+END_SRC
+
+*** set babel execute language
+    #+BEGIN_SRC elisp
+      (org-babel-do-load-languages
+       'org-babel-load-languages '((clojure . t)
+                                   (emacs-lisp . t)))
+    #+END_SRC
+
+*** set no auto backup
+    disable auto backup. ( backup~ & #autobackup#)
+    #+BEGIN_SRC elisp
+      (setq make-backup-files nil)
+      (setq auto-save-default nil)
+    #+END_SRC
+** emacs packages 
+*** use-packages
+    #+BEGIN_SRC elisp
+      (straight-use-package 'use-package)
+    #+END_SRC
+
+*** Hydras
+    hydras and example
+
+    #+BEGIN_SRC elisp
+      (use-package hydra
+	:straight t
+	:config
+	(defhydra hydra-zoom (global-map "<f5>")
+	  "zoom"
+	  ("g" text-scale-increase "in")
+	  ("l" text-scale-decrease "out")))
+    #+END_SRC
+
+*** awesome-tab & projectile 
+    [[https://github.com/manateelazycat/awesome-tab][github address]]
+    我非常喜欢的一个包. 在顶部显示相关的 tab
+    #+BEGIN_SRC elisp
+      ;; the tab dependency projectile package
+      (use-package projectile
+	:straight t
+	:config
+	(projectile-mode +1)
+	(use-package awesome-tab
+	:straight (awesome-tab :type git :host github :repo "manateelazycat/awesome-tab")
+	:config
+	(awesome-tab-mode t))
+	(defhydra hydra-projectile
+	  (global-map "C-c f")
+	  "
+      Press _f_ to find file in current project
+      Press _a_ to find file by ag
+      "
+	  ("f" projectile-find-file nil)
+	  ("a" projectile-ag nil)
+	  ("q" nil "quit"))
+	(define-key global-map (kbd "C-c f") 'hydra-projectile/body))
+
+    #+END_SRC
+
+*** Ivy, Counsel, Swiper
+    #+BEGIN_SRC elisp
+      (use-package ivy
+	:straight t
+	:bind (("C-x b" . ivy-switch-buffer)))
+
+      (use-package counsel
+	:straight t
+	:bind (("C-x C-f" . counsel-find-file)
+	       ("M-x" . counsel-M-x)
+	       ("C-h f" . counsel-describe-function)
+	       ("<f1> l" . counsel-find-library)
+	       ("C-x C-r" . counsel-recentf)))
+
+      (use-package swiper
+	:straight t
+	:bind (("C-s" . swiper)))
+    #+END_SRC
+*** awesome-tray                                                   :NOTANGLE:
+    [[https://github.com/manateelazycat/awesome-tray][github address]]. not in the melpa
+    #+BEGIN_SRC elisp :tangle no
+      (use-package awesome-tray
+	:straight (awesome-tray :type git :host github :repo "manateelazycat/awesome-tray")
+	:config
+	(awesome-tray-mode 1))
+    #+END_SRC
+
+*** my ewsw package
+    #+BEGIN_SRC elisp
+      (use-package ewsw
+	:straight (ewsw :type git :host github :repo "shjanken/emacs-websocket-sucem")
+	:init (use-package websocket :straight t)
+	:config
+	(defhydra hydra-sucem (global-map "C-c s")
+	  "
+      Press _s_ to search info.
+      Press _d_ to delete the entry
+      "
+	  ("s" ewsw-send-cgylr-search nil)
+	  ("d" ewsw-send-delete-yw nil)
+	  ("r" ewsw-close-ewsw-buffer "close the ewsw buffer")
+	  ("q" nil "quit"))
+
+	(define-key global-map (kbd "C-c s") 'hydra-sucem/body))
+
+    #+END_SRC
+
+*** rainbow delimiters
+    #+BEGIN_SRC elisp
+      (use-package rainbow-delimiters
+	:straight t
+	:config
+	(add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+    #+END_SRC
+
+*** smart parens
+    我不能没有这个包
+    #+BEGIN_SRC elisp
+      (use-package smartparens
+	:straight t
+	:config
+	(add-hook 'prog-mode-hook #'smartparens-mode)
+	(defhydra hydra-sp (prog-mode-map
+			    "C-c p"
+			    :pre (set-cursor-color "#40e0d0")
+			    :post (set-cursor-color "#ffffff"))
+	  "smart parens"
+	  ("p" sp-splice-sexp "去表达式的括号")
+	  ("r" sp-rewrapp-sex "修改括号")
+	  ("f" sp-forward-slurp-sexp "向前吞掉一个表达式")
+	  ("b" sp-forward-barf-sexp "收缩括号")))
+    #+END_SRC
+
+*** cursor movement 
+    #+BEGIN_SRC elisp
+      (defhydra hydra-move
+	(global-map "<f4>")
+	"movement"
+	("w" forward-word "forward word")
+	("b" backward-word "backward word")
+	("s" forward-sexp "forward sexp")
+	("B" backward-sexp "backward sexp"))
+
+      (define-key global-map (kbd "<f4>") 'hydra-move/body)
+    #+END_SRC
+
+*** switch window
+    use =other-window= function
+    #+BEGIN_SRC elisp
+      (defhydra hydra-other-window
+	(global-map "C-x")
+	"
+      Press _o_ to switch window in current frame
+      Press _O_ to switch frame
+      "
+	("o" other-window nil)
+	("O" other-frame nil)
+	("q" nil "quit"))
+    #+END_SRC
+
+*** ace jump
+    快速跳转，字符，行，等等
+    #+BEGIN_SRC elisp
+      (use-package avy
+	:straight t
+	:config
+	(defhydra hydra-ace-jump
+	  (global-map "C-c c")
+	  "ace-jump"
+	  ("c" avy-goto-char "jump to char")
+	  ("w" avy-goto-word-0 "jump to word")
+	  ("l" avy-goto-line "jump to line qnumber")
+	  ("t" avy-goto-char-timer "jump to char timer")
+	  ("q" nil "quit"))
+
+	(define-key global-map (kbd "C-c c") 'hydra-ace-jump/body))
+    #+END_SRC
+
+*** themes
+**** dracula theme                                                 :NOTANGLE:
+    #+BEGIN_SRC elisp :tangle no
+      (use-package dracula-theme
+	:straight t
+	:config
+	(load-theme 'dracula t))
+    #+END_SRC
+
+**** solarized-theme
+     #+BEGIN_SRC elisp
+       (use-package solarized-theme
+         :ensure t
+         :config (load-theme 'solarized-light t))
+     #+END_SRC
+
+**** poet-theme                                                    :NOTANGLE:
+     #+BEGIN_SRC elisp :tangle no
+       (use-package poet-theme
+         :ensure t
+         :config
+         (load-theme 'poet)
+         (add-hook 'text-mode-hook (lambda () (variable-pitch-mode 1)))
+         (set-face-attribute 'fixed-pitch nil :family "Inziu Iosevka SC")
+         (set-face-attribute 'variable-pitch nil :family "Inziu Iosevka SC"))
+     #+END_SRC
+
+*** moody
+    好看的 =mode-line= 样式
+    [[https://github.com/tarsius/moody][github address]]
+    #+BEGIN_SRC elisp :tangle no
+      (use-package moody
+	:straight t
+	:config
+	(moody-replace-mode-line-buffer-identification)
+	(moody-replace-vc-mode))
+    #+END_SRC
+
+*** buffer manager
+    #+BEGIN_SRC elisp
+      (defhydra hydra-buffer
+	(global-map "C-c b")
+	"buffer operation"
+	("b" ivy-switch-buffer "switch buffer")
+	("B" list-buffers "list all buffers")
+	("k" kill-buffer "kill current buffer")
+	("q" nil "quit"))
+
+      (define-key global-map (kbd "C-c b") 'hydra-buffer/body)
+    #+END_SRC
+
+*** expand-region    
+ #+BEGIN_SRC elisp
+       (use-package expand-region
+	 :straight t
+	 :commands (er/expand-region)
+	 :bind
+	 (("C-=" . er/expand-region)))
+     #+END_SRC
+
+*** cnfonts 
+    #+BEGIN_SRC elisp
+      (use-package cnfonts
+	:ensure t
+	:config
+	(cnfonts-enable))
+
+    #+END_SRC
+*** development
+
+**** autocomplete                                                  :NOTANGLE:
+     #+BEGIN_SRC elisp :tangle no
+       (use-package auto-complete
+	 :straight t
+	 :config
+	 (add-hook 'prog-mode-hook #'auto-complete-mode))
+     #+END_SRC
+
+**** company
+     auto complate
+     #+BEGIN_SRC elisp
+       (use-package company
+	 :straight t
+	 :config
+	 (add-hook 'prog-mode-hook #'company-mode))
+     #+END_SRC
+
+**** fly check
+
+     #+BEGIN_SRC elisp
+       (use-package flycheck
+	 :straight t
+	 :init
+	 (global-flycheck-mode))
+     #+END_SRC
+
+**** Languages
+     
+     config the lsp for simple luangage
+     bulit in lsp-client
+     #+BEGIN_SRC elisp
+       (use-package lsp-mode
+	 :ensure t
+	 :init
+	 (setq lsp-auto-guess-root t)
+
+	 :config
+	 (require 'lsp-clients)
+
+	 ;; install lsp-ui
+	 (use-package lsp-ui
+	   :ensure t
+	   :hook (lsp-mode . 'lsp-ui-mode)
+	   :config
+	   (defhydra hydra-lsp
+	     (global-map "C-c l")
+	     "lsp convinent"
+	     ("s" lsp-ui-sideline-mode "sidline mode"))
+	   (define-key global-map (kbd "C-c l") 'hydra-lsp/body))
+
+	 ;; intall company-lsp for complition
+	 (use-package company-lsp
+	   :straight t
+	   :config
+	   (push 'company-lsp company-backends))
+	 )
+     #+END_SRC
+
+***** rust
+      #+BEGIN_SRC elisp
+	(use-package rust-mode
+	  :straight t
+	  :config
+	  (setq rust-format-on-save t)
+	  (use-package cargo
+	    :straight t
+	    :config
+	    (add-hook 'rust-mode-hook 'cargo-minor-mode)
+
+	    ;; set keybinding
+	    (defhydra hydra-cargo
+	      (rust-mode-map "C-c r")
+
+	      "rust cargo"
+	      ("t" cargo-process-test "run cargo test")
+	      ("r" cargo-process-run "run project")
+	      ("b" cargo-process-build "build project")
+	      ("q" nil "quit"))
+
+	    (define-key global-map (kbd "C-c r") 'hydra-cargo/body))
+	  :mode "\\.rs\\'"
+	  :interpreter "rust"
+	  :hook (rust-mode . (lambda () (lsp) (flycheck-mode))))
+      #+END_SRC
+
+***** javascript
+#+BEGIN_SRC elisp
+  (use-package js2-mode
+    :straight t
+    :config
+    (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+
+    ;; install indium package
+    (use-package indium
+      :straight t)
+
+    ;; use lsp mode
+    :hook (js2-mode . (lambda
+			()
+			(lsp)))
+    :mode "\\.js\\'")
+
+  (use-package emmet-mode
+    :straight t
+    :config
+    (add-hook 'sgml-mode-hook 'emmet-mode)
+    (add-hook 'css-mode-hook 'emmet-mode))
+
+
+#+END_SRC
+
+***** clojure & clojurescript
+      #+BEGIN_SRC elisp
+        (use-package cider
+          :ensure t)
+      #+END_SRC
+***** Elixir
+      #+BEGIN_SRC elisp
+	(use-package alchemist
+	  :straight t
+	  :mode "\\.(ex|exs)\\'"
+	  :interpreter "elixirt"
+	  :config
+	  (defhydra hydra-al
+	    (elixir-mode-map "C-c a")
+
+	    "
+	_b_ eval this buffer
+	"
+	    ("b" alchemist-eval-buffer)
+	    ("q" nil "quit"))
+	  (define-key global-map (kbd "C-c a") 'hydra-al/body))
+      #+END_SRC
+*** org-re-reveal
+    #+BEGIN_SRC elisp
+      (use-package org-re-reveal
+	:ensure t)
+    #+END_SRC
+*** pyim
+    #+BEGIN_SRC elisp
+      (use-package pyim
+	:ensure t
+	:demand t
+	:config
+	(use-package pyim-basedict
+	  :ensure t
+	  :config (pyim-basedict-enable))
+
+	(setq default-input-method "pyim")
+
+	(setq pyim-default-scheme 'xiaohe-shuangpin)
+
+	  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+	;; 我自己使用的中英文动态切换规则是：
+	;; 1. 光标只有在注释里面时，才可以输入中文。
+	;; 2. 光标前是汉字字符时，才能输入中文。
+	;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+	(setq-default pyim-english-input-switch-functions
+		      '(pyim-probe-dynamic-english
+			pyim-probe-isearch-mode
+			pyim-probe-program-mode
+			pyim-probe-org-structure-template))
+
+	(setq-default pyim-punctuation-half-width-functions
+		      '(pyim-probe-punctuation-line-beginning
+			pyim-probe-punctuation-after-punctuation))
+
+	;; 开启拼音搜索功能
+	(pyim-isearch-mode 1)
+
+	;; 使用 pupup-el 来绘制选词框, 如果用 emacs26, 建议设置
+	;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+	;; 手动安装 posframe 包。
+	(use-package posframe
+	  :ensure t)
+	(setq pyim-page-tooltip 'posframe)
+
+	;; 选词框显示5个候选词
+	(setq pyim-page-length 5)
+	:bind
+	(("M-j" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
+	 ))
+      (global-set-key (kbd "C-\\") 'toggle-input-method)
+    #+END_SRC

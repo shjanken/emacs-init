@@ -1,0 +1,10 @@
+* rescuetime desktop file
+  #+BEGIN_SRC shell :tangle ~/.local/share/applications/rescuetime.desktop
+    [Desktop Entry]
+    Encoding=UTF-8
+    Version=1.0
+    Type=Application
+    Terminal=false
+    Exec=/usr/bin/rescuetime
+    Name=RescueTime
+  #+END_SRC
