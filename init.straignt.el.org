@@ -248,7 +248,7 @@ Some package is in the github.
     #+END_SRC
 
 *** themes
-**** dracula theme                                                 :NOTANGLE:
+**** dracula                                                       :NOTANGLE:
     #+BEGIN_SRC elisp :tangle no
       (use-package dracula-theme
 	:straight t
@@ -256,24 +256,30 @@ Some package is in the github.
 	(load-theme 'dracula t))
     #+END_SRC
 
-**** solarized-theme
-     #+BEGIN_SRC elisp
+**** solarized-theme                                               :NOTANGLE:
+     #+BEGIN_SRC elisp :tangle no
        (use-package solarized-theme
          :ensure t
          :config (load-theme 'solarized-light t))
      #+END_SRC
 
-**** poet-theme                                                    :NOTANGLE:
+**** poet-theme                                                    :NOTANBLE:
      #+BEGIN_SRC elisp :tangle no
        (use-package poet-theme
          :ensure t
          :config
-         (load-theme 'poet)
+         (load-theme 'poet t)
          (add-hook 'text-mode-hook (lambda () (variable-pitch-mode 1)))
          (set-face-attribute 'fixed-pitch nil :family "Inziu Iosevka SC")
          (set-face-attribute 'variable-pitch nil :family "Inziu Iosevka SC"))
      #+END_SRC
 
+**** Doneburn
+     #+BEGIN_SRC elisp
+       (use-package doneburn-theme
+	 :ensure t
+	 :config (load-theme 'doneburn 'no-confirm))
+     #+END_SRC
 *** moody
     好看的 =mode-line= 样式
     [[https://github.com/tarsius/moody][github address]]
