@@ -120,10 +120,11 @@ Some package is in the github.
 	  (global-map "C-c f")
 	  "
       Press _f_ to find file in current project
-      Press _a_ to find file by ag
+      Press _p_ to switch project
       "
 	  ("f" projectile-find-file nil)
 	  ("a" projectile-ag nil)
+	  ("p" projectile-switch-project)
 	  ("q" nil "quit"))
 	(define-key global-map (kbd "C-c f") 'hydra-projectile/body))
 
@@ -185,7 +186,7 @@ Some package is in the github.
     #+END_SRC
 
 *** smart parens
-    我不能没有这个包
+    *我不能没有这个包*
     #+BEGIN_SRC elisp
       (use-package smartparens
 	:straight t
@@ -220,12 +221,9 @@ Some package is in the github.
     #+BEGIN_SRC elisp
       (defhydra hydra-other-window
 	(global-map "C-x")
-	"
-      Press _o_ to switch window in current frame
-      Press _O_ to switch frame
-      "
-	("o" other-window nil)
-	("O" other-frame nil)
+	"switch window"
+	("o" other-window "switch to other _window_")
+	("O" other-frame "switch to other _frame_")
 	("q" nil "quit"))
     #+END_SRC
 
