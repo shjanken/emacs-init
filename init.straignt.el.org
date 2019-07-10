@@ -84,6 +84,11 @@ Some package is in the github.
       (setq make-backup-files nil)
       (setq auto-save-default nil)
     #+END_SRC
+
+*** set org agenda files
+    #+BEGIN_SRC elisp
+      (setq org-agenda-files "~/Documents/org")
+    #+END_SRC
 ** emacs packages 
 *** use-packages
     #+BEGIN_SRC elisp
@@ -106,16 +111,15 @@ Some package is in the github.
 *** awesome-tab & projectile 
     [[https://github.com/manateelazycat/awesome-tab][github address]]
     我非常喜欢的一个包. 在顶部显示相关的 tab
+
+    <2019-07-10 三> 使用 [[https://github.com/ema2159/centaur-tabs/tree/c6c41b8542d300f4a5935adef3f280e1cb39f9f6][Centaur tabs]] 代替 awesome-tab
+
     #+BEGIN_SRC elisp
       ;; the tab dependency projectile package
       (use-package projectile
 	:straight t
 	:config
 	(projectile-mode +1)
-	(use-package awesome-tab
-	:straight (awesome-tab :type git :host github :repo "manateelazycat/awesome-tab")
-	:config
-	(awesome-tab-mode t))
 	(defhydra hydra-projectile
 	  (global-map "C-c f")
 	  "
@@ -127,7 +131,28 @@ Some package is in the github.
 	  ("p" projectile-switch-project)
 	  ("q" nil "quit"))
 	(define-key global-map (kbd "C-c f") 'hydra-projectile/body))
+    #+END_SRC
 
+*** centaur tabs
+    #+BEGIN_SRC elisp
+      (use-package centaur-tabs
+	:ensure t
+	:demand
+	:config
+	(centaur-tabs-mode t)
+	(defhydra hydra-centaur
+	  (global-map "C-c t")
+	  "
+      Press _n_ to next tab
+      Press _p_ to previors tab
+      Press _N_ to next tab group
+      Press _P_ to previors tab group
+      "
+	  ("n" centaur-tabs-backward nil)
+	  ("p" centaur-tabs-forward nil)
+	  ("N" centaur-tabs-backward-group nil)
+	  ("P" centaur-tabs-forward-group nil))
+	(define-key global-map (kbd "C-c t") 'hydra-centaur/body))
     #+END_SRC
 
 *** Ivy, Counsel, Swiper
