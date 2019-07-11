@@ -87,7 +87,7 @@ Some package is in the github.
 
 *** set org agenda files
     #+BEGIN_SRC elisp
-      (setq org-agenda-files "~/Documents/org")
+      (setq org-agenda-files (list "~/Documents/org"))
     #+END_SRC
 ** emacs packages 
 *** use-packages
@@ -108,33 +108,9 @@ Some package is in the github.
 	  ("l" text-scale-decrease "out")))
     #+END_SRC
 
-*** awesome-tab & projectile 
-    [[https://github.com/manateelazycat/awesome-tab][github address]]
-    我非常喜欢的一个包. 在顶部显示相关的 tab
-
-    <2019-07-10 三> 使用 [[https://github.com/ema2159/centaur-tabs/tree/c6c41b8542d300f4a5935adef3f280e1cb39f9f6][Centaur tabs]] 代替 awesome-tab
-
-    #+BEGIN_SRC elisp
-      ;; the tab dependency projectile package
-      (use-package projectile
-	:straight t
-	:config
-	(projectile-mode +1)
-	(defhydra hydra-projectile
-	  (global-map "C-c f")
-	  "
-      Press _f_ to find file in current project
-      Press _p_ to switch project
-      "
-	  ("f" projectile-find-file nil)
-	  ("a" projectile-ag nil)
-	  ("p" projectile-switch-project)
-	  ("q" nil "quit"))
-	(define-key global-map (kbd "C-c f") 'hydra-projectile/body))
-    #+END_SRC
-
-*** centaur tabs
-    #+BEGIN_SRC elisp
+*** centaur tabs                                                   :NOTANGLE:
+    为了使用 icon 还是改回了 =awesome-tab=
+    #+BEGIN_SRC elisp :tangle no
       (use-package centaur-tabs
 	:ensure t
 	:demand
@@ -172,14 +148,6 @@ Some package is in the github.
       (use-package swiper
 	:straight t
 	:bind (("C-s" . swiper)))
-    #+END_SRC
-*** awesome-tray                                                   :NOTANGLE:
-    [[https://github.com/manateelazycat/awesome-tray][github address]]. not in the melpa
-    #+BEGIN_SRC elisp :tangle no
-      (use-package awesome-tray
-	:straight (awesome-tray :type git :host github :repo "manateelazycat/awesome-tray")
-	:config
-	(awesome-tray-mode 1))
     #+END_SRC
 
 *** my ewsw package
@@ -303,7 +271,7 @@ Some package is in the github.
 	 :ensure t
 	 :config (load-theme 'doneburn 'no-confirm))
      #+END_SRC
-*** moody
+*** moody                                                 :modeline:NOTANGLE:
     好看的 =mode-line= 样式
     [[https://github.com/tarsius/moody][github address]]
     #+BEGIN_SRC elisp :tangle no
@@ -530,3 +498,61 @@ Some package is in the github.
 	 ))
       (global-set-key (kbd "C-\\") 'toggle-input-method)
     #+END_SRC
+*** org-agenda
+    #+BEGIN_SRC elisp
+      (defhydra hydra-org
+	(global-map "C-c o")
+	"
+	    Press _a_ to org-agenda
+	    "
+	("a" org-agenda nil))
+      (define-key global-map (kbd "C-c o") 'hydra-org/body)
+    #+END_SRC
+*** All the icons
+    [[https://github.com/domtronn/all-the-icons.el][github]]
+    #+BEGIN_SRC elisp
+      (use-package all-the-icons
+	:ensure t)
+    #+END_SRC
+
+*** awesome-tab & projectile                                         :github:
+    [[https://github.com/manateelazycat/awesome-tab][github address]]
+    我非常喜欢的一个包. 在顶部显示相关的 tab
+
+    <2019-07-10 三> 使用 [[https://github.com/ema2159/centaur-tabs/tree/c6c41b8542d300f4a5935adef3f280e1cb39f9f6][Centaur tabs]] 代替 awesome-tab
+
+    #+BEGIN_SRC elisp
+      ;; the tab dependency projectile package
+      (use-package projectile
+	:straight t
+	:config
+	(projectile-mode +1)
+	(defhydra hydra-projectile
+	  (global-map "C-c f")
+	  "
+      Press _f_ to find file in current project
+      Press _p_ to switch project
+      "
+	  ("f" projectile-find-file nil)
+	  ("a" projectile-ag nil)
+	  ("p" projectile-switch-project)
+	  ("q" nil "quit"))
+	(define-key global-map (kbd "C-c f") 'hydra-projectile/body))
+    #+END_SRC
+
+    #+BEGIN_SRC elisp
+      (use-package awesome-tab
+	:straight (awesome-tab :type git :host github :repo "manateelazycat/awesome-tab")
+	:config
+	(awesome-tab-mode t)
+	(setq awesome-tab-display-icon t))
+    #+END_SRC
+*** awesome-tray                                            :modeline:github:
+    [[https://github.com/manateelazycat/awesome-tray][github address]]. not in the melpa
+    #+BEGIN_SRC elisp
+      (use-package awesome-tray
+	:straight (awesome-tray :type git :host github :repo "manateelazycat/awesome-tray")
+	:config
+	(awesome-tray-mode 1))
+    #+END_SRC
+    
