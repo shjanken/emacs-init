@@ -240,7 +240,7 @@ Some package is in the github.
 
 *** themes
 **** dracula                                                       :NOTANGLE:
-    #+BEGIN_SRC elisp :tangle no
+    #+BEGIN_SRC elisp
       (use-package dracula-theme
 	:straight t
 	:config
@@ -265,8 +265,8 @@ Some package is in the github.
          (set-face-attribute 'variable-pitch nil :family "Inziu Iosevka SC"))
      #+END_SRC
 
-**** Doneburn
-     #+BEGIN_SRC elisp
+**** Doneburn                                                      :NOTANGLE:
+     #+BEGIN_SRC elisp :tangle
        (use-package doneburn-theme
 	 :ensure t
 	 :config (load-theme 'doneburn 'no-confirm))
@@ -555,4 +555,11 @@ Some package is in the github.
 	:config
 	(awesome-tray-mode 1))
     #+END_SRC
-    
+*** indent-guide
+    在代码前面显示一条缩进的线
+    #+BEGIN_SRC elisp
+      (use-package indent-guide
+	:straight (indent-guide :type git :host github :repo "zk-phi/indent-guide")
+	:config
+	(indent-guide-global-mode))
+    #+END_SRC
