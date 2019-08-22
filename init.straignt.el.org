@@ -75,9 +75,11 @@ Some package is in the github.
     #+BEGIN_SRC elisp
       (org-babel-do-load-languages
        'org-babel-load-languages '((clojure . t)
-                                   (emacs-lisp . t)))
+				   (emacs-lisp . t)
+				   (ditta . t)
+				   (sh . t)))
     #+END_SRC
-
+n
 *** set no auto backup
     disable auto backup. ( backup~ & #autobackup#)
     #+BEGIN_SRC elisp
@@ -562,4 +564,8 @@ Some package is in the github.
 	:straight (indent-guide :type git :host github :repo "zk-phi/indent-guide")
 	:config
 	(indent-guide-global-mode))
+    #+END_SRC
+*** ditta
+    #+BEGIN_SRC elisp
+      (setq org-ditaa-jar-path "~/.local/share/ditaa/ditaa.jar") ; set the ditta lib path
     #+END_SRC
