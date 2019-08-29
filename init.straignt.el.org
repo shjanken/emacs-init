@@ -76,8 +76,8 @@ Some package is in the github.
       (org-babel-do-load-languages
        'org-babel-load-languages '((clojure . t)
 				   (emacs-lisp . t)
-				   (ditta . t)
-				   (sh . t)))
+				   (ditaa . t)
+				   (shell . t)))
     #+END_SRC
 n
 *** set no auto backup
