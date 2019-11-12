@@ -349,7 +349,7 @@ Some package is in the github.
 
      #+BEGIN_SRC elisp
        (use-package flycheck
-	 :straight t
+	 :ensure t
 	 :init
 	 (global-flycheck-mode))
      #+END_SRC
@@ -381,7 +381,7 @@ Some package is in the github.
 
 	 ;; intall company-lsp for complition
 	 (use-package company-lsp
-	   :straight t
+	   :ensure t
 	   :config
 	   (push 'company-lsp company-backends))
 	 )
@@ -390,11 +390,11 @@ Some package is in the github.
 ***** rust
       #+BEGIN_SRC elisp
 	(use-package rust-mode
-	  :straight t
+	  :ensure t
 	  :config
 	  (setq rust-format-on-save t)
 	  (use-package cargo
-	    :straight t
+	    :ensure t
 	    :config
 	    (add-hook 'rust-mode-hook 'cargo-minor-mode)
 
@@ -422,12 +422,12 @@ Some package is in the github.
   ;;   (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
 
   (use-package rjsx-mode
-    :straight t
+    :ensure t
 
     :config
     ;; install indium package
     (use-package indium
-      :straight t)
+      :ensure t)
     (use-package company-tern
       :ensure t)
     (setq js2-mode-show-strict-warnings nil)
@@ -448,7 +448,7 @@ Some package is in the github.
     (setq web-mode-css-indent-offset 2))
 
   (use-package emmet-mode
-    :straight t
+    :ensure t
     :config
     (add-hook 'sgml-mode-hook 'emmet-mode)
     (add-hook 'css-mode-hook 'emmet-mode))
@@ -464,7 +464,7 @@ Some package is in the github.
 ***** Elixir
       #+BEGIN_SRC elisp
 	(use-package alchemist
-	  :straight t
+	  :ensure t
 	  :mode "\\.(ex|exs)\\'"
 	  :interpreter "elixirt"
 	  :config
@@ -555,7 +555,7 @@ Some package is in the github.
     #+BEGIN_SRC elisp
       ;; the tab dependency projectile package
       (use-package projectile
-	:straight t
+	:ensure t
 	:config
 	(projectile-mode +1)
 	(defhydra hydra-projectile
