@@ -210,6 +210,13 @@ Some package is in the github.
 	  ("b" sp-forward-barf-sexp "收缩括号")))
     #+END_SRC
 
+*** yasnippet
+    #+BEGIN_SRC elisp
+      (use-package yasnippet
+        :ensure t
+        :commands yas-minor-mode
+        :hook (go-mode . yas-minor-mode))
+    #+END_SRC
 *** cursor movement 
     #+BEGIN_SRC elisp
       (defhydra hydra-move
@@ -262,28 +269,35 @@ Some package is in the github.
     #+END_SRC
 
 **** solarized-theme                                               :NOTANGLE:
-     #+BEGIN_SRC elisp
+     #+BEGIN_SRC elisp :tangle no
        (use-package solarized-theme
          :ensure t
          :config (load-theme 'solarized-light t))
      #+END_SRC
 
 **** poet-theme                                                    :NOTANBLE:
-     #+BEGIN_SRC elisp :tangle no
+     #+BEGIN_SRC elisp
        (use-package poet-theme
          :ensure t
          :config
          (load-theme 'poet t)
-         (add-hook 'text-mode-hook (lambda () (variable-pitch-mode 1)))
-         (set-face-attribute 'fixed-pitch nil :family "Inziu Iosevka SC")
-         (set-face-attribute 'variable-pitch nil :family "Inziu Iosevka SC"))
+         (add-hook 'text-mode-hook (lambda () (variable-pitch-mode 1))))
+         ;; (set-face-attribute 'fixed-pitch nil :family "Inziu Iosevka SC") 
+         ;;(set-face-attribute 'variable-pitch nil :family "Inziu Iosevka SC")
      #+END_SRC
 
 **** Doneburn                                                      :NOTANGLE:
-     #+BEGIN_SRC elisp :tangle
+     #+BEGIN_SRC elisp :tangle no
        (use-package doneburn-theme
 	 :ensure t
 	 :config (load-theme 'doneburn 'no-confirm))
+     #+END_SRC
+
+**** Tao Theme                                                     :NOTANGLE:
+     #+BEGIN_SRC elisp :tangle no
+       (use-package tao-theme
+         :ensure t
+         :config (load-theme 'tao-yang 'no-confirm))
      #+END_SRC
 *** moody                                                 :modeline:NOTANGLE:
     好看的 =mode-line= 样式
@@ -361,7 +375,7 @@ Some package is in the github.
      #+BEGIN_SRC elisp
        (use-package lsp-mode
 	 :ensure t
-	 :commands (lsp)
+	 :commands (lsp lsp-deferred)
 	 :init
 	 (setq lsp-auto-guess-root t)
 
@@ -478,6 +492,23 @@ Some package is in the github.
 	    ("q" nil "quit"))
 	  (define-key global-map (kbd "C-c a") 'hydra-al/body))
       #+END_SRC
+
+***** Golang
+      [[https://github.com/dominikh/go-mode.el][go-mode]]
+      #+BEGIN_SRC elisp
+        (use-package go-mode
+          :mode "\\.go\\'"
+          :ensure t
+          :config
+          (progn
+            (defun lsp-go-install-save-hooks ()
+              (add-hook 'before-save-hook #'lsp-format-buffer t t)
+              (add-hook 'before-save-hook #'lsp-organize-imports))
+            (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+            ;; (add-hook 'go-mode-hook #'lsp-ui-mode)
+            (lsp-deferred)))
+      #+END_SRC
+      
 *** org-re-reveal
     #+BEGIN_SRC elisp
       (use-package org-re-reveal
