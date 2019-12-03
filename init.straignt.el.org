@@ -260,11 +260,6 @@ Some package is in the github.
     #+END_SRC
 
 *** themes
-    #+BEGIN_SRC 
-    (load-theme 'leuven)
-    #+END_SRC
-
-
 **** dracula                                                       :NOTANGLE:
     #+BEGIN_SRC elisp :tangle no
       (use-package dracula-theme
@@ -273,15 +268,15 @@ Some package is in the github.
 	(load-theme 'dracula t))
     #+END_SRC
 
-**** solarized-theme
-     #+BEGIN_SRC elisp
+**** solarized-theme                                               :NOTANGLE:
+     #+BEGIN_SRC elisp :tangle no
        (use-package solarized-theme
          :ensure t
          :config (load-theme 'solarized-light t))
      #+END_SRC
 
 **** poet-theme                                                    :NOTANBLE:
-     #+BEGIN_SRC elisp :tangle no
+     #+BEGIN_SRC elisp
        (use-package poet-theme
          :ensure t
          :config
@@ -379,32 +374,31 @@ Some package is in the github.
      bulit in lsp-client
      #+BEGIN_SRC elisp
        (use-package lsp-mode
-         :ensure t
-         :commands (lsp lsp-deferred)
-         :init
-         (setq lsp-auto-guess-root t)
+	 :ensure t
+	 :commands (lsp lsp-deferred)
+	 :init
+	 (setq lsp-auto-guess-root t)
 
-         :config
-         (require 'lsp-clients)
+	 :config
+	 (require 'lsp-clients)
 
-         ;; install lsp-ui
-         ;; (use-package lsp-ui
-         ;;   :ensure t
-         ;;   :hook (lsp-mode . 'lsp-ui-mode)
-         ;;   :config
-         ;;   (defhydra hydra-lsp
-         ;;     (global-map "C-c l")
-         ;;     "lsp convinent"
-         ;;     ("s" lsp-ui-sideline-mode "sidline mode"))
-         ;;   (define-key global-map (kbd "C-c l") 'hydra-lsp/body
-         ;; ))                                
+	 ;; install lsp-ui
+	 (use-package lsp-ui
+	   :ensure t
+	   :hook (lsp-mode . 'lsp-ui-mode)
+	   :config
+	   (defhydra hydra-lsp
+	     (global-map "C-c l")
+	     "lsp convinent"
+	     ("s" lsp-ui-sideline-mode "sidline mode"))
+	   (define-key global-map (kbd "C-c l") 'hydra-lsp/body))
 
-         ;; intall company-lsp for complition
-         (use-package company-lsp
-           :ensure t
-           :config
-           (push 'company-lsp company-backends))
-         )
+	 ;; intall company-lsp for complition
+	 (use-package company-lsp
+	   :ensure t
+	   :config
+	   (push 'company-lsp company-backends))
+	 )
      #+END_SRC
 
 ***** rust
@@ -512,8 +506,7 @@ Some package is in the github.
               (add-hook 'before-save-hook #'lsp-organize-imports))
             (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
             ;; (add-hook 'go-mode-hook #'lsp-ui-mode)
-            )
-          (lsp-deferred))
+            (lsp-deferred)))
       #+END_SRC
       
 *** org-re-reveal
@@ -618,7 +611,7 @@ Some package is in the github.
     #+END_SRC
 *** awesome-tray                                            :modeline:github:
     [[https://github.com/manateelazycat/awesome-tray][github address]]. not in the melpa
-    #+BEGIN_SRC elisp :tangle no
+    #+BEGIN_SRC elisp
       (use-package awesome-tray
 	:straight (awesome-tray :type git :host github :repo "manateelazycat/awesome-tray")
 	:config
@@ -660,12 +653,4 @@ Some package is in the github.
     #+BEGIN_SRC elisp
       (use-package restclient
 	:ensure t)
-    #+END_SRC
-*** beacon
-    hight light current cursor
-    #+BEGIN_SRC elisp
-      (use-package beacon
-        :ensure t
-        :config
-        (beacon-mode 1))
     #+END_SRC
