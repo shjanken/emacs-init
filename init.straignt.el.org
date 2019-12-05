@@ -30,6 +30,11 @@ Some package is in the github.
      (setq visible-bell nil)
      (setq ring-bell-function 'ignore)
    #+END_SRC
+   
+   使用 =ibuffer= 代替 =bufferlist=
+   #+BEGIN_SRC elisp
+     (global-set-key (kbd "C-x C-b") 'ibuffer)
+   #+END_SRC
 
 ** use mepal package reposity
    #+BEGIN_SRC elisp
@@ -232,7 +237,7 @@ Some package is in the github.
 
 *** switch window
     use =other-window= function
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (defhydra hydra-other-window
 	(global-map "C-x")
 	"switch window"
@@ -240,6 +245,8 @@ Some package is in the github.
 	("O" other-frame "switch to other _frame_")
 	("q" nil "quit"))
     #+END_SRC
+
+    <2019-12-05 Thu> use ace window replace 
 
 *** ace jump
     快速跳转，字符，行，等等
@@ -427,7 +434,7 @@ Some package is in the github.
 	      ("r" cargo-process-run "run project")
 	      ("b" cargo-process-build "build project")
 	      ("q" nil "quit"))
-
+r
 	    (define-key global-map (kbd "C-c r") 'hydra-cargo/body))
 	  :mode "\\.rs\\'"
 	  :interpreter "rust"
@@ -593,20 +600,19 @@ Some package is in the github.
     #+BEGIN_SRC elisp
       ;; the tab dependency projectile package
       (use-package projectile
-	:ensure t
-	:config
-	(projectile-mode +1)
-	(defhydra hydra-projectile
-	  (global-map "C-c f")
-	  "
-      Press _f_ to find file in current project
-      Press _p_ to switch project
-      "
-	  ("f" projectile-find-file nil)
-	  ("a" projectile-ag nil)
-	  ("p" projectile-switch-project)
-	  ("q" nil "quit"))
-	(define-key global-map (kbd "C-c f") 'hydra-projectile/body))
+        :ensure t
+        :config
+        (projectile-mode +1)
+        (defhydra hydra-projectile
+          (global-map "C-c f")
+          ""
+          ("f" projectile-find-file "projectile find file")
+          ("a" projectile-ag "projectile ag grep")
+          ("p" projectile-switch-project "projectile switch project")
+          ("b" projectile-ibuffer "projectile ibuffer")
+          ("k" projectile-kill-buffers "projectile kill buffers")
+          ("q" nil "quit"))
+        (define-key global-map (kbd "C-c f") 'hydra-projectile/body))
     #+END_SRC
 
     #+BEGIN_SRC elisp
@@ -669,3 +675,12 @@ Some package is in the github.
         :config
         (beacon-mode 1))
     #+END_SRC
+*** ace window
+    #+BEGIN_SRC elisp
+      (use-package ace-window
+        :ensure t
+        :config
+        (global-set-key (kbd "C-x o") 'ace-window))
+    #+END_SRC
+
+    <2019-12-05 Thu>
