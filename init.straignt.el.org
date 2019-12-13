@@ -280,8 +280,8 @@ Some package is in the github.
 	(load-theme 'dracula t))
     #+END_SRC
 
-**** solarized-theme
-     #+BEGIN_SRC elisp
+**** solarized-theme                                               :NOTANGLE:
+     #+BEGIN_SRC elisp :tangle no 
        (use-package solarized-theme
          :ensure t
          :config (load-theme 'solarized-light t))
@@ -311,6 +311,15 @@ Some package is in the github.
          :ensure t
          :config (load-theme 'tao-yang 'no-confirm))
      #+END_SRC
+**** Espresso 
+     light theme
+     #+BEGIN_SRC elisp
+       (use-package espresso-theme
+         :ensure t
+         :config (load-theme 'espresso 'no-confirm))
+     #+END_SRC
+
+
 *** moody                                                 :modeline:NOTANGLE:
     好看的 =mode-line= 样式
     [[https://github.com/tarsius/moody][github address]]
