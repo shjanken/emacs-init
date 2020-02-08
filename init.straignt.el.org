@@ -693,3 +693,23 @@ r
     #+END_SRC
 
     <2019-12-05 Thu>
+*** org-roam
+    [[https://github.com/jethrokuan/org-roam][github]] roam 是一个笔记系统.特点是无结构的文章组织,使用 =link= 的方式来组织笔记
+    #+BEGIN_SRC elisp
+      (use-package org-roam
+        :after org
+        :hook (org-mode . org-roam-mode)
+        :straight (:host github :repo "jethrokuan/org-roam")
+        :custom
+        (org-roam-directory "~/Documents/org/")
+        :commands (org-roam-today)
+        :config
+        (defhydra hydra-roam
+          (org-mode-map "C-c n")
+
+          "org roam key binding"
+          ("l" org-roam "show side bar")
+          ("f" org-roam-find-file "find file")
+          ("i" org-roam-insert "insert here"))
+        (define-key org-mode-map (kbd "C-c n") 'hydra-roam/body))
+    #+END_SRC
