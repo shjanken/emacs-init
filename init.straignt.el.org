@@ -713,3 +713,12 @@ r
           ("i" org-roam-insert "insert here"))
         (define-key org-mode-map (kbd "C-c n") 'hydra-roam/body))
     #+END_SRC
+*** remind-bindings 
+    提醒我当前我定义了哪些快捷键
+    #+BEGIN_SRC elisp
+      (use-package remind-bindings
+        :ensure t
+        :hook (after-init . remind-bindings-initialise)
+        :bind (("C-c C-d" . 'remind-bindings-toggle-buffer)
+               ("C-c M-d" . 'remind-bindings-specific-mode)))
+    #+END_SRC
