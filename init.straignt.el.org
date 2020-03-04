@@ -80,9 +80,10 @@ Some package is in the github.
     #+BEGIN_SRC elisp
       (org-babel-do-load-languages
        'org-babel-load-languages '((clojure . t)
-				   (emacs-lisp . t)
-				   (ditaa . t)
-				   (shell . t)))
+                                   (emacs-lisp . t)
+                                   (ditaa . t)
+                                   (shell . t)
+                                   (js . t)))
     #+END_SRC
 
 *** set no auto backup
@@ -165,7 +166,7 @@ Some package is in the github.
 	       ("C-x C-r" . counsel-recentf)))
 
       (use-package swiper
-	:straight t
+	:ensure t
 	:bind (("C-s" . swiper)))
     #+END_SRC
 
