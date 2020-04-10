@@ -312,15 +312,19 @@ Some package is in the github.
          :ensure t
          :config (load-theme 'tao-yang 'no-confirm))
      #+END_SRC
-**** Espresso 
+**** Espresso                                                      :NOTANGLE:
      light theme
-     #+BEGIN_SRC elisp
+     #+BEGIN_SRC elisp :tangle no
        (use-package espresso-theme
          :ensure t
          :config (load-theme 'espresso 'no-confirm))
      #+END_SRC
-
-
+**** srcery
+     #+begin_src elisp
+       (use-package srcery-theme
+         :ensure t
+         :config (load-theme 'srcery t))
+     #+end_src
 *** moody                                                 :modeline:NOTANGLE:
     好看的 =mode-line= 样式
     [[https://github.com/tarsius/moody][github address]]
@@ -533,6 +537,15 @@ r
           (lsp-deferred))
       #+END_SRC
       
+***** typescript
+      #+begin_src elisp
+        (use-package tide
+          :ensure t
+          :after (typescript-mode company flycheck)
+          :hook ((typescript-mode . tide-setup)
+                 (typescript-mode . tide-hl-identifier-mode)
+                 (before-save . tide-format-before-save)))
+      #+end_src
 *** org-re-reveal
     #+BEGIN_SRC elisp
       (use-package org-re-reveal
@@ -700,7 +713,8 @@ r
       (use-package org-roam
         :after org
         :hook (org-mode . org-roam-mode)
-        :straight (:host github :repo "jethrokuan/org-roam")
+        ;; :straight (:host github :repo "jethrokuan/org-roam")
+        :ensure t
         :custom
         (org-roam-directory "~/Documents/org/")
         :commands (org-roam-today)
