@@ -426,6 +426,11 @@ Some package is in the github.
            :config
            (push 'company-lsp company-backends))
          )
+
+       (use-package lsp-treemacs
+         :config
+         (lsp-metals-treeview-enable t)
+         (setq lsp-metals-treeview-show-when-views-received t))
      #+END_SRC
 
 ***** rust
@@ -546,6 +551,21 @@ r
                  (typescript-mode . tide-hl-identifier-mode)
                  (before-save . tide-format-before-save)))
       #+end_src
+***** scala 
+      #+begin_src elisp
+        (use-package scala-mode
+          :ensure t
+          :mode "\\.s\\(cala\\|bt\\)$")
+
+        (use-package sbt-mode
+          :ensure t
+          :config
+          (substitute-key-definition
+           'minibuffer-complete-word
+           'self-insert-command
+           minibuffer-local-completion-map)
+          (setq sbt:program-options '(-Dsbt.supershell=false)))
+      #+end_src
 *** org-re-reveal
     #+BEGIN_SRC elisp
       (use-package org-re-reveal
@@ -640,10 +660,11 @@ r
 
     #+BEGIN_SRC elisp
       (use-package awesome-tab
-	:straight (awesome-tab :type git :host github :repo "manateelazycat/awesome-tab")
-	:config
-	(awesome-tab-mode t)
-	(setq awesome-tab-display-icon t))
+        :straight (awesome-tab :type git :host github :repo "manateelazycat/awesome-tab")
+        :config
+        (awesome-tab-mode t)
+        (setq awesome-tab-display-icon nil)
+        (setq frame-background-mode 'dark))
     #+END_SRC
 *** awesome-tray                                            :modeline:github:
     [[https://github.com/manateelazycat/awesome-tray][github address]]. not in the melpa
