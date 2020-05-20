@@ -409,16 +409,15 @@ Some package is in the github.
          (require 'lsp-clients)
 
          ;; install lsp-ui
-         ;; (use-package lsp-ui
-         ;;   :ensure t
-         ;;   :hook (lsp-mode . 'lsp-ui-mode)
-         ;;   :config
-         ;;   (defhydra hydra-lsp
-         ;;     (global-map "C-c l")
-         ;;     "lsp convinent"
-         ;;     ("s" lsp-ui-sideline-mode "sidline mode"))
-         ;;   (define-key global-map (kbd "C-c l") 'hydra-lsp/body
-         ;; ))                                
+         (use-package lsp-ui
+           :ensure t
+           :hook (lsp-mode . 'lsp-ui-mode)
+           :config
+           (defhydra hydra-lsp
+             (global-map "C-c l")
+             "lsp convinent"
+             ("s" lsp-ui-sideline-mode "sidline mode"))
+           (define-key global-map (kbd "C-c l") 'hydra-lsp/body))
 
          ;; intall company-lsp for complition
          (use-package company-lsp
