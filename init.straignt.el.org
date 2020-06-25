@@ -426,10 +426,10 @@ Some package is in the github.
            (push 'company-lsp company-backends))
          )
 
-       (use-package lsp-treemacs
-         :config
-         (lsp-metals-treeview-enable t)
-         (setq lsp-metals-treeview-show-when-views-received t))
+       ;; (use-package lsp-treemacs
+       ;;  :config
+       ;;   (lsp-metals-treeview-enable t)
+       ;;  (setq lsp-metals-treeview-show-when-views-received t))
      #+END_SRC
 
 ***** rust
@@ -550,8 +550,8 @@ r
                  (typescript-mode . tide-hl-identifier-mode)
                  (before-save . tide-format-before-save)))
       #+end_src
-***** scala 
-      #+begin_src elisp
+***** scala                                                        :NOTANGLE:
+      #+begin_src elisp :tangle no
         (use-package scala-mode
           :ensure t
           :mode "\\.s\\(cala\\|bt\\)$")
@@ -571,50 +571,45 @@ r
 	:ensure t)
     #+END_SRC
 *** pyim
+
     #+BEGIN_SRC elisp
       (use-package pyim
-	:ensure t
-	:demand t
-	:config
-	(use-package pyim-basedict
-	  :ensure t
-	  :config (pyim-basedict-enable))
+        :ensure t
+        :demand t
+        :config
+        (use-package pyim-basedict
+          :ensure t
+          :config (pyim-basedict-enable))
 
-	(setq default-input-method "pyim")
+        (setq default-input-method "pyim")
 
-	(setq pyim-default-scheme 'xiaohe-shuangpin)
+        (setq pyim-default-scheme 'xiaohe-shuangpin)
 
-	  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
-	;; 我自己使用的中英文动态切换规则是：
-	;; 1. 光标只有在注释里面时，才可以输入中文。
-	;; 2. 光标前是汉字字符时，才能输入中文。
-	;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
-	(setq-default pyim-english-input-switch-functions
-		      '(pyim-probe-dynamic-english
-			pyim-probe-isearch-mode
-			pyim-probe-program-mode
-			pyim-probe-org-structure-template))
+          ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+        ;; 我自己使用的中英文动态切换规则是：
+        ;; 1. 光标只有在注释里面时，才可以输入中文。
+        ;; 2. 光标前是汉字字符时，才能输入中文。
+        ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+        (setq-default pyim-english-input-switch-functions
+                      '(pyim-probe-dynamic-english
+                        pyim-probe-isearch-mode
+                        pyim-probe-program-mode
+                        pyim-probe-org-structure-template))
 
-	(setq-default pyim-punctuation-half-width-functions
-		      '(pyim-probe-punctuation-line-beginning
-			pyim-probe-punctuation-after-punctuation))
+        (setq-default pyim-punctuation-half-width-functions
+                      '(pyim-probe-punctuation-line-beginning
+                        pyim-probe-punctuation-after-punctuation))
 
-	;; 开启拼音搜索功能
-	(pyim-isearch-mode 1)
+        ;; 开启拼音搜索功能
+        (pyim-isearch-mode 1)
 
-	;; 使用 pupup-el 来绘制选词框, 如果用 emacs26, 建议设置
-	;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
-	;; 手动安装 posframe 包。
-	(use-package posframe
-	  :ensure t)
-	(setq pyim-page-tooltip 'posframe)
+        (setq pyim-page-tooltip 'popup)
 
-	;; 选词框显示5个候选词
-	(setq pyim-page-length 5)
-	:bind
-	(("M-j" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
-	 ))
-      (global-set-key (kbd "C-\\") 'toggle-input-method)
+        ;; 选词框显示5个候选词
+        (setq pyim-page-length 5)
+
+        (define-key org-mode-map (kbd "C-c C-p") 'pyim-convert-string-at-point)
+        :defer t)
     #+END_SRC
 *** org-agenda
     #+BEGIN_SRC elisp
@@ -727,17 +722,17 @@ r
     #+END_SRC
 
     <2019-12-05 Thu>
-*** org-roam
+*** org-roam                                                       :NOTANGLE:
     [[https://github.com/jethrokuan/org-roam][github]] roam 是一个笔记系统.特点是无结构的文章组织,使用 =link= 的方式来组织笔记
     #+BEGIN_SRC elisp
       (use-package org-roam
-        :after org
-        :hook (org-mode . org-roam-mode)
+        ;; :after org
+        :hook (after-init . org-roam-mode)
         ;; :straight (:host github :repo "jethrokuan/org-roam")
         :ensure t
         :custom
         (org-roam-directory "~/Documents/org/")
-        :commands (org-roam-today)
+        ;; :commands (org-roam-today)
         :config
         (defhydra hydra-roam
           (org-mode-map "C-c n")
@@ -748,9 +743,14 @@ r
           ("i" org-roam-insert "insert here"))
         (define-key org-mode-map (kbd "C-c n") 'hydra-roam/body))
     #+END_SRC
-*** remind-bindings 
+*** remind-bindings                                                :NOTANGLE:
     提醒我当前我定义了哪些快捷键
-    #+BEGIN_SRC elisp
+    
+    <2020-06-22 Mon>
+    看起来不是很有用。而且造成了一个启动错误
+    所以先把这个包去掉了
+
+    #+BEGIN_SRC elisp :tangle no
       (use-package remind-bindings
         :ensure t
         :hook (after-init . remind-bindings-initialise)
