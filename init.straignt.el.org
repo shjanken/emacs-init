@@ -728,6 +728,12 @@ r
         (org-roam-directory "~/Documents/org/")
         ;; :commands (org-roam-today)
         :config
+        (setq org-roam-capture-templates
+              '(("d" "default" plain (function org-roam--capture-get-point)
+                 "%?"
+                 :file-name "${slug}"
+                 :head "#+title: ${title}\n"
+                 :unnarrowed t)))
         (defhydra hydra-roam
           (org-mode-map "C-c n")
 
