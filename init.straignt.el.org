@@ -380,9 +380,9 @@ Some package is in the github.
      auto complate
      #+BEGIN_SRC elisp
        (use-package company
-	 :straight t
-	 :config
-	 (add-hook 'prog-mode-hook #'company-mode))
+         :ensure t
+         :config
+         (add-hook 'prog-mode-hook #'company-mode))
      #+END_SRC
 
 **** fly check
@@ -743,6 +743,15 @@ r
           ("i" org-roam-insert "insert here"))
         (define-key org-mode-map (kbd "C-c n") 'hydra-roam/body))
     #+END_SRC
+
+**** roam-company
+     #+begin_src elisp
+       (use-package company-org-roam
+         :straight (:host github :repo "org-roam/company-org-roam")
+         :config
+         (push 'company-org-roam company-backends))
+     #+end_src
+
 *** remind-bindings                                                :NOTANGLE:
     提醒我当前我定义了哪些快捷键
     
