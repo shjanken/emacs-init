@@ -733,14 +733,16 @@ r
                  "%?"
                  :file-name "${slug}"
                  :head "#+title: ${title}\n"
-                 :unnarrowed t)))
+                 :unnarrowed t
+                 :immediate-finish t)))
         (defhydra hydra-roam
           (org-mode-map "C-c n")
 
           "org roam key binding"
           ("l" org-roam "show side bar")
           ("f" org-roam-find-file "find file")
-          ("i" org-roam-insert "insert here"))
+          ("i" org-roam-insert "insert here")
+          ("t" org-roam-dailies-today "today"))
         (define-key org-mode-map (kbd "C-c n") 'hydra-roam/body))
     #+END_SRC
 
