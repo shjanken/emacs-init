@@ -108,6 +108,12 @@ Some package is in the github.
       (setq-default indent-tabs-mode nil)
     #+END_SRC
 
+*** 自动扩展块模板
+    <s + Tab 无法扩展成块模板
+    #+begin_src elisp
+      (when (version<= "9.2" (org-version))
+        (require 'org-tempo))
+    #+end_src
 
 ** emacs packages 
 *** use-packages
@@ -716,7 +722,7 @@ r
     #+END_SRC
 
     <2019-12-05 Thu>
-*** org-roam                                                       :NOTANGLE:
+*** org-roam
     [[https://github.com/jethrokuan/org-roam][github]] roam 是一个笔记系统.特点是无结构的文章组织,使用 =link= 的方式来组织笔记
     #+BEGIN_SRC elisp
       (use-package org-roam
@@ -755,6 +761,16 @@ r
          :after org-roam)
      #+end_src
 
+*** deft
+    一个用来显示，过滤大量文件的库
+    #+begin_src elisp
+      (use-package deft
+        :bind ("<f8>" . deft)
+        :commands (deft)
+        :config (setq deft-directory "~/Documents/org"
+                      deft-extensions '("md" "org" "txt"))
+        :ensure t)
+    #+end_src
 *** remind-bindings                                                :NOTANGLE:
     提醒我当前我定义了哪些快捷键
     
