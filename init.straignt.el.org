@@ -1,8 +1,12 @@
 #+title: Emacs init file
 #+STARTUP: hidestars
 #+STARTUP: overview
+#+roam_alias: "emasc init file"
 this init file install package with =user-package= and =straight=.
 Some package is in the github.
+
+- tags :: dotfile, [[file:../linux.org][Linux]]
+
 * emacs init file
   :PROPERTIES:
   :header-args:elisp: :tangle ~/.emacs.d/init.el
@@ -41,6 +45,7 @@ Some package is in the github.
      (require 'package) ;; You might already have this line
      (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
                               ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+     ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
      (package-initialize)
    #+END_SRC
 
@@ -75,16 +80,19 @@ Some package is in the github.
       (show-paren-mode) ; hight light match parens
       (setq inhibit-startup-screen t)
     #+END_SRC
+*** org mode
+**** set babel execute language
+     设置 ~org babel~ 代码块里面可以运行的语言
+     #+BEGIN_SRC elisp
+       (org-babel-do-load-languages
+        'org-babel-load-languages '((clojure . t)
+                                    (emacs-lisp . t)
+                                    (ditaa . t)
+                                    (shell . t)
+                                    (js . t)))
 
-*** set babel execute language
-    #+BEGIN_SRC elisp
-      (org-babel-do-load-languages
-       'org-babel-load-languages '((clojure . t)
-                                   (emacs-lisp . t)
-                                   (ditaa . t)
-                                   (shell . t)
-                                   (js . t)))
-    #+END_SRC
+       (setq org-confirm-babel-evaluate nil)
+     #+END_SRC
 
 *** set no auto backup
     disable auto backup. ( backup~ & #autobackup#)
@@ -95,7 +103,7 @@ Some package is in the github.
 
 *** set org agenda file
     #+BEGIN_SRC elisp
-      (setq org-agenda-files (list "~/Documents/org"))
+      (setq org-agenda-files (list "~/documents/org"))
     #+END_SRC
 
 *** set line high light
@@ -115,6 +123,13 @@ Some package is in the github.
         (require 'org-tempo))
     #+end_src
 
+*** 自动折行
+    设置 ~toggle-truncate-lines~ 变量即可。
+    但是 ~org-mode~ 需要单独设置，因为每次进入 ~org-mode~ 的时候，这个变量都会重设
+    #+begin_src elisp
+      (setq toggle-truncate-lines t)
+      (add-hook 'org-mode-hook 'toggle-truncate-lines)
+    #+end_src
 ** emacs packages 
 *** use-packages
     #+BEGIN_SRC elisp
@@ -246,11 +261,12 @@ Some package is in the github.
     use =other-window= function
     #+BEGIN_SRC elisp :tangle no
       (defhydra hydra-other-window
-	(global-map "C-x")
-	"switch window"
-	("o" other-window "switch to other _window_")
-	("O" other-frame "switch to other _frame_")
-	("q" nil "quit"))
+        (global-map "C-x")
+        "switch window"
+        ("o" other-window "switch to other _window_")
+        ("O" other-frame "switch to other _frame_")
+        ("1" delete-other-windows "delete other windows")
+        ("q" nil "quit"))
     #+END_SRC
 
     <2019-12-05 Thu> use ace window replace 
@@ -389,8 +405,7 @@ Some package is in the github.
          :ensure t
          :config
          ;; (add-hook 'prog-mode-hook #'company-)
-         :hook ((prog-mode . company-mode)
-                (org-mode . company-mode)))
+         :hook ((prog-mode org-mode ejc-sql-minor-mode-hook) . company-mode))
      #+END_SRC
 
 **** fly check
@@ -573,6 +588,44 @@ r
            minibuffer-local-completion-map)
           (setq sbt:program-options '(-Dsbt.supershell=false)))
       #+end_src
+***** erlang
+      ~erlang~ 使用 ~erlang-mode~ 来提供编写代码的能力
+      #+begin_src elisp
+        (use-package erlang
+          :ensure t
+          :interpreter ("erlang" . erlang-mode))
+      #+end_src
+
+      ob-erlang
+      #+begin_src elisp
+        (use-package ob-erlang
+          :straight (ob-erlang :type git :host github :repo "xfwduke/ob-erlang"))
+
+        (org-babel-do-load-languages 'org-babel-load-languages
+                                     (append org-babel-load-languages '((erlang . t))))
+      #+end_src
+***** plantuml
+      [2020-08-07 五]
+      =plantuml= 是一个画图的软件
+      [[https://www.yuque.com/barretlee/yuque/aabh67][绘制PlantUML图]]
+      要使用 =plantuml= 需要现在系统里面安装, 可以使用官方的 =plantuml.jar=, 然后在 =emacs= 里面配置执行路径，如果是 =archlinux= 可以直接安装 =plantuml= 到系统里面, [[https://plantuml.com/zh/emacs][集成PlantUML到Emacs里面]]
+      
+      =plantuml.jar= 的安装位置在各个系统上都有不同，所以需要根据具体的位置来配置
+      #+name: manjaro-plantuml-jar-path
+      #+begin_src elisp :tangle no
+      /usr/share/java/plantuml/plantuml.jar
+      #+end_src
+      
+      #+begin_src elisp :noweb yes 
+        (use-package plantuml-mode
+          :init
+          ; (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+          (org-babel-do-load-languages
+           'org-babel-load-languages
+           (append org-babel-load-languages '((plantuml . t))))
+          (setq org-plantuml-jar-path (expand-file-name "<<manjaro-plantuml-jar-path>>"))
+          :interpreter "plantuml")
+      #+end_src
 *** org-re-reveal
     #+BEGIN_SRC elisp
       (use-package org-re-reveal
@@ -580,7 +633,7 @@ r
     #+END_SRC
 *** pyim
 
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package pyim
         :ensure t
         :demand t
@@ -731,7 +784,7 @@ r
         ;; :straight (:host github :repo "jethrokuan/org-roam")
         :ensure t
         :custom
-        (org-roam-directory "~/Documents/org/")
+        (org-roam-directory "~/documents/org/")
         ;; :commands (org-roam-today)
         :config
         (setq org-roam-capture-templates
@@ -741,6 +794,7 @@ r
                  :head "#+title: ${title}\n"
                  :unnarrowed t
                  :immediate-finish t)))
+        (setq org-roam-completion-system 'ivy)
         (defhydra hydra-roam
           (org-mode-map "C-c n")
 
@@ -753,21 +807,20 @@ r
     #+END_SRC
 
 **** roam-company
-     #+begin_src elisp
+     #+begin_src elisp :tangle no
        (use-package company-org-roam
          :straight (:host github :repo "org-roam/company-org-roam")
          :config
          (push 'company-org-roam company-backends)
          :after org-roam)
      #+end_src
-
 *** deft
     一个用来显示，过滤大量文件的库
     #+begin_src elisp
       (use-package deft
         :bind ("<f8>" . deft)
         :commands (deft)
-        :config (setq deft-directory "~/Documents/org"
+        :config (setq deft-directory "~/documents/org"
                       deft-extensions '("md" "org" "txt"))
         :ensure t)
     #+end_src
@@ -785,3 +838,60 @@ r
         :bind (("C-c C-d" . 'remind-bindings-toggle-buffer)
                ("C-c M-d" . 'remind-bindings-specific-mode)))
     #+END_SRC
+*** eaf
+    从官网上抄来的配置文件
+    #+begin_src elisp :tangle no
+      (use-package eaf
+        :load-path "/usr/share/emacs/site-lisp/eaf"
+        :custom
+        (eaf-find-alternate-file-in-dired t)
+        :config
+        (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+        (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+        (eaf-bind-key take_photo "p" eaf-camera-keybinding))
+    #+end_src
+*** [[file:../ecj_sql.org][ejc sql]]
+    ~ejc sql~ 是一个使用 ~clojure/java.jdbc~ 库来链接数据库的简单的 ~emacs sql client~
+
+    #+begin_src elisp
+      (use-package ejc-sql
+        :ensure t
+        :config
+        (require 'ejc-company)
+        (push 'ejc-company-backend company-backends)
+
+        :init
+        (setq ejc-temp-editor-file-path "/tmp"))
+    #+end_src
+
+    #+begin_src elisp
+      (ejc-create-connection
+       "test-db"
+       :dependencies [[com.oracle.jdbc/ojdbc6 "11.0.0.0"]]
+       :dbtype "oracle"
+       :dbname "xe"
+       :port "1521"
+       :host "localhost"
+       :user "hr"
+       :password "hr"
+       :separator "/")
+    #+end_src
+*** org mode key bindings
+     
+     设置快捷键，使用 ~hydra~
+     #+begin_src elisp
+       (defhydra hydra-org-mode (org-mode-map "C-c o")
+       "org map"
+         ("f" org-metaright "headline right")
+         ("b" org-metaleft "headline left")
+         ("t" org-time-stamp "insert time stamp")
+         ("a" org-time-stamp-inactive "insert inactive time stamp")
+         ("u" org-time-stamp-up-day "up day")
+         ("d" org-time-stamp-down-day "down day"))
+
+       (define-key org-mode-map (kbd "C-c o") 'hydra-org-mode/body)
+     #+end_src
+
+     #+RESULTS:
+     : hydra-org-mode/body
+     
