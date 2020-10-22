@@ -289,9 +289,19 @@ Some package is in the github.
 	(define-key global-map (kbd "C-c c") 'hydra-ace-jump/body))
     #+END_SRC
 
-*** themes
-    #+BEGIN_SRC 
-    (load-theme 'leuven)
+*** themes                                                         :NOTANGLE:
+    #+BEGIN_SRC elisp :tangle no
+      (use-package leuven-theme
+        :ensure t
+        :config
+        (load-theme 'leuven t)
+        ;; set neotree face.
+        ;; neotree 淡色的上面太淡了
+        (custom-set-faces
+         '(neo-root-dir-face ((t (:foreground "dodger blue" :weight bold))))
+         '(neo-file-link-face ((t (:foreground "lime green"))))
+         '(neo-dir-link-face ((t (:foreground "SteelBlue4")))))
+        )
     #+END_SRC
 
 
@@ -310,7 +320,7 @@ Some package is in the github.
          :config (load-theme 'solarized-light t))
      #+END_SRC
 
-**** poet-theme                                                    :NOTANBLE:
+**** poet-theme                                                    :NOTANGLE:
      #+BEGIN_SRC elisp :tangle no
        (use-package poet-theme
          :ensure t
@@ -341,7 +351,8 @@ Some package is in the github.
          :ensure t
          :config (load-theme 'espresso 'no-confirm))
      #+END_SRC
-**** srcery
+**** srcery                                                        :NOTANGLE:
+     一个黑色的主题, 比较好看
      #+begin_src elisp
        (use-package srcery-theme
          :ensure t
@@ -525,16 +536,36 @@ r
 #+END_SRC
 
 ***** clojure & clojurescript
+      使用 =cider= 来作为 =clojure= 和 =cljs= 语言的开发工具
+      设置 =org-babel-clojure-backend= 可以在 =org file= 里面支持 =clojure= 代码的运行
       #+BEGIN_SRC elisp
-	(use-package cider
-	  :ensure t)
+        (use-package cider
+          :ensure t
+          :init
+          (setq org-babel-clojure-backend 'cider))
       #+END_SRC
+
+****** Clojure & ClojureScript 的 lint 工具
+       使用 =clj-kondo= 作为 =lint= 工具, 可以使用操作系统的包管理器安装
+       - 在项目中集成 :: 需要在项目的根目录 (和 =project.clj, build.boot, deps.edn= 在同一个目录) 创建 =.clj-kondo= 目录. 这个目录用来缓存
+         
+       =flycheck-clj-kondo= 是一个使用 =flycheck= 调用 =clj-kondo= 的包. 在 =emacs= 里面提示错误
+
+       #+begin_src elisp
+         (use-package flycheck-clj-kondo
+           :ensure t)
+
+         (use-package clojure-mode
+           :ensure t
+           :config
+           (require 'flycheck-clj-kondo))
+       #+end_src
 ***** Elixir
-      #+BEGIN_SRC elisp
+      #+BEGIN_SRC elisp :tangle no
 	(use-package alchemist
 	  :ensure t
 	  :mode "\\.(ex|exs)\\'"
-	  :interpreter "elixirt"
+	  :interpreter "elixir"
 	  :config
 	  (defhydra hydra-al
 	    (elixir-mode-map "C-c a")
@@ -547,6 +578,24 @@ r
 	  (define-key global-map (kbd "C-c a") 'hydra-al/body))
       #+END_SRC
 
+      <2020-10-16 五> [[https://github.com/DogLooksGood/inf-iex][inf-iex]] 一个类似 =cider= 风格的 =iex= 插件
+      =clojure= 群里的大佬开发
+
+      install elixir mode first
+      #+begin_src elisp
+        (use-package elixir-mode
+          :ensure t
+          :mode "\\.(ex|exs)\\'"
+          :interpreter "elixir")
+      #+end_src
+      
+      #+begin_src elisp
+        (use-package inf-iex
+          :hook (elixir-mode . inf-iex-minor-mode)
+          :straight (rime :type git
+                          :host github
+                          :repo "DogLooksGood/inf-iex"))
+      #+end_src
 ***** Golang
       [[https://github.com/dominikh/go-mode.el][go-mode]]
       #+BEGIN_SRC elisp
@@ -627,12 +676,16 @@ r
           :interpreter "plantuml")
       #+end_src
 *** org-re-reveal
+    提供导出为 =revealjs= 的功能.
+    网页幻灯片
+    [[https://melpa.org/#/org-re-reveal][melpa]]
+    需要安装 =revealjs= 
     #+BEGIN_SRC elisp
       (use-package org-re-reveal
-	:ensure t)
+        :ensure t)
     #+END_SRC
-*** pyim
-
+*** pyim                                                           :NOTANGLE:
+    <2020-10-16 五> 使用系统输入法代替, 但是在 =windows= 下使用 =wsl= 里面的 =emacs= 无法使用系统输入法( =windows= 下的输入法 ). 所以这个包还是需要的
     #+BEGIN_SRC elisp :tangle no
       (use-package pyim
         :ensure t
@@ -702,7 +755,10 @@ r
           ("b" projectile-ibuffer "projectile ibuffer")
           ("k" projectile-kill-buffers "projectile kill buffers")
           ("q" nil "quit"))
-        (define-key global-map (kbd "C-c f") 'hydra-projectile/body))
+        (define-key global-map (kbd "C-c f") 'hydra-projectile/body)
+        ;; ignore folder cli-kondo
+        (add-to-list 'projectile-globally-ignored-directories ".clj-kondo")
+        )
     #+END_SRC
 
     #+BEGIN_SRC elisp
@@ -733,9 +789,11 @@ r
     #+BEGIN_SRC elisp
       (setq org-ditaa-jar-path "~/.local/share/ditaa/ditaa.jar") ; set the ditta lib path
     #+END_SRC
-*** shortcuts
+*** shortcuts                                                      :NOTANGLE:
     在 =buffer= 顶部显示切换 =buffer= 的快捷键
-    #+BEGIN_SRC elisp
+    每次窗口最大化以后, 顶部的快捷键栏会消失
+    <2020-10-16 五> 使用 =awesometab= 以后, 就不需要这个包了
+    #+BEGIN_SRC elisp :tangle no
       (use-package shortcuts
 	:straight (shortcuts.el :type git :host github :repo "tetron/shortcuts.el"))
     #+END_SRC
@@ -756,7 +814,7 @@ r
     [[https://github.com/pashky/restclient.el][github]]
     #+BEGIN_SRC elisp
       (use-package restclient
-	:ensure t)
+	:ensure t)    
     #+END_SRC
 *** beacon
     hight light current cursor
@@ -776,6 +834,7 @@ r
 
     <2019-12-05 Thu>
 *** org-roam
+    <2020-10-17 六> 尝试使用 =gkroam=
     [[https://github.com/jethrokuan/org-roam][github]] roam 是一个笔记系统.特点是无结构的文章组织,使用 =link= 的方式来组织笔记
     #+BEGIN_SRC elisp
       (use-package org-roam
@@ -807,13 +866,43 @@ r
     #+END_SRC
 
 **** roam-company
-     #+begin_src elisp :tangle no
+     #+begin_src elisp
        (use-package company-org-roam
-         :straight (:host github :repo "org-roam/company-org-roam")
+         :ensure t
          :config
          (push 'company-org-roam company-backends)
          :after org-roam)
      #+end_src
+     
+*** gkroam                                                         :NOTANGLE:
+    =gkroam= 是一个轻量级的 =roam= 实现.
+    可以使用 {[article]} 这样的语法. [[https://github.com/Kinneyzhang/gkroam][github]]
+    <2020-10-18 日> gkroam 如何设置别名? 如何像 =org-roam= 一样是使用 =roam_alias= ?
+    #+begin_src elisp :tangle no
+      (use-package gkroam
+	:ensure t
+	:init
+	(setq gkroam-root-dir "~/documents/org/")
+	(setq gkroam-prettify-p t
+	      gkroam-show-brackets-p t
+	      gkroam-use-default-filename t
+	      gkroma-window-margin 4)
+	:config
+	(defhydra hydra-gkroam-mode (org-mode-map "C-c n")
+	  "gkroam keybidng"
+	  ("I" gkroam-index "gkroam index")
+	  ("d" gkroam-daily "gkroam daily")
+	  ("f" gkroam-find "gkroam find")
+	  ("i" gkroam-insert "gkroam insert")
+	  ("c" gkroam-capture "gkroam capture")
+	  ("e" gkroam-link-edit "gkroam link edit")
+	  ("n" gkroam-smart-new "gkroam smart new")
+	  ("p" gkroam-toggle-prettify "gkroam toggle prettify")
+	  ("t" gkroam-toggle-brackets "gkroam toggle brachets")
+	  ("D" gkroam-toggle-dynamic "gkroam toggle dynamic")
+	  ("g" gkroam-update "gkroam update"))
+	(define-key org-mode-map (kbd "C-c n") 'hydra-gkroam-mode/body))
+    #+end_src
 *** deft
     一个用来显示，过滤大量文件的库
     #+begin_src elisp
@@ -838,7 +927,7 @@ r
         :bind (("C-c C-d" . 'remind-bindings-toggle-buffer)
                ("C-c M-d" . 'remind-bindings-specific-mode)))
     #+END_SRC
-*** eaf
+*** eaf                                                            :NOTANGLE:
     从官网上抄来的配置文件
     #+begin_src elisp :tangle no
       (use-package eaf
@@ -867,15 +956,19 @@ r
     #+begin_src elisp
       (ejc-create-connection
        "test-db"
-       :dependencies [[com.oracle.jdbc/ojdbc6 "11.0.0.0"]]
+       :dependencies [[com.oracle.database.jdbc/ojdbc8 "19.7.0.0"]]
        :dbtype "oracle"
        :dbname "xe"
        :port "1521"
        :host "localhost"
-       :user "hr"
-       :password "hr"
+       :user "system"
+       :password "oracle"
        :separator "/")
     #+end_src
+
+    #+RESULTS:
+    | test-db | (:separator . /) | (:dependencies . [[com.oracle.jdbc/ojdbc6 11.0.0.0]]) | (:password . hr) | (:user . hr) | (:port . 1521) | (:host . localhost) | (:dbname . xe) | (:dbtype . oracle) |
+
 *** org mode key bindings
      
      设置快捷键，使用 ~hydra~
@@ -894,4 +987,54 @@ r
 
      #+RESULTS:
      : hydra-org-mode/body
-     
+*** direnv
+    [[https://github.com/wbolster/emacs-direnv][direnv github]]
+    #+begin_src elisp
+      (use-package direnv
+        :ensure t
+        :config
+        (direnv-mode))
+    #+end_src
+*** org pdf and org noter                                          :NOTANGLE:
+    安装 =pdf-tools=
+    #+begin_src elisp :tangle no
+      (use-package pdf-tools
+        :ensure t
+        :config
+        (pdf-tools-install)
+        (setq-default pdf-view-display-size 'fit-page)
+        (setq pdf-annot-activate-created-annotations t))
+    #+end_src
+    
+    使用 =org-pdftools= 来预览 =pdf= 文件
+    =org-noter= 库可以将笔记和许多文件格式相关联, 同步. 比如 =pdf= =epub= =Microsoft Office= 等等 (需要配合 =DocView=, =Nov.el=) 等包 [[https://github.com/weirdNox/org-noter][github]]    
+    =org-noter= 配合 =org-noter-pdftools= 包可以将笔记和 =pdf= 上下文关联起来.
+
+    #+begin_src elisp :tangle no
+      (use-package org-noter
+        :ensure t
+        :commands org-noter
+        :init
+        (setq org-noter-default-notes-file-names '("notes.org")
+              org-noter-notes-search-path '("~/documents/org")))
+
+      (use-package org-pdftools
+        :ensure t
+        :hook (org-mode . org-pdftools-setup-link)
+        :config
+        (pdf-tools-install))
+
+      (use-package org-noter-pdftools
+        :ensure t
+        :after org-noter
+        :config
+        (with-eval-after-load 'pdf-annot
+          (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+    #+end_src
+*** emacs-load-env-vars
+    载入一个 =env file=. [[https://github.com/diasjorge/emacs-load-env-vars][github]]
+    #+begin_src elisp
+      (use-package load-env-vars
+        :ensure t
+        :config (load-env-vars "~/.emacs.d/emacs.env"))
+    #+end_src
