@@ -392,7 +392,7 @@ Some package is in the github.
      #+END_SRC
 
 *** cnfonts 
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (use-package cnfonts
 	:ensure t
 	:config
@@ -416,6 +416,8 @@ Some package is in the github.
          :ensure t
          :config
          ;; (add-hook 'prog-mode-hook #'company-)
+         (setq company-idle-delay 0)
+         (setq company-minimum-prefix-length 1)
          :hook ((prog-mode org-mode ejc-sql-minor-mode-hook) . company-mode))
      #+END_SRC
 
@@ -440,7 +442,7 @@ Some package is in the github.
          (setq lsp-auto-guess-root t)
 
          :config
-         (require 'lsp-clients)
+         ;; (require 'lsp-clients)
 
          ;; install lsp-ui
          (use-package lsp-ui
@@ -454,10 +456,10 @@ Some package is in the github.
            (define-key global-map (kbd "C-c l") 'hydra-lsp/body))
 
          ;; intall company-lsp for complition
-         (use-package company-lsp
-           :ensure t
-           :config
-           (push 'company-lsp company-backends))
+          ;; (use-package company-lsp1
+         ;;   :ensure t
+         ;;   :config
+         ;;   (push 'company-lsp company-backends))
          )
 
        ;; (use-package lsp-treemacs
@@ -610,7 +612,7 @@ r
             (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
             ;; (add-hook 'go-mode-hook #'lsp-ui-mode)
             )
-          (lsp-deferred))
+          :hook (lsp-deferred))
       #+END_SRC
       
 ***** typescript
