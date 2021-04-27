@@ -146,7 +146,6 @@ Some package is in the github.
     #+end_src
 
 ** packages
-   
 *** use-package
     use-package is the basic of packages
     这个包需要手动安装
@@ -202,6 +201,11 @@ Some package is in the github.
     #+end_src
     
 *** projectile
+    #+begin_src elisp
+      (use-package projectile
+        :ensure t
+        :bind ("C-c p" . projectile-command-map))
+    #+end_src
 *** rainbow delimiters
     彩虹括号 [[https://github.com/Fanael/rainbow-delimiters][github]]
     #+begin_src elisp
