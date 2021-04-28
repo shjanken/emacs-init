@@ -159,13 +159,17 @@ Some package is in the github.
     不在 mode-line 里面显示 mode 的名字. [[https://github.com/myrjola/diminish.el][diminish gthub address]]
     #+begin_src elisp
       (use-package diminish
-        :ensure t)
+        :ensure t
+        :config
+        (diminish 'eldoc-mode)
+        (diminish 'abbrev-mode))
     #+end_src
     
 *** ivy, swip
     使用 ~ivy-mode 1~ 就可以打开大部分的 ~ivy~ 命令支持
     :bind 可以绑定多个命令, 使用 :bind (("key" . command) ("key2" . command2))
-    #+begin_src elisp
+    <2021-04-27 二> 尝试使用 consult 配合 selectrum
+    #+begin_src elisp :tangle no
       (use-package counsel
         :ensure t
         :init (ivy-mode 1)
@@ -174,36 +178,61 @@ Some package is in the github.
     #+end_src
 
     尝试不在 mode line 显示 ivy
-    #+begin_src elisp
+    #+begin_src elisp :tangle no
       (use-package ivy
         :ensure t
         :diminish)
     #+end_src
+    
+**** selectrum
+     selectrum 和 ivy 的功能有些重复. 如果使用了 selectrum 就不要使用 ivy
+     selectrum 可以将 **候选的内容排序**. 常用的候选项目, 比如 =M-x= 候选命令, =find-file= 显示的候选文件, 都会按照频率来进行排序.
 
+     <2021-04-26 一> 尝试使用 =selecrrum= 可以通过使用频率排序候选
+     <2021-04-26 一> 切换回 consunel 了. selectrum 没有 recent file 和 swiper
+     <2021-04-27 二> 尝试使用 consult 配合 selectrum
+     #+begin_src elisp
+       (use-package selectrum
+         :ensure t
+         :init (selectrum-mode t)
+         :defer t)
+     #+end_src
 
-    <2021-04-26 一> 尝试使用 =selecrrum= 可以通过使用频率排序候选
-    <2021-04-26 一> 切换回 consunel 了. selectrum 没有 recent file 和 swiper
-    #+begin_src elisp :tangle no
-      (use-package selectrum
-        :ensure t
-        :init (selectrum-mode t)
-        :defer t)
-    #+end_src
-
-    使用 selectrum-prescient 排序候选项目
-    #+begin_src elisp :tangle no
-      (use-package selectrum-prescient
+     使用 selectrum-prescient 排序候选项目
+     #+begin_src elisp
+       (use-package selectrum-prescient
+         :ensure t
+         :init
+         (selectrum-prescient-mode +1)
+         (prescient-persist-mode +1)
+         :after (selectrum))
+     #+end_src
+     
+*** consult
+    提供了很多方便的从候选列表里面选择内容的函数, [[https://github.com/minad/consult#available-commands][github]]
+    #+begin_src elisp
+      (use-package consult
         :ensure t
         :init
-        (selectrum-prescient-mode +1)
-        (prescient-persist-mode +1)
-        :after (selectrum))
+        (setq register-preview-delay 0
+              register-preview-function #'consult-register-format)
+        (advice-add #'register-preview :override #'consult-register-window)
+        (setq xref-show-xrefs-function #'consult-xref
+              xref-show-definitions-function #'consult-xref)
+        :bind (("C-x r" . consult-recent-file)
+               ("C-x b" . consult-buffer)
+               ("C-s" . consult-line))
+        :config
+        (recentf-mode t)
+        (autoload 'projectile-project-root "projectile")
+        (setq consult-project-root-function #'projectile-project-root))
     #+end_src
     
 *** projectile
     #+begin_src elisp
       (use-package projectile
         :ensure t
+        :diminish projectile-mode
         :bind ("C-c p" . projectile-command-map))
     #+end_src
 *** rainbow delimiters
@@ -227,7 +256,7 @@ Some package is in the github.
         :defer 3)
     #+end_src   
 *** themes
-**** COMMENT all the icons
+**** all the icons
      有了这个包以后可以显示图标, [[https://github.com/domtronn/all-the-icons.el][github]]. *注意, 需要手动执行 all-the-icons-install-fonts 安装图标字体文件*
      #+begin_src elisp
        (use-package all-the-icons
@@ -315,8 +344,14 @@ Some package is in the github.
          :hook (company-mode . company-box-mode))
 
      #+end_src
-
-     
+**** flycheck
+     检查语法错误等 [[https://www.flycheck.org/en/latest/user/installation.html#use-package][offical website]]
+     #+begin_src elisp
+       (use-package flycheck
+         :ensure t
+         :hook (prog-mode . flycheck-mode)
+         :diminish)
+     #+end_src
 **** Python
      配置 python 开发环境, lsp 后端使用微软的 lsp client. [[https://github.com/Microsoft/python-language-server][微软 python language server 主页]]
      微软的 python lsp server 使用非常简单, 可以自动安装
@@ -329,10 +364,24 @@ Some package is in the github.
                                 (require 'lsp-python-ms)
                                 (lsp-deferred))))
      #+end_src
- 
+**** java
+     [[https://emacs-lsp.github.io/lsp-java/][lsp java]], lsp java 使用 [[https://projects.eclipse.org/projects/eclipse.jdt.ls][eclipse jdt language server]].
+     提供了 maven 项目的支持. 但是对 gradle 只有
+     #+begin_quote
+     limit support
+     #+end_quote
 
-
-
+     对 spring 项目有实验性的支持
+     
+     #+begin_src elisp
+       (use-package lsp-java
+         :ensure t
+         :hook
+         (java-mode . (lambda ()
+                        (lsp-deferred)
+                        (lsp-java-boot-lens-mode)))
+         (lsp-mode . #'lsp-lens-mode))
+     #+end_src
 ** Chinese
    中文相关的设置, 字体, 输入法等等
    
