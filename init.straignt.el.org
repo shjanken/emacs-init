@@ -242,28 +242,38 @@ Some package is in the github.
         (prescient-persist-mode +1)
         :after (selectrum))
     #+end_src
-     
-*** consult
-    提供了很多方便的从候选列表里面选择内容的函数, [[https://github.com/minad/consult#available-commands][github]]
-    #+begin_src elisp
-      (use-package consult
+    
+**** consult
+     提供了很多方便的从候选列表里面选择内容的函数, [[https://github.com/minad/consult#available-commands][github]]
+     #+begin_src elisp
+       (use-package consult
+         :ensure t
+         :init
+         (setq register-preview-delay 0
+               register-preview-function #'consult-register-format)
+         (advice-add #'register-preview :override #'consult-register-window)
+         (setq xref-show-xrefs-function #'consult-xref
+               xref-show-definitions-function #'consult-xref)
+         :bind (("C-x r" . consult-recent-file)
+                ("C-x b" . consult-buffer)
+                ("C-s" . consult-line))
+         :config
+         (autoload 'projectile-project-root "projectile")
+         (setq consult-project-root-function #'projectile-project-root))
+     #+end_src
+
+     =recentf-mode= 必须开启, 不然 =consult= 的 recent-file 不可以使用
+
+*** helm
+    #+begin_src elisp :tangle no
+      (use-package helm
         :ensure t
-        :init
-        (setq register-preview-delay 0
-              register-preview-function #'consult-register-format)
-        (advice-add #'register-preview :override #'consult-register-window)
-        (setq xref-show-xrefs-function #'consult-xref
-              xref-show-definitions-function #'consult-xref)
-        :bind (("C-x r" . consult-recent-file)
-               ("C-x b" . consult-buffer)
-               ("C-s" . consult-line))
-        :config
-        (autoload 'projectile-project-root "projectile")
-        (setq consult-project-root-function #'projectile-project-root))
+        :bind
+        (:map global-map
+              ("M-x" . helm-M-x)
+              ("C-x r" . helm-recentf)
+              ("C-x b" . helm-buffers-list)))
     #+end_src
-
-    =recentf-mode= 必须开启, 不然 =consult= 的 recent-file 不可以使用
-
 *** projectile
     =projectile= 制定一个目录, 在里面根据一定的规则查找项目
     #+begin_src elisp
