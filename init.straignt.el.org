@@ -173,7 +173,13 @@ Some package is in the github.
       (eval-when-compile
         (require 'use-package))
     #+end_src
-    
+*** org-roam
+    #+begin_src elisp
+      (use-package org-roam
+        :ensure t
+        :custom (org-roam-directory "~/documents/org")
+        :hook (after-init-hook 'org-roam-mode))
+    #+end_src
 *** diminish
     不在 mode-line 里面显示 mode 的名字. [[https://github.com/myrjola/diminish.el][diminish gthub address]]
     #+begin_src elisp
@@ -360,6 +366,7 @@ Some package is in the github.
     #+begin_src elisp
       (use-package smartparens
         :ensure t
+        :diminish
         :bind
         ("C-c s r" . sp-rewrap-sexp)
         ("C-c s f" . sp-forward-slurp-sexp)
@@ -386,18 +393,28 @@ Some package is in the github.
          (load-theme 'doom-zenburn t))
      #+end_src
 *** develop
+**** docker intergration
+     [[https://github.com/Silex/docker.el][docker.el]] 在 ~emacs~ 里面集成 ~docker~
+     #+begin_src elisp
+       (use-package docker
+         :ensure t
+         :bind ("C-c d" . docker))
+     #+end_src
 **** lsp lauguage server protocol
      设置 ~lsp-deferred~ , 如果不希望 ~LSP server~ 立刻启动
+     ~lsp~ 的性能优化. 根据[[https://emacs-lsp.github.io/lsp-mode/page/performance/\\][官方文档]]的内容, ~gc-cons-threshold~ 这个变量会极大的影响性能
+     可以使用 ~lsp doctor~ 命令查看当前 ~lsp server~ 配置的优化建议
      [[https://emacs-lsp.github.io/lsp-mode/page/installation/][安装官方文档]]
      #+begin_src elisp
        (use-package lsp-mode
          :ensure t
+         :init
+         (setq gc-cons-threshold (* 1 100 1024 1024))
+         (setq read-process-output-max (* 1024 1024))
          :commands (lsp lsp-deferred)
          :init (setq lsp-keymap-prefix "C-c l")
          :config (lsp-enable-which-key-integration t))
-
      #+end_src
-
 ***** lsp-ui [[https://emacs-lsp.github.io/lsp-ui/][官方网站]].
      =lsp ui= 提供了 =lsp-mode= 界面上的支持. 比如 =flycheck=, =code lenses=.
      一般来说, =lsp-mode= 自动启用 =lsp-ui= 除非 =lsp-auto-config= 设置成 nil.
@@ -405,9 +422,19 @@ Some package is in the github.
        (use-package lsp-ui
          :ensure t
          :init (setq lsp-ui-doc-position 'bottom)
-         :hook (lsp-mode . lsp-ui-mode))
+         :hook ((lsp-mode . lsp-ui-mode)
+                (lsp-mode . lsp-enable-which-key-integration)))
      #+end_src
 
+***** dap
+      用来 debugger 的
+      [[https://github.com/emacs-lsp/dap-mode][dap github]]
+      #+begin_src elisp
+        (use-package dap-mode
+          :ensure t
+          :after lsp-mode
+          :config (dap-auto-configure-mode))
+      #+end_src
 ***** lsp treemasc
       可以漂亮的显示当前 =buffer= 的 =symbols=, =errors=, =warrnings= 等等信息
       显示文件 symbol 的效果比 =lsp-ui imenu= 好很多
@@ -422,7 +449,7 @@ Some package is in the github.
      比如
      #+begin_src elisp :tangle no
        (use-package ...
-         ...
+          ...
          :hook (xxx-mode . lsp-deferred)
          ...)
      #+end_src
@@ -430,17 +457,18 @@ Some package is in the github.
 ***** lsp ivy
       可以快速的在 symbols 中跳转.
       如果想要跳转到任何 functons, vars 或者别的 symbols, 可以使用 =ivy-workspace-symbol= 命令
-      #+begin_src elisp
+      使用了 =selectrum= 和 =consult= 所以不需要这个包了
+      #+begin_src elisp :tangle no
         (use-package lsp-ivy
           :ensure t)
       #+end_src      
-***** git
-      使用 [[https://magit.vc/][magit]] 包
-      #+begin_src elisp
-        (use-package magit
-          :ensure t
-          :commands magit-status)
-      #+end_src
+**** git
+     使用 [[https://magit.vc/][magit]] 包
+     #+begin_src elisp
+       (use-package magit
+         :ensure t
+         :commands magit-status)
+     #+end_src
 **** Company 自动完成
      配置自动完成的功能, 自动完成只在启动了 lsp 的 buffer 中启动
      #+begin_src elisp
@@ -484,6 +512,15 @@ Some package is in the github.
                                 (require 'lsp-python-ms)
                                 (lsp-deferred))))
      #+end_src
+***** poetry
+      [[https://python-poetry.org/][Poetry]] 是一个用于 ~python~ 项目管理的软件, 类似于 ~npm~
+      [[https://github.com/galaunay/poetry.el][peotry emacs]] 在 ~emacs~ 里面管理运行 ~poetry~ 命令
+      #+begin_src elisp
+        (use-package poetry
+          :ensure t
+          :commands (poetry-tracking-mode)
+          :init (poetry-tracking-mode))
+      #+end_src
 **** java
      [[https://emacs-lsp.github.io/lsp-java/][lsp java]], lsp java 使用 [[https://projects.eclipse.org/projects/eclipse.jdt.ls][eclipse jdt language server]].
      提供了 maven 项目的支持. 但是对 gradle 只有
@@ -491,17 +528,26 @@ Some package is in the github.
      limit support
      #+end_quote
 
-     对 spring 项目有实验性的支持
+     对 =spring= 项目有实验性的支持
      
      #+begin_src elisp
        (use-package lsp-java
          :ensure t
-         :hook
-         (java-mode . (lambda ()
-                        (lsp-deferred)
-                        (lsp-java-boot-lens-mode)))
-         (lsp-mode . #'lsp-lens-mode)
-         :commands (lsp-java-spring-initializr))
+         :hook (java-mode . (lambda ()
+                                    (require 'lsp-java)
+                                    (lsp-deferred)))
+         :config
+         (lambda ()
+           (require 'lsp-java-boot
+                    (add-hook 'lsp-mode-hook #'lsp-lens-mode)
+                    (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode))))
+     #+end_src
+
+     #+begin_src elisp
+       (use-package dap-java
+         :ensure nil)
+
+       (use-package dap-mode :after lsp-mode :config (dap-auto-configure-mode))
      #+end_src
 **** groovy
      只安装 =groovy-mode= , 目前的需求只是写 =gradle=, 所以不许要安装 lsp
@@ -509,6 +555,18 @@ Some package is in the github.
        (use-package groovy-mode
          :ensure t
          :mode "\\.gradle\\'")
+     #+end_src
+**** xonsh
+     =xonsh= 是一个集合了 =python= 和 =shell= 的, 可以方便的开发脚本的软件
+     #+begin_src elisp
+       (use-package xonsh-mode
+         :ensure t)
+     #+end_src
+**** lua
+     #+begin_src elisp
+       (use-package lua-mode
+         :ensure t
+         :mode "\\.lua\\'")
      #+end_src
 ** Chinese
    中文相关的设置, 字体, 输入法等等
@@ -533,16 +591,19 @@ Some package is in the github.
               '(rime-predicate-ace-window-p
                 rime-predicate-after-alphabet-char-p
                 rime-predicate-prog-in-code-p
-                rime-predicate-current-input-punctuation-p
-                rime-predicate-punctuation-after-space-cc-p
-                rime-predicate-space-after-ascii-p))
+                rime-predicate-current-input-punctuation-p ; 需要输入符号
+                rime-predicate-punctuation-after-space-cc-p ; 空格以后需要输入符号
+                rime-predicate-space-after-ascii-p ; 英文字符且有空格后
+                rime-predicate-space-after-cc-p ; 中文字符且有空格后
+                rime-predicate-current-uppercase-letter-p ; 需要输入大写英文后
+                )
+              rime-inline-ascii-trigger 'shift-l)
         :bind
         (:map rime-active-mode-map
               ("M-j" . rime-inline-ascii))
         (:map rime-mode-map
               ("M-j" . rime-force-enable)))
     #+end_src
-
 
 * Local Variables
 Local Variables:
