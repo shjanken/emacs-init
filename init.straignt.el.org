@@ -178,7 +178,8 @@ Some package is in the github.
       (use-package org-roam
         :ensure t
         :custom (org-roam-directory "~/documents/org")
-        :hook (after-init-hook 'org-roam-mode))
+        :hook (after-init . org-roam-mode)
+        :diminish)
     #+end_src
 *** diminish
     不在 mode-line 里面显示 mode 的名字. [[https://github.com/myrjola/diminish.el][diminish gthub address]]
@@ -393,6 +394,87 @@ Some package is in the github.
          (load-theme 'doom-zenburn t))
      #+end_src
 *** develop
+**** yasnippet
+     不使用这个包, 代码补全有问题, 会出现 $0, $1 这样的占位符
+     #+begin_src elisp
+       (use-package yasnippet
+         :ensure t
+         :hook (prog-mode . (lambda () (yas-reload-all) (yas-minor-mode)))
+         :commands (yas-reload-all))
+     #+end_src
+**** restclient
+     使用 restclient.el 方便的进行接口的测试
+     #+begin_quote
+     C-c C-c: runs the query under the cursor, tries to pretty-print the response (if possible)
+     C-c C-r: same, but doesn't do anything with the response, just shows the buffer
+     C-c C-v: same as C-c C-c, but doesn't switch focus to other window
+     C-c C-p: jump to the previous query
+     C-c C-n: jump to the next query
+     C-c C-.: mark the query under the cursor
+     C-c C-u: copy query under the cursor as a curl command
+     C-c C-g: start a helm session with sources for variables and requests (if helm is available, of course)
+     C-c n n: narrow to region of current request (including headers)
+     TAB: hide/show current request body, only if
+     C-c C-a: show all collapsed regions
+     C-c C-i: show information on resclient variables at point
+     #+end_quote
+
+     #+begin_src restclient
+       # -*- restclient -*-
+       #
+       # Gets  all Github APIs, formats JSON, shows response status and headers underneath.
+       # Also sends a User-Agent header, because the Github API requires this.
+       #
+       GET https://api.github.com
+       User-Agent: Emacs Restclient
+
+       #
+       # XML is supported - highlight, pretty-print
+       #
+       GET http://www.redmine.org/issues.xml?limit=10
+
+       #
+       # It can even show an image!
+       #
+       GET http://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png
+       #
+       # A bit of json GET, you can pass headers too
+       #
+       GET http://jira.atlassian.com/rest/api/latest/issue/JRA-9
+       User-Agent: Emacs24
+       Accept-Encoding: compress, gzip
+
+       #
+       # Post works too, entity just goes after an empty line. Same is for PUT.
+       #
+       POST https://jira.atlassian.com/rest/api/2/search
+       Content-Type: application/json
+
+       {
+               "jql": "project = HCPUB",
+               "startAt": 0,
+               "maxResults": 15,
+               "fields": [
+                       "summary",
+                       "status",
+                       "assignee"
+               ]
+       }
+       #
+       # And delete, will return not-found error...
+       #
+       DELETE https://jira.atlassian.com/rest/api/2/version/20
+
+       # Set a variable to the value of your ip address using a jq expression
+       GET http://httpbin.org/ip
+       -> jq-set-var :my-ip .origin
+     #+end_src
+ 
+
+     #+begin_src elisp
+       (use-package restclient
+         :ensure t)
+     #+end_src
 **** docker intergration
      [[https://github.com/Silex/docker.el][docker.el]] 在 ~emacs~ 里面集成 ~docker~
      #+begin_src elisp
@@ -521,6 +603,52 @@ Some package is in the github.
           :commands (poetry-tracking-mode)
           :init (poetry-tracking-mode))
       #+end_src
+**** javascript
+***** COMMENT [[https://github.com/NicolasPetton/Indium][javascript ide Indium]]. 支持 repl(nodejs, chromium tab), scratch buffer 等等特性
+****** Install
+       =npm install -g indium= 安装 server.
+       =package-install indium= 安装 emacs package.
+****** Usage
+       在项目的根目录下放置 =indium.json= 文件. 文件里面可以配置许多选项,具体看[[https://indium.readthedocs.io/en/latest/setup.html][这篇文档]]
+****** Starting Indium
+       =indium-connect= 连接一个正在运行的 node 或者浏览器进程
+       =inidum-launch= 开启新的进程
+****** elisp
+       #+begin_src elisp :tangle no
+         (use-package indium
+           :ensure t
+           :mode "\\.js\\'")
+       #+end_src
+***** js2mode & skewer
+
+      skewer 提供了在浏览器里面运行和调试代码的能力.
+      使用 =run-skewer= 命令会显示一个浏览器窗口, 并启动一个进程和这个浏览器连接, 可以把当前的代码发送到浏览器里面运行.
+      - =C-c C-k= :: send-buffer
+      - =C-c C-c= :: send-last-sexp
+      
+      #+begin_src elisp
+        (use-package js2-mode
+          :ensure t
+          :config (lsp-deferred)
+          :mode ("\\.js\\'"))
+      #+end_src
+
+      #+begin_src elisp
+        (use-package skewer-mode
+          :ensure t
+          :commands (run-skewer))
+      #+end_src
+**** nodejs
+     使用 [[https://github.com/redguardtoo/js-comint][js-comint]] 开发 nodejs.
+     #+begin_src elisp
+       (use-package js-comint
+         :ensure t
+         :commands (run-js)
+         :bind (:map js2-mode-map
+                     ("C-c C-c" . js-comint-send-last-sexp)
+                     ("C-c C-k" . js-comint-send-buffer)
+                     ("C-c r" . js-comint-reset-repl)))
+     #+end_src
 **** java
      [[https://emacs-lsp.github.io/lsp-java/][lsp java]], lsp java 使用 [[https://projects.eclipse.org/projects/eclipse.jdt.ls][eclipse jdt language server]].
      提供了 maven 项目的支持. 但是对 gradle 只有
