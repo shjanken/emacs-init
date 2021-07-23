@@ -103,6 +103,7 @@ Some package is in the github.
     #+BEGIN_SRC elisp
       (setq make-backup-files nil)
       (setq auto-save-default nil)
+      (setq create-lockfiles nil) ;; not create .#filename
     #+END_SRC
 
 *** set org agenda file
@@ -364,7 +365,8 @@ Some package is in the github.
 *** smart parens
     智能括号补全
     可以使用 =sp-cheat-sheet= 查看自带的帮助.
-    #+begin_src elisp
+    <2021-07-07 三> 使用 paredit 替换
+    #+begin_src elisp :tangle no
       (use-package smartparens
         :ensure t
         :diminish
@@ -375,6 +377,13 @@ Some package is in the github.
         ("C-c s a" . sp-add-to-next-sexp)
         :hook (prog-mode . smartparens-mode)
         :defer t)
+    #+end_src
+*** paredit
+    #+begin_src elisp
+          (use-package paredit
+            :ensure t
+            :diminish
+            :hook (prog-mode . paredit-mode))
     #+end_src
 *** themes
 **** all the icons
@@ -400,7 +409,8 @@ Some package is in the github.
        (use-package yasnippet
          :ensure t
          :hook (prog-mode . (lambda () (yas-reload-all) (yas-minor-mode)))
-         :commands (yas-reload-all))
+         :commands (yas-reload-all)
+         :diminish)
      #+end_src
 **** restclient
      使用 restclient.el 方便的进行接口的测试
@@ -557,8 +567,8 @@ Some package is in the github.
        (use-package company
          :diminish
          :ensure t
-         :after lsp-mode
-         :hook (lsp-mode . company-mode)
+         :hook ((lsp-mode . company-mode)
+                (prog-mode . company-mode))
          :bind
          (:map company-active-map
                ("<tab>" . company-complete-selection))
@@ -613,7 +623,6 @@ Some package is in the github.
 ****** Starting Indium
        =indium-connect= 连接一个正在运行的 node 或者浏览器进程
        =inidum-launch= 开启新的进程
-****** elisp
        #+begin_src elisp :tangle no
          (use-package indium
            :ensure t
@@ -630,7 +639,9 @@ Some package is in the github.
         (use-package js2-mode
           :ensure t
           :config (lsp-deferred)
-          :mode ("\\.js\\'"))
+          :mode ("\\.[mc]*js\\'")
+          :hook (js2-mode . lsp-deferred)
+          :custom (js-indent-level 2))
       #+end_src
 
       #+begin_src elisp
@@ -638,16 +649,62 @@ Some package is in the github.
           :ensure t
           :commands (run-skewer))
       #+end_src
-**** nodejs
-     使用 [[https://github.com/redguardtoo/js-comint][js-comint]] 开发 nodejs.
+
+      [[https://github.com/js-emacs/js2-refactor.el][js2-refactor]] 提供了一些很好用的函数, 需要配合 =js2-mode= '
+      (js2r-add-keybindings-with-prefix "C-c C-m") 设置按键绑定
+      #+begin_src elisp
+        (use-package js2-refactor
+          :ensure t
+          :diminish
+          :hook (js2-mode . js2-refactor-mode)
+          :bind (:map js2-mode-map
+                      ("C-k" . js2r-kill))
+          :config (js2r-add-keybindings-with-prefix "C-c C-m"))
+      #+end_src
+***** nodejs
+      使用 [[https://github.com/redguardtoo/js-comint][js-comint]] 开发 nodejs.
+      #+begin_src elisp
+        (use-package js-comint
+          :ensure t
+          :commands (run-js)
+          :bind (:map js2-mode-map
+                      ("C-c C-c" . js-comint-send-last-sexp)
+                      ("C-c C-k" . js-comint-send-buffer)
+                      ("C-c r" . js-comint-reset-repl)
+                      ("C-c C-l" . js-comint-clear)))
+      #+end_src
+***** web-mode
+      web-mode 用来开发 html, 各种模板
+      #+begin_src elisp
+        (use-package web-mode
+          :ensure t
+          :mode "\\.html?\\'")
+      #+end_src
+***** jsx
+      [[https://github.com/felipeochoa/rjsx-mode][rjsx-mode]] 编辑 react 的 jsx 文件.
+      输入 < 符号以后会自动生成 </> . 继续输入 > 符号或者 C-d 可以补全关闭括号
+      #+begin_src elisp
+        (use-package rjsx-mode
+          :ensure t
+          :mode ("\\.[jt]sx\\'")
+          :config (lsp-deferred))
+      #+end_src
+***** prettier
+      美化代码
+      #+begin_src elisp
+        (use-package prettier-js
+          :ensure t
+          :diminish
+          :hook ((js2-mode . prettier-js-mode)
+                 (web-work-mode . prettier-js-mode)
+                 (typescript-mode . prettier-js-mode)))
+      #+end_src
+**** typescript
      #+begin_src elisp
-       (use-package js-comint
+       (use-package typescript-mode
          :ensure t
-         :commands (run-js)
-         :bind (:map js2-mode-map
-                     ("C-c C-c" . js-comint-send-last-sexp)
-                     ("C-c C-k" . js-comint-send-buffer)
-                     ("C-c r" . js-comint-reset-repl)))
+         :hook (typescript-mode . lsp-deferred)
+         :custom (typescript-indent-level 2))
      #+end_src
 **** java
      [[https://emacs-lsp.github.io/lsp-java/][lsp java]], lsp java 使用 [[https://projects.eclipse.org/projects/eclipse.jdt.ls][eclipse jdt language server]].
@@ -695,6 +752,24 @@ Some package is in the github.
        (use-package lua-mode
          :ensure t
          :mode "\\.lua\\'")
+     #+end_src
+**** clojure && clojurescript
+     [[https://docs.cider.mx/cider/basics/installation.html][cider]] 提供了很多方便的功能, 是 ~emacs~ 上开发 clojure 和 clojurescript 的不二之选
+     #+begin_src elisp
+       (use-package cider
+         :ensure t
+         :config (global-set-key (kbd "TAB") #'company-indent-or-complete-common))
+     #+end_src
+
+     [[https://github.com/borkdude/flycheck-clj-kondo][clj-kondo]] 提供了提示代码错误， =linter= 功能，不需要启动 =repl=
+     #+begin_src elisp
+       (use-package flycheck-clj-kondo
+         :ensure t)
+
+       (use-package clojure-mode
+         :ensure t
+         :config
+         (require 'flycheck-clj-kondo))
      #+end_src
 ** Chinese
    中文相关的设置, 字体, 输入法等等
